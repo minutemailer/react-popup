@@ -61,7 +61,20 @@
 		box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 		border-radius: 15px;
 		border: 1px solid #eee;
+		overflow: hidden;
 	}
+
+		.mm-popup__box__header {
+			padding: 20px 40px;
+			background: #e74c3c;
+			color: #fff;
+		}
+
+			.mm-popup__box__header__title {
+				margin: 0;
+				text-align: center;
+				font-style: 18px;
+			}
 
 		.mm-popup__box__body {
 			padding: 40px;
