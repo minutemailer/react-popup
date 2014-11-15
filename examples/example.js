@@ -12,6 +12,9 @@ var React                  = require('react'),
     registeredAlertTrigger = document.getElementById('registeredAlertTrigger'),
     registeredAlert;
 
+/** React debug */
+window.react = React;
+
 /** Render popup */
 React.render(
 	<PopupComponent closeHtml="×" />,
