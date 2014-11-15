@@ -30,7 +30,7 @@ alertWithTitle.addEventListener('click', function () {
 });
 
 /** Pre-register alert popup */
-registeredAlert = Popup.alert('You can register popups for use later. Set the third parameter to true for no queue. All popups creations will generate an ID, use this ID to display the popup.', null, true);
+registeredAlert = Popup.alert('You can register popups for use later. Set the third parameter to true for no queue. All popup creations will generate an ID, use this ID to display the popup.', null, true);
 
 /** Display pre-registered popup */
 registeredAlertTrigger.addEventListener('click', function () {
