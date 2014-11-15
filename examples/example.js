@@ -34,5 +34,5 @@ registeredAlert = Popup.alert('You can register popups for use later. Set the th
 
 /** Display pre-registered popup */
 registeredAlertTrigger.addEventListener('click', function () {
-	Popup.alert(registeredAlert);
+	Popup.queue(registeredAlert);
 });

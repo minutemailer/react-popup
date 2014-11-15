@@ -29,20 +29,6 @@ function register(data) {
 	return id; 
 }
 
-function queue(id) {
-	if (!_popups.hasOwnProperty(id)) {
-		return false;
-	}
-
-	/** Add popup to queue */
-	_queue.push(id);
-
-	/** Dispatch queue */
-	dispatch();
-
-	return id;
-}
-
 function dispatch () {
 	if (_active || _queue.length < 1) {
 		return false;
@@ -68,34 +54,42 @@ Manager = assign({}, EventEmitter.prototype, {
 		this.on(CLOSE_EVENT, callback);
 	},
 
-	alert: function (text, title, noQueue) {
-		/** Text can be an already created popup */
-		if (_popups.hasOwnProperty(text)) {
-			queue(text);
-
-			/** Display if no active */
-			this.dispatch(force, replace);
-
-			return text;
+	queue: function (id) {
+		if (!_popups.hasOwnProperty(id)) {
+			return false;
 		}
 
+		/** Add popup to queue */
+		_queue.push(id);
+
+		/** Dispatch queue */
+		dispatch();
+
+		return id;
+	},
+
+	create: function (data, noQueue) {
+		/** Register popup */
+		var id = register(data);
+
+		if (!noQueue) {
+			/** Queue popup */
+			this.queue(id);
+		}
+
+		return id;
+	},
+
+	alert: function (text, title, noQueue) {
 		var data = {
 			title: title,
 			html: text,
 			buttons: {
 				right: ['ok']
 			}
-		}, id;
+		};
 
-		/** Register popup */
-		id = register(data);
-
-		if (!noQueue) {
-			/** Queue popup */
-			queue(id);
-		}
-
-		return id;
+		return this.create(data, noQueue);
 	},
 
 	close: function () {
