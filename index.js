@@ -21,14 +21,6 @@ function getId() {
 	return 'id_' + (_id++);
 }
 
-function register(data) {
-	var id = getId();
-
-	_popups[id] = data;
-
-	return id; 
-}
-
 function dispatch () {
 	if (_active || _queue.length < 1) {
 		return false;
@@ -54,6 +46,14 @@ Manager = assign({}, EventEmitter.prototype, {
 		this.on(CLOSE_EVENT, callback);
 	},
 
+	register: function (data) {
+		var id = getId();
+
+		_popups[id] = data;
+
+		return id; 
+	},
+
 	queue: function (id) {
 		if (!_popups.hasOwnProperty(id)) {
 			return false;
@@ -70,7 +70,7 @@ Manager = assign({}, EventEmitter.prototype, {
 
 	create: function (data, noQueue) {
 		/** Register popup */
-		var id = register(data);
+		var id = this.register(data);
 
 		if (!noQueue) {
 			/** Queue popup */
