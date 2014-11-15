@@ -4,11 +4,13 @@
 
 'use strict';
 
-var React = require('react'),
-    Popup = require('../index').Manager,
-    PopupComponent = require('../index').Component,
-    alert = document.getElementById('alert'),
-    alertWithTitle = document.getElementById('alertWithTitle');
+var React                  = require('react'),
+    Popup                  = require('../index').Manager,
+    PopupComponent         = require('../index').Component,
+    alert                  = document.getElementById('alert'),
+    alertWithTitle         = document.getElementById('alertWithTitle'),
+    registeredAlertTrigger = document.getElementById('registeredAlertTrigger'),
+    registeredAlert;
 
 /** Render popup */
 React.render(
@@ -25,4 +27,12 @@ alert.addEventListener('click', function () {
 /** Alert with title */
 alertWithTitle.addEventListener('click', function () {
 	Popup.alert("The alert can also have a title. Isn't it nice?", 'Lorem ipsum');
+});
+
+/** Pre-register alert popup */
+registeredAlert = Popup.alert('You can register popups for use later. Set the third parameter to true for no queue. All popups creations will generate an ID, use this ID to display the popup.', null, true);
+
+/** Display pre-registered popup */
+registeredAlertTrigger.addEventListener('click', function () {
+	Popup.alert(registeredAlert);
 });

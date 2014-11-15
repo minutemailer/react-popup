@@ -68,7 +68,7 @@ Manager = assign({}, EventEmitter.prototype, {
 		this.on(CLOSE_EVENT, callback);
 	},
 
-	alert: function (text, title) {
+	alert: function (text, title, noQueue) {
 		/** Text can be an already created popup */
 		if (_popups.hasOwnProperty(text)) {
 			queue(text);
@@ -90,8 +90,10 @@ Manager = assign({}, EventEmitter.prototype, {
 		/** Register popup */
 		id = register(data);
 
-		/** Queue popup */
-		queue(id);
+		if (!noQueue) {
+			/** Queue popup */
+			queue(id);
+		}
 
 		return id;
 	},
