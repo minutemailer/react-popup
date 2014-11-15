@@ -22,7 +22,7 @@ alert.addEventListener('click', function () {
 	Popup.alert("All popups will be queued and when first in line, displayed.");
 });
 
-/** Alert */
+/** Alert with title */
 alertWithTitle.addEventListener('click', function () {
 	Popup.alert("The alert can also have a title. Isn't it nice?", 'Lorem ipsum');
 });
