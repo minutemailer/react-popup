@@ -10,6 +10,7 @@ var React                  = require('react'),
     alert                  = document.getElementById('alert'),
     alertWithTitle         = document.getElementById('alertWithTitle'),
     registeredAlertTrigger = document.getElementById('registeredAlertTrigger'),
+    customButtons          = document.getElementById('customButtons'),
     registeredAlert;
 
 /** React debug */
@@ -38,4 +39,25 @@ registeredAlert = Popup.alert('You can register popups for use later. Set the th
 /** Display pre-registered popup */
 registeredAlertTrigger.addEventListener('click', function () {
 	Popup.queue(registeredAlert);
+});
+
+/** Custom buttons */
+customButtons.addEventListener('click', function () {
+	Popup.create({
+		title: null,
+		html: 'This popup uses the create method directly to get more control. This popup demonstrates custom buttons.',
+		buttons: {
+			left: ['cancel'],
+			right: [{
+				text: 'Save',
+				action: function () {
+					/** This popup will be displayed after this one has closed */
+					Popup.alert('Another popup yada yada');
+
+					/** Close this popup. Close will always close the current visible one, if one is visible */
+					Popup.close();
+				}
+			}]
+		}
+	});
 });
