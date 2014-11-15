@@ -51,6 +51,10 @@
 		outline: none;
 	}
 
+	.mm-popup__btn--success {
+		background-color: #2aca76;
+	}
+
 	.mm-popup__box {
 		width: 460px;
 		position: absolute;
