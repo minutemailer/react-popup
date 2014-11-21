@@ -11,6 +11,7 @@ var React                  = require('react'),
     alertWithTitle         = document.getElementById('alertWithTitle'),
     registeredAlertTrigger = document.getElementById('registeredAlertTrigger'),
     customButtons          = document.getElementById('customButtons'),
+    position               = document.getElementById('position'),
     registeredAlert;
 
 /** React debug */
@@ -59,6 +60,30 @@ customButtons.addEventListener('click', function () {
 					Popup.close();
 				}
 			}]
+		}
+	});
+});
+
+/** Positioning */
+position.addEventListener('click', function () {
+	var _this = this;
+
+	Popup.create({
+		content: 'This popup will be displayed right above this button.',
+		buttons: {
+			right: ['ok']
+		},
+		noOverlay: true, // Make it look like a tooltip
+		position: function (box) {
+			var bodyRect      = document.body.getBoundingClientRect(),
+			    btnRect       = _this.getBoundingClientRect(),
+			    btnOffsetTop  = btnRect.top - bodyRect.top,
+			    btnOffsetLeft = btnRect.left - bodyRect.left;
+
+			box.style.top  = (btnOffsetTop - box.offsetHeight - 10) + 'px';
+			box.style.left = (btnOffsetLeft + (_this.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
+			box.style.margin = 0;
+			box.style.opacity = 1;
 		}
 	});
 });

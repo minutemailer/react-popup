@@ -68,14 +68,12 @@ Manager = assign({}, EventEmitter.prototype, {
 		return id;
 	},
 
-	create: function (data, noQueue) {
+	create: function (data) {
 		/** Register popup */
 		var id = this.register(data);
 
-		if (!noQueue) {
-			/** Queue popup */
-			this.queue(id);
-		}
+		/** Queue popup */
+		this.queue(id);
 
 		return id;
 	},
@@ -83,11 +81,15 @@ Manager = assign({}, EventEmitter.prototype, {
 	alert: function (text, title, noQueue) {
 		var data = {
 			title: title,
-			html: text,
+			content: text,
 			buttons: {
 				right: ['ok']
 			}
 		};
+
+		if (noQueue) {
+			return this.register(data);
+		}
 
 		return this.create(data, noQueue);
 	},
@@ -147,10 +149,13 @@ Component = React.createClass({
 
 	getInitialState: function() {
 		return {
-			'title'   : null,
-			'buttons' : false,
-			'html'    : null,
-			'visible' : false
+			'title'     : null,
+			'buttons'   : false,
+			'content'   : null,
+			'visible'   : false,
+			'className' : null,
+			'noOverlay' : false,
+			'position'  : false
 		};
 	},
 
@@ -172,16 +177,43 @@ Component = React.createClass({
 			popup = _popups[_active];
 
 			_this.setState({
-				title   : popup.title,
-				html    : popup.html,
-				buttons : popup.buttons,
-				visible : true
+				title     : popup.title,
+				content   : popup.content,
+				buttons   : popup.buttons,
+				visible   : true,
+				className : popup.className,
+				noOverlay : popup.noOverlay,
+				position  : popup.position
 			});
 		});
 
 		Manager.addCloseListener(function () {
 			_this.setState(_this.getInitialState());
 		});
+	},
+
+	componentDidUpdate: function () {
+		var box = this.refs.box, position;
+
+		if (!box) {
+			return;
+		}
+
+		box = box.getDOMNode();
+
+		if (!this.state.position) {
+			box.style.opacity = 1;
+			return false;
+		}
+
+		if (typeof this.state.position === 'function') {
+			return this.state.position.call(null, box);
+		}
+
+		box.style.top     = parseInt(this.state.position.y, 10) + 'px';
+		box.style.left    = parseInt(this.state.position.x, 10) + 'px';
+		box.style.margin  = 0;
+		box.style.opacity = 1;
 	},
 
 	_className: function (className) {
@@ -193,7 +225,7 @@ Component = React.createClass({
 	},
 
 	render: function() {
-		var className = this.props.className, box, closeBtn, header, footer, leftBtnsWrapper, leftBtns = [], rightBtnsWrapper, rightBtns = [], i, btn;
+		var className = this.props.className, box, closeBtn, header, footer, leftBtnsWrapper, leftBtns = [], rightBtnsWrapper, rightBtns = [], i, btn, overlayStyle = {};
 
 		if (this.state.visible) {
 			className += ' ' + this.props.className + '--visible';
@@ -266,12 +298,12 @@ Component = React.createClass({
 			}
 
 			box = (
-				<article className={this._className('box')}>
+				<article ref="box" style={{opacity: 0}} className={this._className('box') + ' ' + this.state.className}>
 					{closeBtn}
 					{header}
 
 					<div className={this._className('box__body')}>
-						{this.state.html}
+						{this.state.content}
 					</div>
 
 					{footer}
@@ -279,9 +311,13 @@ Component = React.createClass({
 			);
 		}
 
+		if (this.state.noOverlay) {
+			overlayStyle.opacity = 0;
+		}
+
 		return (
 			<div className={className}>
-				<div onClick={this._onClose} className={this._className('overlay')} />
+				<div onClick={this._onClose} style={overlayStyle} className={this._className('overlay')} />
 				{box}
 			</div>
 		);
