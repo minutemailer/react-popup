@@ -39,20 +39,20 @@
 	}
 
 	.mm-popup__btn {
-		background: #666;
-		border: 0;
+		background: transparent;
+		border: 1px solid #666;
 		padding: 10px 18px;
-		font-size: 18px;
+		font-size: 16px;
 		cursor: pointer;
-
-		color: #fff;
-		border-radius: 2px;
-		border: 1px solid transparent;
+		color: #333;
+		border-radius: 3px;
 		outline: none;
 	}
 
 	.mm-popup__btn--success {
-		background-color: #2aca76;
+		background-color: #27ae60;
+		border-color: #27ae60;
+		color: #fff;
 	}
 
 	.mm-popup__box {
@@ -65,7 +65,6 @@
 		box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 		border-radius: 15px;
 		border: 1px solid #eee;
-		overflow: hidden;
 	}
 
 		.mm-popup__box__header {
@@ -100,3 +99,28 @@
 			.mm-popup__box__footer__left-space {
 				float: left;
 			}
+
+	.mm-popup__box--popin {
+		width: 300px;
+		margin-left: -150px;
+	}
+
+		.mm-popup__box--popin .mm-popup__close {
+			border-radius: 10px;
+			background: #000;
+			color: #fff;
+			width: 20px;
+			height: 20px;
+			line-height: 20px;
+			top: -10px;
+			right: -10px;
+			font-size: 16px;
+		}
+
+		.mm-popup__box--popin .mm-popup__box__body {
+			padding: 20px;
+		}
+
+		.mm-popup__box--popin .mm-popup__box__footer {
+			padding: 10px 20px 20px;
+		}

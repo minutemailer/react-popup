@@ -221,7 +221,7 @@ Component = React.createClass({
 	},
 
 	render: function() {
-		var className = this.props.className, box, closeBtn, footer, leftBtnsWrapper, leftBtns = [], rightBtnsWrapper, rightBtns = [], i, btn, overlayStyle = {};
+		var className = this.props.className, box, closeBtn, footer, leftBtnsWrapper, leftBtns = [], rightBtnsWrapper, rightBtns = [], i, btn, overlayStyle = {}, boxClass;
 
 		if (this.state.visible) {
 			className += ' ' + this.props.className + '--visible';
@@ -230,8 +230,14 @@ Component = React.createClass({
 				closeBtn = <button onClick={this._onClose} className={this.props.className + '__close'}>{this.props.closeHtml}</button>;
 			}
 
+			boxClass = this._className('box');
+
+			if (this.state.className) {
+				boxClass += ' ' + boxClass + '--' + this.state.className;
+			}
+
 			box = (
-				<article ref="box" style={{opacity: 0}} className={this._className('box') + ' ' + this.state.className}>
+				<article ref="box" style={{opacity: 0}} className={boxClass}>
 					{closeBtn}
 					<Header title={this.state.title} className={this._className('box__header')} />
 

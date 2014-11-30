@@ -69,9 +69,7 @@ position.addEventListener('click', function () {
 
 	Popup.create({
 		content: 'This popup will be displayed right above this button.',
-		buttons: {
-			right: ['ok']
-		},
+		className: 'popin',
 		noOverlay: true, // Make it look like a tooltip
 		position: function (box) {
 			var bodyRect      = document.body.getBoundingClientRect(),
