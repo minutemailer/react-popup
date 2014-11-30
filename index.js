@@ -7,9 +7,6 @@
 var React        = require('react'),
     EventEmitter = require('events').EventEmitter,
     assign       = require('object-assign'),
-    _id          = 0,
-    _popups      = {},
-    _queue       = [],
     _active      = null,
     SHOW_EVENT   = 'show',
     CLOSE_EVENT  = 'close',
@@ -17,97 +14,57 @@ var React        = require('react'),
     Component,
     ActionButton;
 
-function getId() {
-	return 'id_' + (_id++);
-}
-
-function dispatch () {
-	if (_active || _queue.length < 1) {
-		return false;
-	}
-
-	var popup, id;
-
-	id = _queue.shift();
-
-	/** Set active */
-	_active = id;
-
-	Manager.emit(SHOW_EVENT);
-}
-
 Manager = assign({}, EventEmitter.prototype, {
 
-	addShowListener: function (callback) {
-		this.on(SHOW_EVENT, callback);
+	id: 1,
+
+	popups: {},
+
+	queue: [],
+
+	active: null,
+
+	getId: function () {
+		return 'id_' + (this.id++);
 	},
 
-	addCloseListener: function (callback) {
-		this.on(CLOSE_EVENT, callback);
+	addListener: function (event, callback) {
+		this.on(event, callback);
 	},
 
-	register: function (data) {
-		var id = getId();
-
-		_popups[id] = data;
-
-		return id; 
-	},
-
-	queue: function (id) {
-		if (!_popups.hasOwnProperty(id)) {
-			return false;
-		}
-
-		/** Add popup to queue */
-		_queue.push(id);
-
-		/** Dispatch queue */
-		dispatch();
-
-		return id;
-	},
-
-	create: function (data) {
-		/** Register popup */
-		var id = this.register(data);
-
-		/** Queue popup */
-		this.queue(id);
-
-		return id;
-	},
-
-	alert: function (text, title, noQueue) {
-		var data = {
-			title: title,
-			content: text,
-			buttons: {
-				right: ['ok']
-			}
-		};
-
-		if (noQueue) {
-			return this.register(data);
-		}
-
-		return this.create(data, noQueue);
+	activePopup: function () {
+		return this.popups[this.active];
 	},
 
 	close: function () {
-		if (!_active) {
+		if (!this.active) {
 			return false;
 		}
 
-		var id = _active;
+		var id = this.active;
 
-		_active = null;
+		this.active = null;
 
-		Manager.emit(CLOSE_EVENT);
+		this.emit(CLOSE_EVENT);
 
-		dispatch();
+		this.dispatch();
 
 		return id;
+	},
+
+	dispatch: function () {
+		if (this.active || this.queue.length < 1) {
+			return false;
+		}
+
+		var popup, id;
+
+		id = this.queue.shift();
+
+		/** Set active */
+		this.active = id;
+
+		this.emit(SHOW_EVENT);
 	}
 
 });
@@ -170,11 +127,75 @@ Component = React.createClass({
 		};
 	},
 
+	statics: {
+
+		addShowListener: function (callback) {
+			Manager.addListener(SHOW_EVENT, callback);
+		},
+
+		addCloseListener: function (callback) {
+			Manager.addListener(CLOSE_EVENT, callback);
+		},
+
+		register: function (data) {
+			var id = Manager.getId();
+
+			Manager.popups[id] = data;
+
+			return id; 
+		},
+
+		queue: function (id) {
+			if (!Manager.popups.hasOwnProperty(id)) {
+				return false;
+			}
+
+			/** Add popup to queue */
+			Manager.queue.push(id);
+
+			/** Dispatch queue */
+			Manager.dispatch();
+
+			return id;
+		},
+
+		create: function (data) {
+			/** Register popup */
+			var id = this.register(data);
+
+			/** Queue popup */
+			this.queue(id);
+
+			return id;
+		},
+
+		alert: function (text, title, noQueue) {
+			var data = {
+				title: title,
+				content: text,
+				buttons: {
+					right: ['ok']
+				}
+			};
+
+			if (noQueue) {
+				return this.register(data);
+			}
+
+			return this.create(data, noQueue);
+		},
+
+		close: function () {
+			Manager.close();
+		}
+
+	},
+
 	componentDidMount: function() {
 		var _this = this, popup;
 
-		Manager.addShowListener(function () {
-			popup = _popups[_active];
+		Manager.addListener('show', function () {
+			popup = Manager.activePopup();
 
 			_this.setState({
 				title     : popup.title,
@@ -187,7 +208,7 @@ Component = React.createClass({
 			});
 		});
 
-		Manager.addCloseListener(function () {
+		Manager.addListener('close', function () {
 			_this.setState(_this.getInitialState());
 		});
 	},
@@ -325,5 +346,4 @@ Component = React.createClass({
 
 });
 
-module.exports.Component = Component;
-module.exports.Manager = Manager;
+module.exports = Component;

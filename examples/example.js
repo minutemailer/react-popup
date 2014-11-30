@@ -5,8 +5,7 @@
 'use strict';
 
 var React                  = require('react'),
-    Popup                  = require('../index').Manager,
-    PopupComponent         = require('../index').Component,
+    Popup                  = require('../index'),
     alert                  = document.getElementById('alert'),
     alertWithTitle         = document.getElementById('alertWithTitle'),
     registeredAlertTrigger = document.getElementById('registeredAlertTrigger'),
@@ -19,7 +18,7 @@ window.react = React;
 
 /** Render popup */
 React.render(
-	<PopupComponent closeHtml="×" />,
+	<Popup closeHtml="×" />,
 	document.getElementById('popupContainer')
 );
 
