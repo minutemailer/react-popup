@@ -7,7 +7,8 @@
 var React        = require('react'),
     EventEmitter = require('events').EventEmitter,
     assign       = require('object-assign'),
-    ActionButton = require('./components/ActionButton.react'),
+    Header       = require('./components/Header.react'),
+    Footer       = require('./components/Footer.react'),
     _active      = null,
     SHOW_EVENT   = 'show',
     CLOSE_EVENT  = 'close',
@@ -221,7 +222,7 @@ Component = React.createClass({
 	},
 
 	render: function() {
-		var className = this.props.className, box, closeBtn, header, footer, leftBtnsWrapper, leftBtns = [], rightBtnsWrapper, rightBtns = [], i, btn, overlayStyle = {};
+		var className = this.props.className, box, closeBtn, footer, leftBtnsWrapper, leftBtns = [], rightBtnsWrapper, rightBtns = [], i, btn, overlayStyle = {};
 
 		if (this.state.visible) {
 			className += ' ' + this.props.className + '--visible';
@@ -230,79 +231,24 @@ Component = React.createClass({
 				closeBtn = <button onClick={this._onClose} className={this.props.className + '__close'}>{this.props.closeHtml}</button>;
 			}
 
-			if (this.state.title) {
-				header = (
-					<header className={this._className('box__header')}>
-						<h1 className={this._className('box__header__title')}>{this.state.title}</h1>
-					</header>
-				);
-			}
-
-			if (this.state.buttons) {
-				if (this.state.buttons.hasOwnProperty('left')) {
-					for (i = 0; i < this.state.buttons.left.length; i++) {
-						btn = this.state.buttons.left[i];
-
-						if (typeof btn === 'string') {
-							if (btn === 'ok') {
-								leftBtns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--ok'} key={i} onClick={this._onClose}>{this.props.defaultOk}</ActionButton>);
-							} else if (btn === 'cancel') {
-								leftBtns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this._onClose}>{this.props.defaultCancel}</ActionButton>);
-							}
-						} else {
-							leftBtns.push(<ActionButton className={this.props.btnClass + ' ' + btn.className} key={i} onClick={this.handleButtonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
-						}
-					}
-
-					leftBtnsWrapper = (
-						<div className={this._className('box__footer__left-space')}>
-							{leftBtns}
-						</div>
-					);
-				}
-
-				if (this.state.buttons.hasOwnProperty('right')) {
-					for (i = 0; i < this.state.buttons.right.length; i++) {
-						btn = this.state.buttons.right[i];
-
-						if (typeof btn === 'string') {
-							if (btn === 'ok') {
-								rightBtns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--ok'} key={i} onClick={this._onClose}>{this.props.defaultOk}</ActionButton>);
-							} else if (btn === 'cancel') {
-								rightBtns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this._onClose}>{this.props.defaultCancel}</ActionButton>);
-							}
-						} else {
-							rightBtns.push(<ActionButton className={this.props.btnClass + ' ' + btn.className} key={i} onClick={this.handleButtonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
-						}
-					}
-
-					rightBtnsWrapper = (
-						<div className={this._className('box__footer__right-space')}>
-							{rightBtns}
-						</div>
-					);
-				}
-
-				if (leftBtnsWrapper || rightBtnsWrapper) {
-					footer = (
-						<footer className={this._className('box__footer')}>
-							{leftBtnsWrapper}
-							{rightBtnsWrapper}
-						</footer>
-					);
-				}
-			}
-
 			box = (
 				<article ref="box" style={{opacity: 0}} className={this._className('box') + ' ' + this.state.className}>
 					{closeBtn}
-					{header}
+					<Header title={this.state.title} className={this._className('box__header')} />
 
 					<div className={this._className('box__body')}>
 						{this.state.content}
 					</div>
 
-					{footer}
+					<Footer
+						className={this._className('box__footer')} 
+						btnClass={this.props.btnClass} 
+						buttonClick={this.handleButtonClick} 
+						onClose={this._onClose} 
+						onOk={this._onClose}
+						defaultOk={this.props.defaultOk}
+						defaultCancel={this.props.defaultCancel}
+						buttons={this.state.buttons} />
 				</article>
 			);
 		}
