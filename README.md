@@ -33,7 +33,7 @@ Above are defaults and for the popup to work you don't have to change anything.
 
 ## Usage
 
-Using the popup is very simple. Only one popup can be visible at the same time and if a popup is created when another is visible, it will be put on in a queue. When a popup closes, the next popup in the queue will be display. To get started, here's a simple example:
+Using the popup is very simple. Only one popup can be visible at the same time and if a popup is created when another is visible, it will be added to the queue. When a popup closes, the next popup in the queue will be display. To get started, here's a simple example:
 
     popup.alert('Hello, look at me');
 
