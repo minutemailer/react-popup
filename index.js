@@ -7,12 +7,12 @@
 var React        = require('react'),
     EventEmitter = require('events').EventEmitter,
     assign       = require('object-assign'),
+    ActionButton = require('./components/ActionButton.react'),
     _active      = null,
     SHOW_EVENT   = 'show',
     CLOSE_EVENT  = 'close',
     Manager,
-    Component,
-    ActionButton;
+    Component;
 
 Manager = assign({}, EventEmitter.prototype, {
 
@@ -65,37 +65,6 @@ Manager = assign({}, EventEmitter.prototype, {
 		this.active = id;
 
 		this.emit(SHOW_EVENT);
-	}
-
-});
-
-ActionButton = React.createClass({
-
-	displayName: 'PopupAction',
-
-	propTypes: {
-		children: React.PropTypes.renderable.isRequired
-	},
-
-	getInitialProps: function () {
-		return {
-			onClick: function () {},
-			className: 'btn'
-		};
-	},
-
-	handleClick: function () {
-		return this.props.onClick(Manager);
-	},
-
-	render: function () {
-		var className = this.props.className;
-
-		return (
-			<button onClick={this.handleClick} className={className}>
-				{this.props.children}
-			</button>
-		);
 	}
 
 });
@@ -245,6 +214,12 @@ Component = React.createClass({
 		Manager.close();
 	},
 
+	handleButtonClick: function (action) {
+		if (typeof action === 'function') {
+			return action.call();
+		}
+	},
+
 	render: function() {
 		var className = this.props.className, box, closeBtn, header, footer, leftBtnsWrapper, leftBtns = [], rightBtnsWrapper, rightBtns = [], i, btn, overlayStyle = {};
 
@@ -275,7 +250,7 @@ Component = React.createClass({
 								leftBtns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this._onClose}>{this.props.defaultCancel}</ActionButton>);
 							}
 						} else {
-							leftBtns.push(<ActionButton className={this.props.btnClass + ' ' + btn.className} key={i} onClick={btn.action}>{btn.text}</ActionButton>);
+							leftBtns.push(<ActionButton className={this.props.btnClass + ' ' + btn.className} key={i} onClick={this.handleButtonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
 						}
 					}
 
@@ -297,7 +272,7 @@ Component = React.createClass({
 								rightBtns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this._onClose}>{this.props.defaultCancel}</ActionButton>);
 							}
 						} else {
-							rightBtns.push(<ActionButton className={this.props.btnClass + ' ' + btn.className} key={i} onClick={btn.action}>{btn.text}</ActionButton>);
+							rightBtns.push(<ActionButton className={this.props.btnClass + ' ' + btn.className} key={i} onClick={this.handleButtonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
 						}
 					}
 
