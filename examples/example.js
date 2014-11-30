@@ -45,7 +45,7 @@ registeredAlertTrigger.addEventListener('click', function () {
 customButtons.addEventListener('click', function () {
 	Popup.create({
 		title: null,
-		html: 'This popup uses the create method directly to get more control. This popup demonstrates custom buttons.',
+		content: 'This popup uses the create method directly to get more control. This popup demonstrates custom buttons.',
 		buttons: {
 			left: ['cancel'],
 			right: [{
