@@ -5,23 +5,22 @@ Button example styles from https://github.com/hakimel/Ladda
 
 ## Install
 
-For now this component is only available as a CommonJS module and is for the moment not available on npm or any other package manager. So to install, just drop this folder in your project and require it. The module exports a "Manager" and a React Component. Here's a simple example:
+For now this component is only available as a CommonJS module and is for the moment not available on npm or any other package manager. So to install, just drop this folder in your project and require it. The module exports a react component with static methods. Here's a simple example:
 
-    var popup          = require('./react-popup').Manager,
-        PopupComponent = require('./react-popup').Component
+    var Popup = require('./react-popup').Manager;
 
     React.render(
-    	<PopupComponent />,
+    	<Popup />,
     	document.getElementById('popupContainer')
     );
 
-    popup.alert('This is an alert popup');
+    Popup.alert('This is an alert popup');
 
 ## Configuration
 
 You configure the popup by passing properties to the component. Available options are:
 
-    <PopupComponent
+    <Popup
         className="mm-popup"
         btnClass="mm-popup__btn"
         closeBtn={true}
@@ -35,11 +34,11 @@ Above are defaults and for the popup to work you don't have to change anything.
 
 Using the popup is very simple. Only one popup can be visible at the same time and if a popup is created when another is visible, it will be added to the queue. When a popup closes, the next popup in the queue will be display. To get started, here's a simple example:
 
-    popup.alert('Hello, look at me');
+    Popup.alert('Hello, look at me');
 
 The code above will display a popup with the text "Hello, look at me" and an "Ok" button that closes the popup. The `alert` method is just an alias for this:
 
-    popup.create({
+    Popup.create({
     	title: null,
     	content: 'Hello, look at me',
     	className: 'mm-popup--alert',
