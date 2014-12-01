@@ -42,12 +42,24 @@ ButtonsSpace = React.createClass({
 		}
 	},
 
+	_wildClass: function (className, base) {
+		if (!className) {
+			return null;
+		}
+
+		if (this.props.wildClasses) {
+			return className;
+		}
+
+		return base + '--' + className;
+	},
+
 	render: function () {
 		if (!this.props.buttons) {
 			return null;
 		}
 
-		var i, btns = [], btn;
+		var i, btns = [], btn, className;
 
 		for (i = 0; i < this.props.buttons.length; i++) {
 			btn = this.props.buttons[i];
@@ -59,7 +71,8 @@ ButtonsSpace = React.createClass({
 					btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this._onClose}>{this.props.defaultCancel}</ActionButton>);
 				}
 			} else {
-				btns.push(<ActionButton className={this.props.btnClass + ' ' + btn.className} key={i} onClick={this.buttonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
+				className = this.props.btnClass + ' ' + this._wildClass(btn.className, this.props.btnClass);
+				btns.push(<ActionButton className={className} key={i} onClick={this.buttonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
 			}
 		}
 
@@ -80,6 +93,7 @@ Component = React.createClass({
 		return {
 			buttons: null,
 			className: null,
+			wildClasses: false,
 			btnClass: null,
 			defaultOk: null,
 			defaultCancel: null,
@@ -98,6 +112,7 @@ Component = React.createClass({
 						onOk={this.props.onOk}
 						onClose={this.props.onClose}
 						className={this.props.className + '__left-space'}
+						wildClasses={this.props.wildClasses}
 						btnClass={this.props.btnClass}
 						defaultOk={this.props.defaultOk}
 						defaultCancel={this.props.defaultCancel}
@@ -108,6 +123,7 @@ Component = React.createClass({
 						onOk={this.props.onOk}
 						onClose={this.props.onClose}
 						className={this.props.className + '__right-space'}
+						wildClasses={this.props.wildClasses}
 						btnClass={this.props.btnClass}
 						defaultOk={this.props.defaultOk}
 						defaultCancel={this.props.defaultCancel}

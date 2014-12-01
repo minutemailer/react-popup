@@ -50,7 +50,7 @@ customButtons.addEventListener('click', function () {
 			left: ['cancel'],
 			right: [{
 				text: 'Save',
-				className: 'mm-popup__btn--success',
+				className: 'success',
 				action: function () {
 					/** This popup will be displayed after this one has closed */
 					Popup.alert('Another popup yada yada');

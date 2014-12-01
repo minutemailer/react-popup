@@ -26,9 +26,16 @@ You configure the popup by passing properties to the component. Available option
         closeBtn={true}
         closeHtml={null}
         defaultOk="Ok"
-        defaultCancel="Cancel" />
+        defaultCancel="Cancel"
+        wildClasses={false} />
 
-Above are defaults and for the popup to work you don't have to change anything.
+Above are defaults and for the popup to work you don't have to change anything. If `wildClasses` is set to `false` all classes will be added as BEM style modifiers. If set to `true` you have complete freedom and the class will be displayed exactly as you defined it. Look at this example:
+
+    Popup.create({
+        className: 'prompt'
+    });
+
+The above popup would have the class `mm-popup__box--prompt` if `wildClasses` is false and if true, it would just be `prompt`. The same goes for button classes.
 
 ## Usage
 
@@ -41,7 +48,7 @@ The code above will display a popup with the text "Hello, look at me" and an "Ok
     Popup.create({
     	title: null,
     	content: 'Hello, look at me',
-    	className: 'mm-popup--alert',
+    	className: 'alert',
     	buttons: {
     		right: ['ok']
     	}

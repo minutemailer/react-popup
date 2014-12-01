@@ -75,13 +75,14 @@ Component = React.createClass({
 
 	getInitialState: function() {
 		return {
-			'title'     : null,
-			'buttons'   : false,
-			'content'   : null,
-			'visible'   : false,
-			'className' : null,
-			'noOverlay' : false,
-			'position'  : false
+			'title'       : null,
+			'buttons'     : false,
+			'content'     : null,
+			'visible'     : false,
+			'className'   : null,
+			'noOverlay'   : false,
+			'position'    : false,
+			'wildClasses' : false
 		};
 	},
 
@@ -210,6 +211,18 @@ Component = React.createClass({
 		return this.props.className + '__' + className;
 	},
 
+	_wildClass: function (className, base) {
+		if (!className) {
+			return null;
+		}
+
+		if (this.props.wildClasses) {
+			return className;
+		}
+
+		return base + '--' + className;
+	},
+
 	_onClose: function () {
 		Manager.close();
 	},
@@ -233,7 +246,7 @@ Component = React.createClass({
 			boxClass = this._className('box');
 
 			if (this.state.className) {
-				boxClass += ' ' + boxClass + '--' + this.state.className;
+				boxClass += ' ' + this._wildClass(this.state.className, boxClass);
 			}
 
 			box = (
@@ -246,7 +259,8 @@ Component = React.createClass({
 					</div>
 
 					<Footer
-						className={this._className('box__footer')} 
+						className={this._className('box__footer')}
+						wildClasses={this.props.wildClasses}
 						btnClass={this.props.btnClass} 
 						buttonClick={this.handleButtonClick} 
 						onClose={this._onClose} 
