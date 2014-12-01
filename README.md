@@ -1,13 +1,11 @@
 React popup component
 ===========
 
-Button example styles from https://github.com/hakimel/Ladda
-
 ## Install
 
 For now this component is only available as a CommonJS module and is for the moment not available on npm or any other package manager. So to install, just drop this folder in your project and require it. The module exports a react component with static methods. Here's a simple example:
 
-    var Popup = require('./react-popup').Manager;
+    var Popup = require('./react-popup');
 
     React.render(
     	<Popup />,
