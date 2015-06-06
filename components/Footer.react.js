@@ -15,22 +15,23 @@ ButtonsSpace = React.createClass({
 
 	getInitialProps: function () {
 		return {
-			buttons: null,
-			className: null,
-			onOk: null,
-			onClose: null,
-			buttonClick: null,
-			btnClass: null
+			buttons     : null,
+			className   : null,
+			onOk        : null,
+			onClose     : null,
+			buttonClick : null,
+			btnClass    : null,
+			href        : null
 		};
 	},
 
-	_onOk: function () {
+	onOk: function () {
 		if (this.props.onOk) {
 			return this.props.onOk();
 		}
 	},
 
-	_onClose: function () {
+	onClose: function () {
 		if (this.props.onClose) {
 			return this.props.onClose();
 		}
@@ -42,7 +43,7 @@ ButtonsSpace = React.createClass({
 		}
 	},
 
-	_wildClass: function (className, base) {
+	wildClass: function (className, base) {
 		if (!className) {
 			return null;
 		}
@@ -51,7 +52,14 @@ ButtonsSpace = React.createClass({
 			return className;
 		}
 
-		return base + '--' + className;
+		var finalClass = [],
+		    classNames = className.split(' ');
+
+		classNames.forEach(function (className) {
+			finalClass.push(base + '--' + className);
+		});
+
+		return finalClass.join(' ');
 	},
 
 	render: function () {
@@ -59,20 +67,21 @@ ButtonsSpace = React.createClass({
 			return null;
 		}
 
-		var i, btns = [], btn, className;
+		var i, btns = [], btn, className, url;
 
 		for (i = 0; i < this.props.buttons.length; i++) {
 			btn = this.props.buttons[i];
+			url = (btn.url) ? btn.url : null;
 
 			if (typeof btn === 'string') {
 				if (btn === 'ok') {
-					btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--ok'} key={i} onClick={this._onOk}>{this.props.defaultOk}</ActionButton>);
+					btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--ok'} key={i} onClick={this.onOk}>{this.props.defaultOk}</ActionButton>);
 				} else if (btn === 'cancel') {
-					btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this._onClose}>{this.props.defaultCancel}</ActionButton>);
+					btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this.onClose}>{this.props.defaultCancel}</ActionButton>);
 				}
 			} else {
-				className = this.props.btnClass + ' ' + this._wildClass(btn.className, this.props.btnClass);
-				btns.push(<ActionButton className={className} key={i} onClick={this.buttonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
+				className = this.props.btnClass + ' ' + this.wildClass(btn.className, this.props.btnClass);
+				btns.push(<ActionButton className={className} key={i} url={url} onClick={this.buttonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
 			}
 		}
 

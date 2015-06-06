@@ -4,13 +4,26 @@
 
 'use strict';
 
-var React        = require('react'),
-    EventEmitter = require('events').EventEmitter,
-    assign       = require('object-assign'),
-    Header       = require('./components/Header.react'),
-    Footer       = require('./components/Footer.react'),
-    SHOW_EVENT   = 'show',
-    CLOSE_EVENT  = 'close',
+var React          = require('react'),
+    EventEmitter   = require('events').EventEmitter,
+    assign         = require('object-assign'),
+    Header         = require('./components/Header.react'),
+    Footer         = require('./components/Footer.react'),
+    Input          = require('./components/Input.react'),
+    SHOW_EVENT     = 'show',
+    CLOSE_EVENT    = 'close',
+    VALUE_EVENT    = 'value',
+    _props         = {},
+    _initialState  = {
+		'title'       : null,
+		'buttons'     : false,
+		'content'     : null,
+		'visible'     : false,
+		'className'   : null,
+		'noOverlay'   : false,
+		'position'    : false,
+		'wildClasses' : false
+	},
     Manager,
     Component;
 
@@ -24,12 +37,10 @@ Manager = assign({}, EventEmitter.prototype, {
 
 	active: null,
 
+	value: null,
+
 	getId: function () {
 		return 'id_' + (this.id++);
-	},
-
-	addListener: function (event, callback) {
-		this.on(event, callback);
 	},
 
 	activePopup: function () {
@@ -41,13 +52,13 @@ Manager = assign({}, EventEmitter.prototype, {
 			return false;
 		}
 
-		var id = this.active;
-
+		var id      = this.active;
 		this.active = null;
 
 		this.emit(CLOSE_EVENT);
-
 		this.dispatch();
+
+		this.value = null;
 
 		return id;
 	},
@@ -74,22 +85,14 @@ Component = React.createClass({
 	displayName: 'Popup',
 
 	getInitialState: function() {
-		return {
-			'title'       : null,
-			'buttons'     : false,
-			'content'     : null,
-			'visible'     : false,
-			'className'   : null,
-			'noOverlay'   : false,
-			'position'    : false,
-			'wildClasses' : false
-		};
+		return _initialState;
 	},
 
 	getDefaultProps: function() {
 		return {
 			'className'     : 'mm-popup',
 			'btnClass'      : 'mm-popup__btn',
+			'inputClass'    : 'mm-popup__input',
 			'closeBtn'      : true,
 			'closeHtml'     : null,
 			'defaultOk'     : 'Ok',
@@ -100,15 +103,25 @@ Component = React.createClass({
 	statics: {
 
 		addShowListener: function (callback) {
-			Manager.addListener(SHOW_EVENT, callback);
+			Manager.on(SHOW_EVENT, callback);
+		},
+
+		removeShowListener: function (callback) {
+			Manager.on(SHOW_EVENT, callback);
 		},
 
 		addCloseListener: function (callback) {
-			Manager.addListener(CLOSE_EVENT, callback);
+			Manager.on(CLOSE_EVENT, callback);
+		},
+
+		removeCloseListener: function (callback) {
+			Manager.on(CLOSE_EVENT, callback);
 		},
 
 		register: function (data) {
 			var id = Manager.getId();
+
+			data = assign({}, _initialState, data);
 
 			Manager.popups[id] = data;
 
@@ -152,11 +165,46 @@ Component = React.createClass({
 				return this.register(data);
 			}
 
-			return this.create(data, noQueue);
+			return this.create(data);
+		},
+
+		prompt: function (title, inputAttributes, okBtn, noQueue) {
+			if (!okBtn) {
+				okBtn = 'ok';
+			}
+			
+			inputAttributes || (inputAttributes = {
+				value: '',
+				placeholder: '',
+				type: 'text'
+			});
+
+			function onChange(value) {
+				Manager.value = value;
+			}
+
+			var data = {
+				title: title,
+				content: <Input value={inputAttributes.value} placeholder={inputAttributes.placeholder} type={inputAttributes.type} className={_props.inputClass} onChange={onChange} />,
+				buttons: {
+					left: ['cancel'],
+					right: [okBtn]
+				}
+			};
+
+			if (noQueue) {
+				return this.register(data);
+			}
+
+			return this.create(data);
 		},
 
 		close: function () {
 			Manager.close();
+		},
+
+		getValue: function () {
+			return Manager.value;
 		}
 
 	},
@@ -164,7 +212,7 @@ Component = React.createClass({
 	componentDidMount: function() {
 		var _this = this, popup;
 
-		Manager.addListener('show', function () {
+		Manager.on(SHOW_EVENT, function () {
 			popup = Manager.activePopup();
 
 			_this.setState({
@@ -178,7 +226,9 @@ Component = React.createClass({
 			});
 		});
 
-		Manager.addListener('close', function () {
+		_props = this.props;
+
+		Manager.on(CLOSE_EVENT, function () {
 			_this.setState(_this.getInitialState());
 		});
 	},
@@ -194,6 +244,9 @@ Component = React.createClass({
 
 		if (!this.state.position) {
 			box.style.opacity = 1;
+			box.style.top  = null;
+			box.style.left = null;
+			box.style.margin = null;
 			return false;
 		}
 
@@ -206,12 +259,20 @@ Component = React.createClass({
 		box.style.margin  = 0;
 		box.style.opacity = 1;
 	},
+	
+	hasClass: function (element, className) {
+		if (element.classList) {
+	      return !!className && element.classList.contains(className);
+	    }
+	    
+	    return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
+	},
 
-	_className: function (className) {
+	className: function (className) {
 		return this.props.className + '__' + className;
 	},
 
-	_wildClass: function (className, base) {
+	wildClass: function (className, base) {
 		if (!className) {
 			return null;
 		}
@@ -220,16 +281,29 @@ Component = React.createClass({
 			return className;
 		}
 
-		return base + '--' + className;
+		var finalClass = [],
+		    classNames = className.split(' ');
+
+		classNames.forEach(function (className) {
+			finalClass.push(base + '--' + className);
+		});
+
+		return finalClass.join(' ');
 	},
 
-	_onClose: function () {
+	onClose: function () {
 		Manager.close();
 	},
 
 	handleButtonClick: function (action) {
 		if (typeof action === 'function') {
-			return action.call();
+			return action.call(this, Manager);
+		}
+	},
+	
+	containerClick: function (e) {
+		if (this.hasClass(e.target, this.props.className)) {
+			this.onClose();
 		}
 	},
 
@@ -240,31 +314,31 @@ Component = React.createClass({
 			className += ' ' + this.props.className + '--visible';
 
 			if (this.props.closeBtn) {
-				closeBtn = <button onClick={this._onClose} className={this.props.className + '__close'}>{this.props.closeHtml}</button>;
+				closeBtn = <button onClick={this.onClose} className={this.props.className + '__close'}>{this.props.closeHtml}</button>;
 			}
 
-			boxClass = this._className('box');
+			boxClass = this.className('box');
 
 			if (this.state.className) {
-				boxClass += ' ' + this._wildClass(this.state.className, boxClass);
+				boxClass += ' ' + this.wildClass(this.state.className, boxClass);
 			}
 
 			box = (
 				<article ref="box" style={{opacity: 0}} className={boxClass}>
 					{closeBtn}
-					<Header title={this.state.title} className={this._className('box__header')} />
+					<Header title={this.state.title} className={this.className('box__header')} />
 
-					<div className={this._className('box__body')}>
+					<div className={this.className('box__body')}>
 						{this.state.content}
 					</div>
 
 					<Footer
-						className={this._className('box__footer')}
+						className={this.className('box__footer')}
 						wildClasses={this.props.wildClasses}
 						btnClass={this.props.btnClass} 
 						buttonClick={this.handleButtonClick} 
-						onClose={this._onClose} 
-						onOk={this._onClose}
+						onClose={this.onClose} 
+						onOk={this.onClose}
 						defaultOk={this.props.defaultOk}
 						defaultCancel={this.props.defaultCancel}
 						buttons={this.state.buttons} />
@@ -273,12 +347,11 @@ Component = React.createClass({
 		}
 
 		if (this.state.noOverlay) {
-			overlayStyle.opacity = 0;
+			overlayStyle.background = 'transparent';
 		}
 
 		return (
-			<div className={className}>
-				<div onClick={this._onClose} style={overlayStyle} className={this._className('overlay')} />
+			<div onClick={this.containerClick} className={className} style={overlayStyle}>
 				{box}
 			</div>
 		);

@@ -6,11 +6,12 @@
 
 var React                  = require('react'),
     Popup                  = require('../index'),
-    alert                  = document.getElementById('alert'),
+    alertBtn               = document.getElementById('alert'),
     alertWithTitle         = document.getElementById('alertWithTitle'),
     registeredAlertTrigger = document.getElementById('registeredAlertTrigger'),
     customButtons          = document.getElementById('customButtons'),
     position               = document.getElementById('position'),
+    prompt                 = document.getElementById('prompt'),
     registeredAlert;
 
 /** React debug */
@@ -23,7 +24,7 @@ React.render(
 );
 
 /** Alert */
-alert.addEventListener('click', function () {
+alertBtn.addEventListener('click', function () {
 	Popup.alert("This is an example of a normal alert box. Pass some text with additional title or send an ID of an already created popup.");
 	Popup.alert("All popups will be queued and when first in line, displayed.");
 });
@@ -39,6 +40,18 @@ registeredAlert = Popup.alert('You can register popups for use later. Set the th
 /** Display pre-registered popup */
 registeredAlertTrigger.addEventListener('click', function () {
 	Popup.queue(registeredAlert);
+});
+
+/** Prompt */
+prompt.addEventListener('click', function () {
+	Popup.prompt('What\'s your name?', null, {
+		text: 'Continue',
+		className: 'success',
+		action: function (Box) {
+			alert('You typed: ' + Box.value);
+			Box.close();
+		}
+	});
 });
 
 /** Custom buttons */

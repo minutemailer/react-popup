@@ -13,7 +13,7 @@ Component = React.createClass({
 
 	getInitialProps: function () {
 		return {
-			title: null,
+			title:     null,
 			className: null
 		};
 	},

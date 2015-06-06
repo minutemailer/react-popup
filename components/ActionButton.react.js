@@ -17,8 +17,9 @@ Component = React.createClass({
 
 	getInitialProps: function () {
 		return {
-			onClick: function () {},
-			className: 'btn'
+			onClick   : function () {},
+			className : 'btn',
+			url       : null
 		};
 	},
 
@@ -27,7 +28,19 @@ Component = React.createClass({
 	},
 
 	render: function () {
-		var className = this.props.className;
+		var className = this.props.className, url = false;
+		
+		if (this.props.url) {
+			if (this.props.url !== '#') {
+				url = true;
+			}
+			
+			if (!url) {
+				return (<a target="_blank" className={className}>{this.props.children}</a>);
+			}
+			
+			return (<a href={this.props.url} target="_blank" className={className}>{this.props.children}</a>);
+		}
 
 		return (
 			<button onClick={this.handleClick} className={className}>
