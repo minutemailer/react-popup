@@ -1,7 +1,7 @@
 {
   "name": "react-popup",
-  "version": "0.0.1",
-  "description": "React popup component",
+  "version": "0.1.0",
+  "description": "React popup component from Minutemailer",
   "main": "index.js",
   "scripts": {
     "start": "watchify -o dist/bundle.js -v -d ./index.js",
