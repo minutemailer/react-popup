@@ -29,7 +29,7 @@
   "dependencies": {
     "object-assign": "^1.0.0",
     "react": "^0.12.0"
-  }
+  },
   "devDependencies": {
     "browserify": "^6.2.0",
     "reactify": "^0.15.2",
