@@ -7,7 +7,7 @@ React popup component
 
 For now this component is only available as a CommonJS module. Install it with npm (`npm install react-popup`). The module exports a react component with static methods. Here's a simple example:
 
-    var Popup = require('./react-popup');
+    var Popup = require('react-popup');
 
     React.render(
     	<Popup />,
