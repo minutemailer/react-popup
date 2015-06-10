@@ -56,7 +56,7 @@ The code above will display a popup with the text "Hello, look at me" and an "Ok
 
 ### Popup options
 
-To create a popup you have to methods you can use: `create` and `register`. The `create` method automatically puts the new popup in the queue and the `register` method just creates a popup for later use. All popup creations returns an ID. More on how to use the ID further down. Now, all available options are:
+To create a popup, you have two methods you can use: `create` and `register`. The `create` method automatically puts the new popup in the queue and the `register` method just creates a popup for later use. All popup creations return an ID. More on how to use the ID further down. Now, all available options are:
 
     {
     	title: null, // or string
@@ -92,7 +92,7 @@ You can also use the default buttons: `ok` and `cancel`. These uses the "default
 
 #### Position
 
-The position property is useful the display a popup in another position, like next to the trigger. The easy use is to just set an object with x and y values: `{x: 100, y: 200}`. The more advance options is to use a function. When using a function you will be given the DOM node of the popup box, what you do with it is up to you. One thing to have in mind is that, when rendered, the popup has the styling `opacity: 0`. This is to give you a chance to know the popup dimensions when you position the element. The popup box will automatically be visible if you do not use positioning or if you use an object, but when using a function you need to do it your self. Here's a simple example to display the popup centered above a button:
+The position property is useful to display a popup in another position, like next to the trigger. The easy use is to just set an object with x and y values: `{x: 100, y: 200}`. The more advanced option is to use a function. When using a function you will be given the DOM node of the popup box, what you do with it is up to you. One thing to have in mind is that, when rendered, the popup has the styling `opacity: 0`. This is to give you a chance to know the popup dimensions when you position the element. The popup box will automatically be visible if you do not use positioning or if you use an object, but when using a function you need to do it yourself. Here's a simple example to display the popup centered above a button:
 
     var trigger = document.getElementById('trigger');
 
