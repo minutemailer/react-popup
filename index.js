@@ -1,12 +1,8 @@
-/**
- * @jsx React.DOM
- */
-
 'use strict';
 
 var React          = require('react'),
     EventEmitter   = require('events').EventEmitter,
-    assign         = require('object-assign'),
+    assign         = require('react/lib/Object.assign'),
     Header         = require('./components/Header.react'),
     Footer         = require('./components/Footer.react'),
     Input          = require('./components/Input.react'),
@@ -239,8 +235,6 @@ Component = React.createClass({
 		if (!box) {
 			return;
 		}
-
-		box = box.getDOMNode();
 
 		if (!this.state.position) {
 			box.style.opacity = 1;

@@ -1,10 +1,7 @@
-/**
- * @jsx React.DOM
- */
-
 'use strict';
 
-var React = require('react'),
+var React    = require('react'),
+    ReactDom = require('react-dom'),
     Component;
 
 Component = React.createClass({
@@ -28,7 +25,7 @@ Component = React.createClass({
 	},
 
 	componentDidMount: function () {
-		this.getDOMNode().focus();
+		ReactDom.findDOMNode(this).focus();
 	},
 
 	handleChange: function (event) {

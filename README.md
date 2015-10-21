@@ -3,9 +3,13 @@ React popup component
 
 ![](https://dl.dropboxusercontent.com/u/6306766/react-popup.png)
 
+## Note!
+
+A React 0.12.* supported version can be found in the 0.1 branch and 0.1.* tagged releases
+
 ## Install
 
-For now this component is only available as a CommonJS module. Install it with npm (`npm install react-popup`). The module exports a react component with static methods. Here's a simple example:
+For now this component is only available as a CommonJS module. Install it with npm (`npm install react-popup --save`). The module exports a react component with static methods. Here's a simple example:
 
     var Popup = require('react-popup');
 
