@@ -1,9 +1,8 @@
 'use strict';
 
-var React = require('react'),
-    Component;
+import React from 'react';
 
-Component = React.createClass({
+let Component = React.createClass({
 
 	displayName: 'PopupHeader',
 
@@ -28,4 +27,4 @@ Component = React.createClass({
 
 });
 
-module.exports = Component;
+export default Component;

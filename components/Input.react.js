@@ -1,10 +1,9 @@
 'use strict';
 
-var React    = require('react'),
-    ReactDom = require('react-dom'),
-    Component;
+import React from 'react';
+import ReactDom from 'react-dom';
 
-Component = React.createClass({
+let Component = React.createClass({
 
 	displayName: 'PopupInput',
 
@@ -43,4 +42,4 @@ Component = React.createClass({
 
 });
 
-module.exports = Component;
+export default Component;

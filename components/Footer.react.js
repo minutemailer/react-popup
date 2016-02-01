@@ -1,8 +1,9 @@
 'use strict';
 
-var React        = require('react'),
-    ActionButton = require('./ActionButton.react'),
-    ButtonsSpace,
+import React from 'react';
+import ActionButton from './ActionButton.react';
+
+let ButtonsSpace,
     Component;
 
 ButtonsSpace = React.createClass({
@@ -142,4 +143,4 @@ Component = React.createClass({
 
 });
 
-module.exports = Component;
+export default Component;

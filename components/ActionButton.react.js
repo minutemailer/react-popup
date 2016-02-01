@@ -1,9 +1,8 @@
 'use strict';
 
-var React = require('react'),
-    Component;
+import React from 'react';
 
-Component = React.createClass({
+let Component = React.createClass({
 
 	displayName: 'PopupAction',
 
@@ -47,4 +46,4 @@ Component = React.createClass({
 
 });
 
-module.exports = Component;
+export default Component;
