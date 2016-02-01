@@ -1,12 +1,11 @@
 {
   "name": "react-popup",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "React popup component from Minutemailer",
-  "main": "index.js",
+  "main": "dist/es5.js",
   "scripts": {
-    "start": "watchify -o dist/bundle.js -v -d ./index.js",
-    "example": "watchify -o examples/dist/example.js -v -d examples/example.js",
-    "build": "browserify index.js | uglifyjs -cm > dist/bundle.min.js"
+    "lint": "eslint index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -27,18 +26,34 @@
   },
   "homepage": "https://github.com/minutemailer/react-popup",
   "peerDependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
   },
   "devDependencies": {
     "babelify": "^6.4.0",
     "browserify": "^11.2.0",
     "uglify-js": "^2.4.15",
-    "watchify": "^3.4.0"
+    "watchify": "^3.4.0",
+    "babel-eslint": "^5.0.0-beta4",
+    "babel-jest": "^6.0.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "eslint": "^1.10.3",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-rename": "^1.2.2",
+    "jest-cli": "^0.8.0",
+    "react-addons-test-utils": "^0.14.3"
   },
-  "browserify": {
-    "transform": [
-      "babelify"
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/react-dom",
+      "<rootDir>/node_modules/react-addons-test-utils"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/node_modules/"
     ]
   }
 }
