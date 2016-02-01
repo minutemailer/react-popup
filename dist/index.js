@@ -16,15 +16,15 @@ var _Object = require('react/lib/Object.assign');
 
 var _Object2 = _interopRequireDefault(_Object);
 
-var _Header = require('./components/Header.react');
+var _Header = require('./Header.react');
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _Footer = require('./components/Footer.react');
+var _Footer = require('./Footer.react');
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _Input = require('./components/Input.react');
+var _Input = require('./Input.react');
 
 var _Input2 = _interopRequireDefault(_Input);
 

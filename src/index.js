@@ -3,9 +3,9 @@
 import React from 'react';
 import events from 'events';
 import assign from 'react/lib/Object.assign';
-import Header from './components/Header.react';
-import Footer from './components/Footer.react';
-import Input from './components/Input.react';
+import Header from './Header.react';
+import Footer from './Footer.react';
+import Input from './Input.react';
 
 var EventEmitter  = events.EventEmitter,
     SHOW_EVENT    = 'show',

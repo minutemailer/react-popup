@@ -2,7 +2,7 @@
   "name": "react-popup",
   "version": "0.2.3",
   "description": "React popup component from Minutemailer",
-  "main": "dist/es5.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "eslint index.js",
     "test": "jest"
