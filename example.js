@@ -18,6 +18,14 @@ ReactDom.render(
     document.getElementById('popupContainer')
 );
 
+Popup.addShowListener(function () {
+    document.body.className = 'no-scrolls';
+});
+
+Popup.addCloseListener(function () {
+    document.body.className = '';
+});
+
 /** Alert */
 alertBtn.addEventListener('click', function () {
     Popup.alert("This is an example of a normal alert box. Pass some text with additional title or send an ID of an already created popup.");

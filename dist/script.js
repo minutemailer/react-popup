@@ -26,6 +26,14 @@ var alertBtn = document.getElementById('alert'),
 /** Render popup */
 _reactDom2.default.render(_react2.default.createElement(_reactPopup2.default, { closeHtml: '×' }), document.getElementById('popupContainer'));
 
+_reactPopup2.default.addShowListener(function () {
+    document.body.className = 'no-scrolls';
+});
+
+_reactPopup2.default.addCloseListener(function () {
+    document.body.className = '';
+});
+
 /** Alert */
 alertBtn.addEventListener('click', function () {
     _reactPopup2.default.alert("This is an example of a normal alert box. Pass some text with additional title or send an ID of an already created popup.");

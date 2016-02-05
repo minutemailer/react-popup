@@ -87,6 +87,7 @@
         border-radius: 5px;
         border: 1px solid #B8C8CC;
         overflow: hidden;
+        z-index: 100;
     }
 
         .mm-popup__box__header {
@@ -150,3 +151,14 @@
         .mm-popup__box--popin .mm-popup__box__footer {
             padding: 10px 20px 20px;
         }
+
+@media (max-width: 420px) {
+    .mm-popup__box {
+        width: auto;
+        left: 10px;
+        right: 10px;
+        top: 50%;
+        margin-left: 0;
+        -webkit-transform: translateY(-50%);
+    }
+}
