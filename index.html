@@ -1,55 +1,184 @@
 <!doctype html>
 <html>
 
-	<head>
-		<meta charset="utf-8">
-		<title>React popup example</title>
-		<link rel="stylesheet" href="popup.example.css">
-		<style>
-			* {
-				margin: 0;
-				padding: 0;
-			}
+    <head>
+        <meta charset="utf-8">
+        <title>React popup example</title>
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700" rel="stylesheet" type="text/css">
+        <style>
+            * {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            html {
+                background: #fff;
+                font: normal 16px/1.2 "Open Sans", sans-serif;
+                color: #646666;
+            }
+            
+            html, button, input {
+                -webkit-font-smoothing: antialiased;
+            }
+            
+            body {
+                text-rendering: optimizeLegibility;
+            }
 
-			html, input, button {
-				-webkit-font-smoothing: antialiased;
-				font-family: sans-serif;
-			}
+            h1 {
+                text-align: center;
+                font: 300 32px/1.2 "Open Sans", sans-serif;
+                font-size: 54px;
+                color: #474a4d;
+                margin: 0 0 10px;
+            }
 
-			body {
-				text-rendering: optimizeLegibility;
-				padding: 40px;
-			}
-			
-			input {
-				display: block;
-				width: 100%;
-				height: 40px;
-				border-radius: 3px;
-				background: #f5f5f5;
-				border: 1px solid #d4d8d9;
-				outline: none;
-				-moz-box-sizing: border-box !important;
-				-webkit-box-sizing: border-box !important;
-				box-sizing: border-box !important;
-				font-size: 14px;
-				padding: 0 12px;
-				color: #808080;
-				vertical-align: top;
-			}
-		</style>
-	</head>
+            h2 {
+                margin: 30px 0 0;
+                font-size: 26px;
+                font-weight: 600;
+            }
 
-	<body>
-		<button class="mm-popup__btn" type="button" id="alert">Alert</button>
-		<button class="mm-popup__btn" type="button" id="alertWithTitle">Alert with title</button>
-		<button class="mm-popup__btn" type="button" id="registeredAlertTrigger">Registered alert</button>
-		<button class="mm-popup__btn" type="button" id="customButtons">Custom buttons</button>
-		<button class="mm-popup__btn" type="button" id="prompt">Prompt</button>
-		<button class="mm-popup__btn" type="button" id="position" style="position: absolute; top: 400px; left: 300px;">Position above me</button>
+            .description {
+                color: #81888b;
+                font-size: 18px;
+                margin: 0;
+                line-height: 1.4;
+                text-align: center;
+            }
 
-		<div id="popupContainer"></div>
-		<script src="dist/script.js"></script>
-	</body>
+            .container {
+                padding: 100px 20px;
+                position: relative;
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .minutemailer {
+                margin: 0;
+                display: block;
+                position: absolute;
+                top: 25px;
+                left: 0;
+                text-indent: -9999px;
+                width: 180px;
+                height: 27px;
+                background: url("https://minutemailer.com/assets/svg/minutemailer-logo.svg") no-repeat;
+                background-size: 100%;
+            }
+            
+            p {
+                line-height: 1.5;
+                margin: 30px 0 0;
+            }
+
+            .section {
+                margin-top: 80px;
+            }
+            
+            section {
+                margin-top: 30px;
+                padding-top: 30px;
+                border-top: 1px solid #e1e1e8;
+            }
+
+            .btn {
+                border-radius: 3px;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                padding: 0 10px;
+                margin: 0 0 0 15px;
+                line-height: 32px;
+                height: 32px;
+                border: 1px solid #666;
+                text-align: center;
+                display: inline-block;
+                font-size: 12px;
+                font-weight: 400;
+                color: #333;
+                background: transparent;
+                outline: none;
+                text-decoration: none;
+                cursor: pointer;
+                font-family: "Open Sans", sans-serif;
+            }
+
+            .btn:hover {
+                border-color: #a6a6a6;
+                color: #a6a6a6;
+            }
+
+            .fork {
+                position: absolute;
+                top: 25px;
+                right: 0;
+            }
+        </style>
+        <link rel="stylesheet" href="popup.example.css">
+        <link rel="stylesheet" type="text/css" href="prism.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="minutemailer">Minutemailer</div>
+            <a href="https://github.com/minutemailer/data" class="btn fork">Fork this on GitHub</a>
+        
+            <h1>React Popup</h1>
+            <p class="description">Simple and powerful react popup component.</p>
+
+            <div class="section">
+                <h2>Install</h2>
+
+                <p>This package is available on npm as <strong>react-popup</strong>. Install it using <code>npm install react-popup</code>. Currenyly only working in CommonJS environments.</p>
+            </div>
+
+            <div class="section">
+                <h2>Setup</h2>
+
+                <p>Start by rendering the react component into an element on the page. You will need the <code>react</code> and <code>react-dom</code> packages. See configuration options at the end of this page.</p>
+                <pre><code class="language-jsx">import React from 'react';
+import ReactDom from 'react-dom';
+import Popup from 'react-popup';
+
+React.render(
+    &lt;Popup /&gt;,
+    document.getElementById('popupContainer')
+);</code></pre>
+            </div>
+
+            <div class="section">
+                <h2>Display a simple alert</h2>
+
+                <p>Displaying an alert box couldn't be easier. Just call the <code>alert</code> method on the popup with the text as the first argument and an optional title as the second one.</p>
+            
+                <pre><code class="language-js">Popup.alert('I am alert, nice to meet you');</code></pre>
+                <p><button class="mm-popup__btn" type="button" id="alert">Try me</button></p>
+
+                <p><em><strong>Pro tip:</strong> If you dispatch multiple popups they will be queued and displayed one at the time as the popups closes.</em></p>
+            </div>
+
+            <div class="section">
+                <h2>Configuration</h2>
+
+                <p>There are multiple options you can set when you attach the popup component to the DOM. See below for a complete list.</p>
+                <pre><code class="language-jsx">&lt;Popup
+    className="mm-popup"
+    btnClass="mm-popup__btn"
+    closeBtn={true}
+    closeHtml={null}
+    defaultOk="Ok"
+    defaultCancel="Cancel"
+    wildClasses={false} /&gt;</code></pre>
+            </div>
+        </div>
+
+        <div id="popupContainer"></div>
+        <script src="dist/script.js"></script>
+        <script src="prism.js"></script>
+    </body>
 
 </html>
