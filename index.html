@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <title>React popup example</title>
-        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400italic,400,300,600,700" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400italic,400,300,600,700" rel="stylesheet" type="text/css">
         <style>
             * {
                 -webkit-box-sizing: border-box;
@@ -170,6 +170,40 @@ React.render(
                 <p><button class="btn btn--big" type="button" id="alert">Try me</button> <button class="btn btn--big" type="button" id="alertWithTitle">I have a title!</button></p>
 
                 <p><em><strong>Pro tip:</strong> If you dispatch multiple popups they will be queued and displayed one at the time as the popups closes.</em></p>
+            </div>
+
+            <div class="section">
+                <h2>What's your name?</h2>
+
+                <p>For your convinience, React Popup ships with a built-in prompt. Displaying one is as easy as asking someone their name.</p>
+
+                <pre><code class="language-js">Popup.prompt('Type your name below', 'What\'s your name?', {
+    text: 'Save',
+    className: 'success',
+    action: function (Box) {
+        Popup.alert('Your name is: ' + Box.value);
+        Box.close();
+    }
+});</code></pre>
+                <p><button class="btn btn--big" type="button" id="prompt">Try me</button></p>
+            </div>
+
+            <div class="section">
+                <h2>Reuse popups</h2>
+
+                <p>It is possible to store popups in variables and reuse them. Instead of using one of the helper methods (alert and prompt) you use the <code>register</code> method. You can also set a third parameter on <code>alert</code> and <code>prompt</code> to <code>true</code>.</p>
+            
+                <pre><code class="language-js">let mySpecialPopup = Popup.register({
+    title: 'I am special',
+    content: 'Since I am special you might need me again later. Save me!',
+    buttons: {
+        left: ['cancel'],
+        right: ['ok']
+    }
+});
+
+Popup.queue(mySpecialPopup);</code></pre>
+                <p><button class="btn btn--big" type="button" id="registeredPopupTrigger">Try me</button></p>
             </div>
 
             <div class="section">

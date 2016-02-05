@@ -6,7 +6,7 @@ import Popup from './react-popup';
 
 let alertBtn               = document.getElementById('alert'),
     alertWithTitle         = document.getElementById('alertWithTitle'),
-    registeredAlertTrigger = document.getElementById('registeredAlertTrigger'),
+    registeredPopupTrigger = document.getElementById('registeredPopupTrigger'),
     customButtons          = document.getElementById('customButtons'),
     position               = document.getElementById('position'),
     prompt                 = document.getElementById('prompt'),
@@ -29,24 +29,32 @@ alertWithTitle.addEventListener('click', function () {
     Popup.alert("The alert can also have a title. Isn't it nice?", 'Lorem ipsum');
 });
 
-/** Pre-register alert popup */
-registeredAlert = Popup.alert('You can register popups for use later. Set the third parameter to true for no queue. All popup creations will generate an ID, use this ID to display the popup.', null, true);
-
-/** Display pre-registered popup */
-registeredAlertTrigger.addEventListener('click', function () {
-    Popup.queue(registeredAlert);
-});
-
 /** Prompt */
 prompt.addEventListener('click', function () {
-    Popup.prompt('What\'s your name?', null, {
-        text: 'Continue',
+    console.log('Hej');
+    Popup.prompt('Type your name below', 'What\'s your name?', {
+        text: 'Save',
         className: 'success',
         action: function (Box) {
-            alert('You typed: ' + Box.value);
+            Popup.alert('You typed: ' + Box.value);
             Box.close();
         }
     });
+});
+
+/** Pre-register popup */
+let mySpecialPopup = Popup.register({
+    title: 'I am special',
+    content: 'Since I am special you might need me again later. Save me!',
+    buttons: {
+        left: ['cancel'],
+        right: ['ok']
+    }
+});
+
+/** Display pre-registered popup */
+registeredPopupTrigger.addEventListener('click', function () {
+    Popup.queue(mySpecialPopup);
 });
 
 /** Custom buttons */
