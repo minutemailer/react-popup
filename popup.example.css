@@ -157,8 +157,26 @@
         width: auto;
         left: 10px;
         right: 10px;
-        top: 50%;
+        top: 10px;
         margin-left: 0;
-        -webkit-transform: translateY(-50%);
+    }
+
+    .mm-popup__box__footer__left-space {
+        float: none;
+    }
+
+    .mm-popup__box__footer__right-space {
+        float: none;
+    }
+
+    .mm-popup__box__footer {
+        padding-top: 30px;
+    }
+
+    .mm-popup__box__footer .mm-popup__btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
     }
 }
