@@ -194,6 +194,9 @@ ReactDom.render(
                 <p>For your convinience, React Popup ships with a built-in prompt. Displaying one is as easy as asking someone their name.</p>
 
                 <pre><code class="language-js">Popup.prompt('Type your name below', 'What\'s your name?', {
+    placeholder: 'Placeholder yo',
+    type: 'text'
+}, {
     text: 'Save',
     className: 'success',
     action: function (Box) {

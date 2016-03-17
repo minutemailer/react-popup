@@ -41,6 +41,9 @@ alertWithTitle.addEventListener('click', function () {
 prompt.addEventListener('click', function () {
     console.log('Hej');
     Popup.prompt('Type your name below', 'What\'s your name?', {
+        placeholder: 'Placeholder yo',
+        type: 'text'
+    }, {
         text: 'Save',
         className: 'success',
         action: function (Box) {

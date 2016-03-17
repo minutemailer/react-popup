@@ -113,6 +113,10 @@
             z-index: 2;
         }
 
+            .mm-popup__box__body p {
+                margin: 0 0 5px;
+            }
+
         .mm-popup__box__footer {
             overflow: hidden;
             padding: 40px 20px 20px;

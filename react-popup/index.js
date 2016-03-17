@@ -190,7 +190,7 @@ Component = _react2.default.createClass({
 			return this.create(data);
 		},
 
-		prompt: function prompt(title, inputAttributes, okBtn, noQueue) {
+		prompt: function prompt(title, text, inputAttributes, okBtn, noQueue) {
 			if (!okBtn) {
 				okBtn = 'ok';
 			}
@@ -205,9 +205,26 @@ Component = _react2.default.createClass({
 				Manager.value = value;
 			}
 
+			var content, data;
+
+			if (text) {
+				text = _react2.default.createElement(
+					'p',
+					null,
+					text
+				);
+			}
+
+			content = _react2.default.createElement(
+				'div',
+				null,
+				text,
+				_react2.default.createElement(_Input2.default, { value: inputAttributes.value, placeholder: inputAttributes.placeholder, type: inputAttributes.type, className: _props.inputClass, onChange: onChange })
+			);
+
 			var data = {
 				title: title,
-				content: _react2.default.createElement(_Input2.default, { value: inputAttributes.value, placeholder: inputAttributes.placeholder, type: inputAttributes.type, className: _props.inputClass, onChange: onChange }),
+				content: content,
 				buttons: {
 					left: ['cancel'],
 					right: [okBtn]
