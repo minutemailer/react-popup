@@ -14,8 +14,8 @@ var _ActionButton2 = _interopRequireDefault(_ActionButton);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ButtonsSpace = undefined,
-    Component = undefined;
+var ButtonsSpace = void 0,
+    Component = void 0;
 
 ButtonsSpace = _react2.default.createClass({
 

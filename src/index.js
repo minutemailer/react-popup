@@ -167,7 +167,7 @@ Component = React.createClass({
 			return this.create(data);
 		},
 
-		prompt: function (title, inputAttributes, okBtn, noQueue) {
+		prompt: function (title, text, inputAttributes, okBtn, noQueue) {
 			if (!okBtn) {
 				okBtn = 'ok';
 			}
@@ -182,9 +182,22 @@ Component = React.createClass({
 				Manager.value = value;
 			}
 
+			var content, data;
+
+			if (text) {
+				text = <p>{text}</p>;
+			}
+
+			content = (
+				<div>
+					{text}
+					<Input value={inputAttributes.value} placeholder={inputAttributes.placeholder} type={inputAttributes.type} className={_props.inputClass} onChange={onChange} />
+				</div>
+			);
+
 			var data = {
 				title: title,
-				content: <Input value={inputAttributes.value} placeholder={inputAttributes.placeholder} type={inputAttributes.type} className={_props.inputClass} onChange={onChange} />,
+				content:content,
 				buttons: {
 					left: ['cancel'],
 					right: [okBtn]
