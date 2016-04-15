@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import Popup from './react-popup';
+import Scroll from './ScrollManager';
 
 let alertBtn               = document.getElementById('alert'),
     alertWithTitle         = document.getElementById('alertWithTitle'),
@@ -19,11 +20,11 @@ ReactDom.render(
 );
 
 Popup.addShowListener(function () {
-    document.body.className = 'no-scrolls';
+    Scroll.deactivate();
 });
 
 Popup.addCloseListener(function () {
-    document.body.className = '';
+    Scroll.activate();
 });
 
 /** Alert */
@@ -68,6 +69,31 @@ registeredPopupTrigger.addEventListener('click', function () {
     Popup.queue(mySpecialPopup);
 });
 
+Popup.registerPlugin('popover', function (content, target) {
+    console.log(target);
+    this.create({
+        content: content,
+        className: 'popover',
+        noOverlay: true,
+        position: function (box) {
+            var bodyRect      = document.body.getBoundingClientRect(),
+                btnRect       = target.getBoundingClientRect(),
+                btnOffsetTop  = btnRect.top - bodyRect.top,
+                btnOffsetLeft = btnRect.left - bodyRect.left;
+
+            box.style.top  = (btnOffsetTop - box.offsetHeight - 10) - Scroll.get() + 'px';
+            box.style.left = (btnOffsetLeft + (target.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
+            box.style.margin = 0;
+            box.style.opacity = 1;
+        }
+    });
+});
+
+/** Positioning */
+position.addEventListener('click', function () {
+    Popup.plugins.popover('This popup will be displayed right above this button.', this);
+});
+
 /** Custom buttons */
 customButtons.addEventListener('click', function () {
     Popup.create({
@@ -86,28 +112,6 @@ customButtons.addEventListener('click', function () {
                     Popup.close();
                 }
             }]
-        }
-    });
-});
-
-/** Positioning */
-position.addEventListener('click', function () {
-    var _this = this;
-
-    Popup.create({
-        content: 'This popup will be displayed right above this button.',
-        className: 'popin',
-        noOverlay: true, // Make it look like a tooltip
-        position: function (box) {
-            var bodyRect      = document.body.getBoundingClientRect(),
-                btnRect       = _this.getBoundingClientRect(),
-                btnOffsetTop  = btnRect.top - bodyRect.top,
-                btnOffsetLeft = btnRect.left - bodyRect.left;
-
-            box.style.top  = (btnOffsetTop - box.offsetHeight - 10) + 'px';
-            box.style.left = (btnOffsetLeft + (_this.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
-            box.style.margin = 0;
-            box.style.opacity = 1;
         }
     });
 });

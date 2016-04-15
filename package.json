@@ -3,11 +3,6 @@
   "version": "0.0.1",
   "description": "React popup component",
   "main": "index.js",
-  "scripts": {
-    "start": "watchify -o dist/bundle.js -v -d ./index.js",
-    "example": "watchify -o examples/dist/example.js -v -d examples/example.js",
-    "build": "browserify index.js | uglifyjs -cm > dist/bundle.min.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/minutemailer/react-popup.git"

@@ -59,6 +59,9 @@
                 position: relative;
                 max-width: 1000px;
                 margin: 0 auto;
+                -webkit-transform: translate3d(0, 0, 0);
+                -moz-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
             }
 
             .minutemailer {
@@ -223,6 +226,36 @@ ReactDom.render(
 
 Popup.queue(mySpecialPopup);</code></pre>
                 <p><button class="btn btn--big" type="button" id="registeredPopupTrigger">Try me</button></p>
+            </div>
+
+            <div class="section">
+                <h2>Plugins</h2>
+
+                <p>In addition to locally reusable popups you can also store your custom popups globally. Let's say you want a <em>popover</em> that you know you will be using on several places in your application. Instead of duplicated code, you can register it once.</p>
+
+                <pre><code class="language-js">Popup.registerPlugin('popover', function (content, target) {
+    this.create({
+        content: content,
+        className: 'popover',
+        noOverlay: true,
+        position: function (box) {
+            var bodyRect      = document.body.getBoundingClientRect(),
+                btnRect       = target.getBoundingClientRect(),
+                btnOffsetTop  = btnRect.top - bodyRect.top,
+                btnOffsetLeft = btnRect.left - bodyRect.left;
+
+            box.style.top  = (btnOffsetTop - box.offsetHeight - 10) + 'px';
+            box.style.left = (btnOffsetLeft + (_this.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
+            box.style.margin = 0;
+            box.style.opacity = 1;
+        }
+    });
+});
+
+Popup.plugins.popover('This popup will be displayed right above this button.', element);</code></pre>
+                
+                <p>Note that in this example I'm using custom positioning. All popups can have a position property. It can be an object with x and y or a function. If you use a function you get complete control over the box. The box is invisible (opacity=0) by default so you need to make it visible in your function as in the example above.</p> 
+                <p><button class="btn btn--big" type="button" id="position">Try me</button></p>
             </div>
 
             <div class="section">
