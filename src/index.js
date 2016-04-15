@@ -17,356 +17,362 @@ var EventEmitter  = events.EventEmitter,
 
 Manager = assign({}, EventEmitter.prototype, {
 
-	id: 1,
+    id: 1,
 
-	popups: {},
+    popups: {},
 
-	queue: [],
+    queue: [],
 
-	active: null,
+    active: null,
 
-	value: null,
+    value: null,
 
-	getId: function () {
-		return 'id_' + (this.id++);
-	},
+    getId: function () {
+        return 'id_' + (this.id++);
+    },
 
-	activePopup: function () {
-		return this.popups[this.active];
-	},
+    activePopup: function () {
+        return this.popups[this.active];
+    },
 
-	close: function () {
-		if (!this.active) {
-			return false;
-		}
+    close: function () {
+        if (!this.active) {
+            return false;
+        }
 
-		var id      = this.active;
-		this.active = null;
+        var id      = this.active;
+        this.active = null;
 
-		this.emit(CLOSE_EVENT);
-		this.dispatch();
+        this.emit(CLOSE_EVENT);
+        this.dispatch();
 
-		this.value = null;
+        this.value = null;
 
-		return id;
-	},
+        return id;
+    },
 
-	dispatch: function () {
-		if (this.active || this.queue.length < 1) {
-			return false;
-		}
+    dispatch: function () {
+        if (this.active || this.queue.length < 1) {
+            return false;
+        }
 
-		var id = this.queue.shift();
+        var id = this.queue.shift();
 
-		/** Set active */
-		this.active = id;
+        /** Set active */
+        this.active = id;
 
-		this.emit(SHOW_EVENT);
-	}
+        this.emit(SHOW_EVENT);
+    }
 
 });
 
 Component = React.createClass({
 
-	displayName: 'Popup',
+    displayName: 'Popup',
 
-	getInitialState: function() {
-		var state = {
-			'title'       : null,
-			'buttons'     : false,
-			'content'     : null,
-			'visible'     : false,
-			'className'   : null,
-			'noOverlay'   : false,
-			'position'    : false,
-			'wildClasses' : false
-		};
+    getInitialState: function() {
+        var state = {
+            'title'       : null,
+            'buttons'     : false,
+            'content'     : null,
+            'visible'     : false,
+            'className'   : null,
+            'noOverlay'   : false,
+            'position'    : false,
+            'wildClasses' : false
+        };
 
-		_initialState = state;
+        _initialState = state;
 
-		return state;
-	},
+        return state;
+    },
 
-	getDefaultProps: function() {
-		return {
-			'className'     : 'mm-popup',
-			'btnClass'      : 'mm-popup__btn',
-			'inputClass'    : 'mm-popup__input',
-			'closeBtn'      : true,
-			'closeHtml'     : null,
-			'defaultOk'     : 'Ok',
-			'defaultCancel' : 'Cancel'
-		};
-	},
+    getDefaultProps: function() {
+        return {
+            'className'     : 'mm-popup',
+            'btnClass'      : 'mm-popup__btn',
+            'inputClass'    : 'mm-popup__input',
+            'closeBtn'      : true,
+            'closeHtml'     : null,
+            'defaultOk'     : 'Ok',
+            'defaultCancel' : 'Cancel'
+        };
+    },
 
-	statics: {
+    statics: {
 
-		addShowListener: function (callback) {
-			Manager.on(SHOW_EVENT, callback);
-		},
+        plugins: {},
 
-		removeShowListener: function (callback) {
-			Manager.removeListener(SHOW_EVENT, callback);
-		},
+        addShowListener: function (callback) {
+            Manager.on(SHOW_EVENT, callback);
+        },
 
-		addCloseListener: function (callback) {
-			Manager.on(CLOSE_EVENT, callback);
-		},
+        removeShowListener: function (callback) {
+            Manager.removeListener(SHOW_EVENT, callback);
+        },
 
-		removeCloseListener: function (callback) {
-			Manager.removeListener(CLOSE_EVENT, callback);
-		},
+        addCloseListener: function (callback) {
+            Manager.on(CLOSE_EVENT, callback);
+        },
 
-		register: function (data) {
-			var id = Manager.getId();
+        removeCloseListener: function (callback) {
+            Manager.removeListener(CLOSE_EVENT, callback);
+        },
 
-			data = assign({}, _initialState, data);
+        register: function (data) {
+            var id = Manager.getId();
 
-			Manager.popups[id] = data;
+            data = assign({}, _initialState, data);
 
-			return id; 
-		},
+            Manager.popups[id] = data;
 
-		queue: function (id) {
-			if (!Manager.popups.hasOwnProperty(id)) {
-				return false;
-			}
+            return id; 
+        },
 
-			/** Add popup to queue */
-			Manager.queue.push(id);
+        queue: function (id) {
+            if (!Manager.popups.hasOwnProperty(id)) {
+                return false;
+            }
 
-			/** Dispatch queue */
-			Manager.dispatch();
+            /** Add popup to queue */
+            Manager.queue.push(id);
 
-			return id;
-		},
+            /** Dispatch queue */
+            Manager.dispatch();
 
-		create: function (data) {
-			/** Register popup */
-			var id = this.register(data);
+            return id;
+        },
 
-			/** Queue popup */
-			this.queue(id);
+        create: function (data) {
+            /** Register popup */
+            var id = this.register(data);
 
-			return id;
-		},
+            /** Queue popup */
+            this.queue(id);
 
-		alert: function (text, title, noQueue) {
-			var data = {
-				title: title,
-				content: text,
-				buttons: {
-					right: ['ok']
-				}
-			};
+            return id;
+        },
 
-			if (noQueue) {
-				return this.register(data);
-			}
+        alert: function (text, title, noQueue) {
+            var data = {
+                title: title,
+                content: text,
+                buttons: {
+                    right: ['ok']
+                }
+            };
 
-			return this.create(data);
-		},
+            if (noQueue) {
+                return this.register(data);
+            }
 
-		prompt: function (title, text, inputAttributes, okBtn, noQueue) {
-			if (!okBtn) {
-				okBtn = 'ok';
-			}
-			
-			inputAttributes || (inputAttributes = {
-				value: '',
-				placeholder: '',
-				type: 'text'
-			});
+            return this.create(data);
+        },
 
-			function onChange(value) {
-				Manager.value = value;
-			}
+        prompt: function (title, text, inputAttributes, okBtn, noQueue) {
+            if (!okBtn) {
+                okBtn = 'ok';
+            }
+            
+            inputAttributes || (inputAttributes = {
+                value: '',
+                placeholder: '',
+                type: 'text'
+            });
 
-			var content, data;
+            function onChange(value) {
+                Manager.value = value;
+            }
 
-			if (text) {
-				text = <p>{text}</p>;
-			}
+            var content, data;
 
-			content = (
-				<div>
-					{text}
-					<Input value={inputAttributes.value} placeholder={inputAttributes.placeholder} type={inputAttributes.type} className={_props.inputClass} onChange={onChange} />
-				</div>
-			);
+            if (text) {
+                text = <p>{text}</p>;
+            }
 
-			var data = {
-				title: title,
-				content:content,
-				buttons: {
-					left: ['cancel'],
-					right: [okBtn]
-				}
-			};
+            content = (
+                <div>
+                    {text}
+                    <Input value={inputAttributes.value} placeholder={inputAttributes.placeholder} type={inputAttributes.type} className={_props.inputClass} onChange={onChange} />
+                </div>
+            );
 
-			if (noQueue) {
-				return this.register(data);
-			}
+            var data = {
+                title: title,
+                content:content,
+                buttons: {
+                    left: ['cancel'],
+                    right: [okBtn]
+                }
+            };
 
-			return this.create(data);
-		},
+            if (noQueue) {
+                return this.register(data);
+            }
 
-		close: function () {
-			Manager.close();
-		},
+            return this.create(data);
+        },
 
-		getValue: function () {
-			return Manager.value;
-		}
+        close: function () {
+            Manager.close();
+        },
 
-	},
+        getValue: function () {
+            return Manager.value;
+        },
 
-	componentDidMount: function() {
-		var _this = this, popup;
+        registerPlugin: function (name, callback) {
+            this.plugins[name] = callback.bind(this);
+        },
 
-		Manager.on(SHOW_EVENT, function () {
-			popup = Manager.activePopup();
+    },
 
-			_this.setState({
-				title     : popup.title,
-				content   : popup.content,
-				buttons   : popup.buttons,
-				visible   : true,
-				className : popup.className,
-				noOverlay : popup.noOverlay,
-				position  : popup.position
-			});
-		});
+    componentDidMount: function() {
+        var _this = this, popup;
 
-		_props = this.props;
+        Manager.on(SHOW_EVENT, function () {
+            popup = Manager.activePopup();
 
-		Manager.on(CLOSE_EVENT, function () {
-			_this.setState(_this.getInitialState());
-		});
-	},
+            _this.setState({
+                title     : popup.title,
+                content   : popup.content,
+                buttons   : popup.buttons,
+                visible   : true,
+                className : popup.className,
+                noOverlay : popup.noOverlay,
+                position  : popup.position
+            });
+        });
 
-	componentDidUpdate: function () {
-		var box = this.refs.box;
+        _props = this.props;
 
-		if (!box) {
-			return;
-		}
+        Manager.on(CLOSE_EVENT, function () {
+            _this.setState(_this.getInitialState());
+        });
+    },
 
-		if (!this.state.position) {
-			box.style.opacity = 1;
-			box.style.top     = null;
-			box.style.left    = null;
-			box.style.margin  = null;
+    componentDidUpdate: function () {
+        var box = this.refs.box;
 
-			return false;
-		}
+        if (!box) {
+            return;
+        }
 
-		if (typeof this.state.position === 'function') {
-			return this.state.position.call(null, box);
-		}
+        if (!this.state.position) {
+            box.style.opacity = 1;
+            box.style.top     = null;
+            box.style.left    = null;
+            box.style.margin  = null;
 
-		box.style.top     = parseInt(this.state.position.y, 10) + 'px';
-		box.style.left    = parseInt(this.state.position.x, 10) + 'px';
-		box.style.margin  = 0;
-		box.style.opacity = 1;
-	},
-	
-	hasClass: function (element, className) {
-		if (element.classList) {
-	      return !!className && element.classList.contains(className);
-	    }
-	    
-	    return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
-	},
+            return false;
+        }
 
-	className: function (className) {
-		return this.props.className + '__' + className;
-	},
+        if (typeof this.state.position === 'function') {
+            return this.state.position.call(null, box);
+        }
 
-	wildClass: function (className, base) {
-		if (!className) {
-			return null;
-		}
+        box.style.top     = parseInt(this.state.position.y, 10) + 'px';
+        box.style.left    = parseInt(this.state.position.x, 10) + 'px';
+        box.style.margin  = 0;
+        box.style.opacity = 1;
+    },
+    
+    hasClass: function (element, className) {
+        if (element.classList) {
+          return !!className && element.classList.contains(className);
+        }
+        
+        return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
+    },
 
-		if (this.props.wildClasses) {
-			return className;
-		}
+    className: function (className) {
+        return this.props.className + '__' + className;
+    },
 
-		var finalClass = [],
-		    classNames = className.split(' ');
+    wildClass: function (className, base) {
+        if (!className) {
+            return null;
+        }
 
-		classNames.forEach(function (className) {
-			finalClass.push(base + '--' + className);
-		});
+        if (this.props.wildClasses) {
+            return className;
+        }
 
-		return finalClass.join(' ');
-	},
+        var finalClass = [],
+            classNames = className.split(' ');
 
-	onClose: function () {
-		Manager.close();
-	},
+        classNames.forEach(function (className) {
+            finalClass.push(base + '--' + className);
+        });
 
-	handleButtonClick: function (action) {
-		if (typeof action === 'function') {
-			return action.call(this, Manager);
-		}
-	},
-	
-	containerClick: function (e) {
-		if (this.hasClass(e.target, this.props.className)) {
-			this.onClose();
-		}
-	},
+        return finalClass.join(' ');
+    },
 
-	render: function() {
-		var className = this.props.className, box, closeBtn, overlayStyle = {}, boxClass;
+    onClose: function () {
+        Manager.close();
+    },
 
-		if (this.state.visible) {
-			className += ' ' + this.props.className + '--visible';
+    handleButtonClick: function (action) {
+        if (typeof action === 'function') {
+            return action.call(this, Manager);
+        }
+    },
+    
+    containerClick: function (e) {
+        if (this.hasClass(e.target, this.props.className)) {
+            this.onClose();
+        }
+    },
 
-			if (this.props.closeBtn) {
-				closeBtn = <button onClick={this.onClose} className={this.props.className + '__close'}>{this.props.closeHtml}</button>;
-			}
+    render: function() {
+        var className = this.props.className, box, closeBtn, overlayStyle = {}, boxClass;
 
-			boxClass = this.className('box');
+        if (this.state.visible) {
+            className += ' ' + this.props.className + '--visible';
 
-			if (this.state.className) {
-				boxClass += ' ' + this.wildClass(this.state.className, boxClass);
-			}
+            if (this.props.closeBtn) {
+                closeBtn = <button onClick={this.onClose} className={this.props.className + '__close'}>{this.props.closeHtml}</button>;
+            }
 
-			box = (
-				<article ref="box" style={{opacity: 0}} className={boxClass}>
-					{closeBtn}
-					<Header title={this.state.title} className={this.className('box__header')} />
+            boxClass = this.className('box');
 
-					<div className={this.className('box__body')}>
-						{this.state.content}
-					</div>
+            if (this.state.className) {
+                boxClass += ' ' + this.wildClass(this.state.className, boxClass);
+            }
 
-					<Footer
-						className={this.className('box__footer')}
-						wildClasses={this.props.wildClasses}
-						btnClass={this.props.btnClass} 
-						buttonClick={this.handleButtonClick} 
-						onClose={this.onClose} 
-						onOk={this.onClose}
-						defaultOk={this.props.defaultOk}
-						defaultCancel={this.props.defaultCancel}
-						buttons={this.state.buttons} />
-				</article>
-			);
-		}
+            box = (
+                <article ref="box" style={{opacity: 0}} className={boxClass}>
+                    {closeBtn}
+                    <Header title={this.state.title} className={this.className('box__header')} />
 
-		if (this.state.noOverlay) {
-			overlayStyle.background = 'transparent';
-		}
+                    <div className={this.className('box__body')}>
+                        {this.state.content}
+                    </div>
 
-		return (
-			<div onClick={this.containerClick} className={className} style={overlayStyle}>
-				{box}
-			</div>
-		);
-	}
+                    <Footer
+                        className={this.className('box__footer')}
+                        wildClasses={this.props.wildClasses}
+                        btnClass={this.props.btnClass} 
+                        buttonClick={this.handleButtonClick} 
+                        onClose={this.onClose} 
+                        onOk={this.onClose}
+                        defaultOk={this.props.defaultOk}
+                        defaultCancel={this.props.defaultCancel}
+                        buttons={this.state.buttons} />
+                </article>
+            );
+        }
+
+        if (this.state.noOverlay) {
+            overlayStyle.background = 'transparent';
+        }
+
+        return (
+            <div onClick={this.containerClick} className={className} style={overlayStyle}>
+                {box}
+            </div>
+        );
+    }
 
 });
 
