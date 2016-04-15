@@ -239,13 +239,14 @@ Popup.queue(mySpecialPopup);</code></pre>
         className: 'popover',
         noOverlay: true,
         position: function (box) {
-            var bodyRect      = document.body.getBoundingClientRect(),
-                btnRect       = target.getBoundingClientRect(),
-                btnOffsetTop  = btnRect.top - bodyRect.top,
-                btnOffsetLeft = btnRect.left - bodyRect.left;
+            let bodyRect      = document.body.getBoundingClientRect();
+            let btnRect       = target.getBoundingClientRect();
+            let btnOffsetTop  = btnRect.top - bodyRect.top;
+            let btnOffsetLeft = btnRect.left - bodyRect.left;
+            let scroll        = document.documentElement.scrollTop || document.body.scrollTop;
 
-            box.style.top  = (btnOffsetTop - box.offsetHeight - 10) + 'px';
-            box.style.left = (btnOffsetLeft + (_this.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
+            box.style.top  = (btnOffsetTop - box.offsetHeight - 10) - scroll + 'px';
+            box.style.left = (btnOffsetLeft + (target.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
             box.style.margin = 0;
             box.style.opacity = 1;
         }
