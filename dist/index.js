@@ -143,7 +143,7 @@ Component = _react2.default.createClass({
         register: function register(data) {
             var id = Manager.getId();
 
-            data = assign({}, _initialState, data);
+            data = _extends({}, _initialState, data);
 
             Manager.popups[id] = data;
 
