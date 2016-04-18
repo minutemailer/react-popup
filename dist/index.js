@@ -12,10 +12,6 @@ var _events = require('events');
 
 var _events2 = _interopRequireDefault(_events);
 
-var _Object = require('react/lib/Object.assign');
-
-var _Object2 = _interopRequireDefault(_Object);
-
 var _Header = require('./Header.react');
 
 var _Header2 = _interopRequireDefault(_Header);
@@ -38,7 +34,7 @@ var EventEmitter = _events2.default.EventEmitter,
     Manager,
     Component;
 
-Manager = (0, _Object2.default)({}, EventEmitter.prototype, {
+Manager = assign({}, EventEmitter.prototype, {
 
     id: 1,
 
@@ -145,7 +141,7 @@ Component = _react2.default.createClass({
         register: function register(data) {
             var id = Manager.getId();
 
-            data = (0, _Object2.default)({}, _initialState, data);
+            data = assign({}, _initialState, data);
 
             Manager.popups[id] = data;
 
