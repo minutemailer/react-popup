@@ -14,7 +14,7 @@ var EventEmitter  = events.EventEmitter,
     Manager,
     Component;
 
-Manager = assign({}, EventEmitter.prototype, {
+Manager = Object.assign({}, EventEmitter.prototype, {
 
     id: 1,
 
