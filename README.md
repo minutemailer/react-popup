@@ -1,11 +1,7 @@
 React popup component
 ===========
 
-![](https://dl.dropboxusercontent.com/u/6306766/react-popup.png)
-
-## Note!
-
-A React 0.12.* supported version can be found in the 0.1 branch and 0.1.* tagged releases
+[Demo](http://minutemailer.github.io/react-popup/)
 
 ## Install
 
