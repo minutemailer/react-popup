@@ -76,6 +76,26 @@
                 background: url("https://minutemailer.com/assets/svg/minutemailer-logo.svg") no-repeat;
                 background-size: 100%;
             }
+
+                .minutemailer a {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                }
+
+            .footer {
+                text-align: center;
+                padding: 30px 0;
+            }
+
+                .footer p {
+                    margin: 0;
+                }
+
+                .footer a {
+                    color: #00b4e5;
+                    font-weight: bold;
+                }
             
             p {
                 line-height: 1.5;
@@ -154,7 +174,7 @@
 
     <body>
         <div class="container">
-            <div class="minutemailer">Minutemailer</div>
+            <div class="minutemailer"><a href="https://minutemailer.com">Minutemailer</a></div>
             <a href="https://github.com/minutemailer/react-popup" class="btn fork">Fork this on GitHub</a>
         
             <h1>React Popup</h1>
@@ -273,6 +293,10 @@ Popup.plugins.popover('This popup will be displayed right above this button.', e
     wildClasses={false} /&gt;</code></pre>
             </div>
         </div>
+
+        <footer class="footer">
+            <p>This react component was crafted by <a href="https://minutemailer.com">Minutemailer</a></p>
+        </footer>
 
         <div id="popupContainer"></div>
         <script src="dist/script.js"></script>
