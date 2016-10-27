@@ -2,6 +2,7 @@
 
 React popup component
 ===========
+Simple and powerful react popup component. Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
 
 [Demo](http://minutemailer.github.io/react-popup/)
 
