@@ -1,20 +1,19 @@
 'use strict';
 
 import React from 'react';
-import events from 'events';
+import { EventEmitter } from 'events';
 import Header from './Header.react';
 import Footer from './Footer.react';
 import Input from './Input.react';
 
-var EventEmitter  = events.EventEmitter,
-    SHOW_EVENT    = 'show',
-    CLOSE_EVENT   = 'close',
-    _props        = {},
-    _initialState = {},
-    Manager,
-    Component;
+const SHOW_EVENT  = 'show';
+const CLOSE_EVENT = 'close';
+const REFRESH_EVENT = 'refresh_position';
 
-Manager = Object.assign({}, EventEmitter.prototype, {
+let _props = {};
+let _initialState = {};
+
+const Manager = Object.assign({}, EventEmitter.prototype, {
 
     id: 1,
 
@@ -61,16 +60,20 @@ Manager = Object.assign({}, EventEmitter.prototype, {
         this.active = id;
 
         this.emit(SHOW_EVENT);
+    },
+
+    refreshPosition: function (position) {
+        this.emit(REFRESH_EVENT, position);
     }
 
 });
 
-Component = React.createClass({
+const Component = React.createClass({
 
     displayName: 'Popup',
 
     getInitialState: function() {
-        var state = {
+        const state = {
             'title'       : null,
             'buttons'     : false,
             'content'     : null,
@@ -119,7 +122,7 @@ Component = React.createClass({
         },
 
         register: function (data) {
-            var id = Manager.getId();
+            const id = Manager.getId();
 
             data = Object.assign({}, _initialState, data);
 
@@ -144,7 +147,7 @@ Component = React.createClass({
 
         create: function (data) {
             /** Register popup */
-            var id = this.register(data);
+            const id = this.register(data);
 
             /** Queue popup */
             this.queue(id);
@@ -153,7 +156,7 @@ Component = React.createClass({
         },
 
         alert: function (text, title, noQueue) {
-            var data = {
+            const data = {
                 title: title,
                 content: text,
                 buttons: {
@@ -179,24 +182,24 @@ Component = React.createClass({
                 type: 'text'
             });
 
+            Manager.value = inputAttributes.value;
+
             function onChange(value) {
                 Manager.value = value;
             }
-
-            var content, data;
 
             if (text) {
                 text = <p>{text}</p>;
             }
 
-            content = (
+            const content = (
                 <div>
                     {text}
                     <Input value={inputAttributes.value} placeholder={inputAttributes.placeholder} type={inputAttributes.type} className={_props.inputClass} onChange={onChange} />
                 </div>
             );
 
-            var data = {
+            const data = {
                 title: title,
                 content:content,
                 buttons: {
@@ -224,15 +227,17 @@ Component = React.createClass({
             this.plugins[name] = callback.bind(this);
         },
 
+        refreshPosition: function (position) {
+            return Manager.refreshPosition(position);
+        }
+
     },
 
     componentDidMount: function() {
-        var _this = this, popup;
+        Manager.on(SHOW_EVENT, () => {
+            let popup = Manager.activePopup();
 
-        Manager.on(SHOW_EVENT, function () {
-            popup = Manager.activePopup();
-
-            _this.setState({
+            this.setState({
                 title     : popup.title,
                 content   : popup.content,
                 buttons   : popup.buttons,
@@ -245,19 +250,31 @@ Component = React.createClass({
 
         _props = this.props;
 
-        Manager.on(CLOSE_EVENT, function () {
-            _this.setState(_this.getInitialState());
+        Manager.on(CLOSE_EVENT, () => {
+            this.setState(this.getInitialState());
+        });
+
+        Manager.on(REFRESH_EVENT, (position) => {
+            this.setPosition(position);
         });
     },
 
     componentDidUpdate: function () {
-        var box = this.refs.box;
+        this.setPosition(this.state.position);
+    },
+
+    setPosition: function (position) {
+        let box = this.refs.box;
 
         if (!box) {
             return;
         }
 
-        if (!this.state.position) {
+        if (!position) {
+            position = this.state.position;
+        }
+
+        if (!position) {
             box.style.opacity = 1;
             box.style.top     = null;
             box.style.left    = null;
@@ -266,12 +283,12 @@ Component = React.createClass({
             return false;
         }
 
-        if (typeof this.state.position === 'function') {
-            return this.state.position.call(null, box);
+        if (typeof position === 'function') {
+            return position.call(null, box);
         }
 
-        box.style.top     = parseInt(this.state.position.y, 10) + 'px';
-        box.style.left    = parseInt(this.state.position.x, 10) + 'px';
+        box.style.top     = parseInt(position.y, 10) + 'px';
+        box.style.left    = parseInt(position.x, 10) + 'px';
         box.style.margin  = 0;
         box.style.opacity = 1;
     },
@@ -297,8 +314,8 @@ Component = React.createClass({
             return className;
         }
 
-        var finalClass = [],
-            classNames = className.split(' ');
+        let finalClass = [];
+        const classNames = className.split(' ');
 
         classNames.forEach(function (className) {
             finalClass.push(base + '--' + className);
@@ -324,16 +341,20 @@ Component = React.createClass({
     },
 
     render: function() {
-        var className = this.props.className, box, closeBtn, overlayStyle = {}, boxClass;
+        let className = this.props.className;
+        let box = null;
+        let overlayStyle = {};
 
         if (this.state.visible) {
+            let closeBtn = null;
+
             className += ' ' + this.props.className + '--visible';
 
             if (this.props.closeBtn) {
                 closeBtn = <button onClick={this.onClose} className={this.props.className + '__close'}>{this.props.closeHtml}</button>;
             }
 
-            boxClass = this.className('box');
+            let boxClass = this.className('box');
 
             if (this.state.className) {
                 boxClass += ' ' + this.wildClass(this.state.className, boxClass);
