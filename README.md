@@ -1,25 +1,24 @@
+[![npm](https://img.shields.io/npm/v/react-popup.svg?maxAge=2592000)](https://www.npmjs.com/package/react-popup) [![npm](https://img.shields.io/npm/dt/react-popup.svg?maxAge=2592000)](https://www.npmjs.com/package/react-popup)  [![npm](https://img.shields.io/npm/l/react-popup.svg?maxAge=2592000)](https://www.npmjs.com/package/react-popup)
+
 React popup component
 ===========
+Simple and powerful react popup component. Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
 
-![](https://dl.dropboxusercontent.com/u/6306766/react-popup.png)
-
-## Note!
-
-A React 0.12.* supported version can be found in the 0.1 branch and 0.1.* tagged releases
+[Demo](http://minutemailer.github.io/react-popup/)
 
 ## Install
 
 For now this component is only available as a CommonJS module. Install it with npm (`npm install react-popup --save`). The module exports a react component with static methods. Here's a simple example:
 
 ```js
-var Popup = require('react-popup');
+import React from 'react';
+import ReactDom from 'react-dom';
+import Popup from 'react-popup';
 
-React.render(
+ReactDom.render(
     <Popup />,
     document.getElementById('popupContainer')
 );
-
-Popup.alert('This is an alert popup');
 ```
 
 ## Configuration
