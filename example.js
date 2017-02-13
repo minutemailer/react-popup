@@ -10,8 +10,7 @@ let alertBtn               = document.getElementById('alert'),
     registeredPopupTrigger = document.getElementById('registeredPopupTrigger'),
     customButtons          = document.getElementById('customButtons'),
     position               = document.getElementById('position'),
-    prompt                 = document.getElementById('prompt'),
-    registeredAlert;
+    prompt                 = document.getElementById('prompt');
 
 /** Render popup */
 ReactDom.render(
@@ -19,12 +18,12 @@ ReactDom.render(
     document.getElementById('popupContainer')
 );
 
-Popup.addShowListener(function () {
-    Scroll.deactivate();
-});
+function refreshPosition() {
+    Popup.refreshPosition();
+}
 
 Popup.addCloseListener(function () {
-    Scroll.activate();
+    window.removeEventListener('scroll', refreshPosition);
 });
 
 /** Alert */
@@ -40,7 +39,6 @@ alertWithTitle.addEventListener('click', function () {
 
 /** Prompt */
 prompt.addEventListener('click', function () {
-    console.log('Hej');
     Popup.prompt('Type your name below', 'What\'s your name?', {
         placeholder: 'Placeholder yo',
         type: 'text'
@@ -70,7 +68,6 @@ registeredPopupTrigger.addEventListener('click', function () {
 });
 
 Popup.registerPlugin('popover', function (content, target) {
-    console.log(target);
     this.create({
         content: content,
         className: 'popover',
@@ -91,6 +88,7 @@ Popup.registerPlugin('popover', function (content, target) {
 
 /** Positioning */
 position.addEventListener('click', function () {
+    window.addEventListener('scroll', refreshPosition);
     Popup.plugins.popover('This popup will be displayed right above this button.', this);
 });
 
@@ -100,13 +98,29 @@ customButtons.addEventListener('click', function () {
         title: null,
         content: 'This popup uses the create method directly to get more control. This popup demonstrates custom buttons.',
         buttons: {
-            left: ['cancel'],
+            left: [{
+                text: 'Cancel',
+                className: 'danger',
+                action: function () {
+                    Popup.alert('You pressed the Cancel btn');
+
+                    /** Close this popup. Close will always close the current visible one, if one is visible */
+                    Popup.close();
+                }
+            }],
             right: [{
+                text: 'Alt',
+                action: function () {
+                    Popup.alert('You pressed the Alt btn');
+
+                    /** Close this popup. Close will always close the current visible one, if one is visible */
+                    Popup.close();
+                }
+            }, {
                 text: 'Save',
                 className: 'success',
                 action: function () {
-                    /** This popup will be displayed after this one has closed */
-                    Popup.alert('Another popup yada yada');
+                    Popup.alert('You pressed the Save btn');
 
                     /** Close this popup. Close will always close the current visible one, if one is visible */
                     Popup.close();

@@ -76,6 +76,12 @@
         color: #fff;
     }
 
+    .mm-popup__btn--danger {
+        background-color: #c5545c;
+        border-color: #c5545c;
+        color: #fff;
+    }
+
     .mm-popup__box {
         width: 350px;
         position: absolute;
@@ -126,9 +132,17 @@
                 float: right;
             }
 
+                .mm-popup__box__footer__right-space .mm-popup__btn {
+                    margin-left: 5px;
+                }
+
             .mm-popup__box__footer__left-space {
                 float: left;
             }
+
+                .mm-popup__box__footer__left-space .mm-popup__btn {
+                    margin-right: 5px;
+                }
 
     .mm-popup__box--popover {
         width: 300px;

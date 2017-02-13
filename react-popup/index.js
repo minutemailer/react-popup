@@ -4,17 +4,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 var _events = require('events');
-
-var _events2 = _interopRequireDefault(_events);
-
-var _Object = require('react/lib/Object.assign');
-
-var _Object2 = _interopRequireDefault(_Object);
 
 var _Header = require('./Header.react');
 
@@ -30,15 +26,14 @@ var _Input2 = _interopRequireDefault(_Input);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var EventEmitter = _events2.default.EventEmitter,
-    SHOW_EVENT = 'show',
-    CLOSE_EVENT = 'close',
-    _props = {},
-    _initialState = {},
-    Manager,
-    Component;
+var SHOW_EVENT = 'show';
+var CLOSE_EVENT = 'close';
+var REFRESH_EVENT = 'refresh_position';
 
-Manager = (0, _Object2.default)({}, EventEmitter.prototype, {
+var _props = {};
+var _initialState = {};
+
+var Manager = _extends({}, _events.EventEmitter.prototype, {
 
     id: 1,
 
@@ -85,11 +80,15 @@ Manager = (0, _Object2.default)({}, EventEmitter.prototype, {
         this.active = id;
 
         this.emit(SHOW_EVENT);
+    },
+
+    refreshPosition: function refreshPosition(position) {
+        this.emit(REFRESH_EVENT, position);
     }
 
 });
 
-Component = _react2.default.createClass({
+var Component = _react2.default.createClass({
 
     displayName: 'Popup',
 
@@ -145,7 +144,7 @@ Component = _react2.default.createClass({
         register: function register(data) {
             var id = Manager.getId();
 
-            data = (0, _Object2.default)({}, _initialState, data);
+            data = _extends({}, _initialState, data);
 
             Manager.popups[id] = data;
 
@@ -203,11 +202,11 @@ Component = _react2.default.createClass({
                 type: 'text'
             });
 
+            Manager.value = inputAttributes.value;
+
             function onChange(value) {
                 Manager.value = value;
             }
-
-            var content, data;
 
             if (text) {
                 text = _react2.default.createElement(
@@ -217,7 +216,7 @@ Component = _react2.default.createClass({
                 );
             }
 
-            content = _react2.default.createElement(
+            var content = _react2.default.createElement(
                 'div',
                 null,
                 text,
@@ -250,16 +249,19 @@ Component = _react2.default.createClass({
 
         registerPlugin: function registerPlugin(name, callback) {
             this.plugins[name] = callback.bind(this);
+        },
+
+        refreshPosition: function refreshPosition(position) {
+            return Manager.refreshPosition(position);
         }
 
     },
 
     componentDidMount: function componentDidMount() {
-        var _this = this,
-            popup;
+        var _this = this;
 
         Manager.on(SHOW_EVENT, function () {
-            popup = Manager.activePopup();
+            var popup = Manager.activePopup();
 
             _this.setState({
                 title: popup.title,
@@ -277,16 +279,28 @@ Component = _react2.default.createClass({
         Manager.on(CLOSE_EVENT, function () {
             _this.setState(_this.getInitialState());
         });
+
+        Manager.on(REFRESH_EVENT, function (position) {
+            _this.setPosition(position);
+        });
     },
 
     componentDidUpdate: function componentDidUpdate() {
+        this.setPosition(this.state.position);
+    },
+
+    setPosition: function setPosition(position) {
         var box = this.refs.box;
 
         if (!box) {
             return;
         }
 
-        if (!this.state.position) {
+        if (!position) {
+            position = this.state.position;
+        }
+
+        if (!position) {
             box.style.opacity = 1;
             box.style.top = null;
             box.style.left = null;
@@ -295,12 +309,12 @@ Component = _react2.default.createClass({
             return false;
         }
 
-        if (typeof this.state.position === 'function') {
-            return this.state.position.call(null, box);
+        if (typeof position === 'function') {
+            return position.call(null, box);
         }
 
-        box.style.top = parseInt(this.state.position.y, 10) + 'px';
-        box.style.left = parseInt(this.state.position.x, 10) + 'px';
+        box.style.top = parseInt(position.y, 10) + 'px';
+        box.style.left = parseInt(position.x, 10) + 'px';
         box.style.margin = 0;
         box.style.opacity = 1;
     },
@@ -326,8 +340,8 @@ Component = _react2.default.createClass({
             return className;
         }
 
-        var finalClass = [],
-            classNames = className.split(' ');
+        var finalClass = [];
+        var classNames = className.split(' ');
 
         classNames.forEach(function (className) {
             finalClass.push(base + '--' + className);
@@ -353,13 +367,13 @@ Component = _react2.default.createClass({
     },
 
     render: function render() {
-        var className = this.props.className,
-            box,
-            closeBtn,
-            overlayStyle = {},
-            boxClass;
+        var className = this.props.className;
+        var box = null;
+        var overlayStyle = {};
 
         if (this.state.visible) {
+            var closeBtn = null;
+
             className += ' ' + this.props.className + '--visible';
 
             if (this.props.closeBtn) {
@@ -370,7 +384,7 @@ Component = _react2.default.createClass({
                 );
             }
 
-            boxClass = this.className('box');
+            var boxClass = this.className('box');
 
             if (this.state.className) {
                 boxClass += ' ' + this.wildClass(this.state.className, boxClass);

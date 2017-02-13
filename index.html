@@ -231,6 +231,48 @@ ReactDom.render(
             </div>
 
             <div class="section">
+                <h2>Custom buttons</h2>
+
+                <p>You can customize the buttons with classes, text and on click actions.</p>
+
+                <pre><code class="language-js">Popup.create({
+    title: null,
+    content: 'This popup uses the create method directly to get more control. This popup demonstrates custom buttons.',
+    buttons: {
+        left: [{
+            text: 'Cancel',
+            className: 'danger',
+            action: function () {
+                Popup.alert('You pressed the Cancel btn');
+
+                /** Close this popup. Close will always close the current visible one, if one is visible */
+                Popup.close();
+            }
+        }],
+        right: [{
+            text: 'Alt',
+            action: function () {
+                Popup.alert('You pressed the Alt btn');
+
+                /** Close this popup. Close will always close the current visible one, if one is visible */
+                Popup.close();
+            }
+        }, {
+            text: 'Save',
+            className: 'success',
+            action: function () {
+                Popup.alert('You pressed the Save btn');
+
+                /** Close this popup. Close will always close the current visible one, if one is visible */
+                Popup.close();
+            }
+        }]
+    }
+});</code></pre>
+                <p><button class="btn btn--big" type="button" id="customButtons">Try me</button></p>
+            </div>
+
+            <div class="section">
                 <h2>Reuse popups</h2>
 
                 <p>It is possible to store popups in variables and reuse them. Instead of using one of the helper methods (alert and prompt) you use the <code>register</code> method. You can also set a third parameter on <code>alert</code> and <code>prompt</code> to <code>true</code>.</p>

@@ -69,18 +69,17 @@ var alertBtn = document.getElementById('alert'),
     registeredPopupTrigger = document.getElementById('registeredPopupTrigger'),
     customButtons = document.getElementById('customButtons'),
     position = document.getElementById('position'),
-    prompt = document.getElementById('prompt'),
-    registeredAlert = void 0;
+    prompt = document.getElementById('prompt');
 
 /** Render popup */
 _reactDom2.default.render(_react2.default.createElement(_reactPopup2.default, { closeHtml: '×' }), document.getElementById('popupContainer'));
 
-_reactPopup2.default.addShowListener(function () {
-    _ScrollManager2.default.deactivate();
-});
+function refreshPosition() {
+    _reactPopup2.default.refreshPosition();
+}
 
 _reactPopup2.default.addCloseListener(function () {
-    _ScrollManager2.default.activate();
+    window.removeEventListener('scroll', refreshPosition);
 });
 
 /** Alert */
@@ -96,7 +95,6 @@ alertWithTitle.addEventListener('click', function () {
 
 /** Prompt */
 prompt.addEventListener('click', function () {
-    console.log('Hej');
     _reactPopup2.default.prompt('Type your name below', 'What\'s your name?', {
         placeholder: 'Placeholder yo',
         type: 'text'
@@ -126,7 +124,6 @@ registeredPopupTrigger.addEventListener('click', function () {
 });
 
 _reactPopup2.default.registerPlugin('popover', function (content, target) {
-    console.log(target);
     this.create({
         content: content,
         className: 'popover',
@@ -147,6 +144,7 @@ _reactPopup2.default.registerPlugin('popover', function (content, target) {
 
 /** Positioning */
 position.addEventListener('click', function () {
+    window.addEventListener('scroll', refreshPosition);
     _reactPopup2.default.plugins.popover('This popup will be displayed right above this button.', this);
 });
 
@@ -156,13 +154,29 @@ customButtons.addEventListener('click', function () {
         title: null,
         content: 'This popup uses the create method directly to get more control. This popup demonstrates custom buttons.',
         buttons: {
-            left: ['cancel'],
+            left: [{
+                text: 'Cancel',
+                className: 'danger',
+                action: function action() {
+                    _reactPopup2.default.alert('You pressed the Cancel btn');
+
+                    /** Close this popup. Close will always close the current visible one, if one is visible */
+                    _reactPopup2.default.close();
+                }
+            }],
             right: [{
+                text: 'Alt',
+                action: function action() {
+                    _reactPopup2.default.alert('You pressed the Alt btn');
+
+                    /** Close this popup. Close will always close the current visible one, if one is visible */
+                    _reactPopup2.default.close();
+                }
+            }, {
                 text: 'Save',
                 className: 'success',
                 action: function action() {
-                    /** This popup will be displayed after this one has closed */
-                    _reactPopup2.default.alert('Another popup yada yada');
+                    _reactPopup2.default.alert('You pressed the Save btn');
 
                     /** Close this popup. Close will always close the current visible one, if one is visible */
                     _reactPopup2.default.close();
@@ -19887,17 +19901,21 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];for (var key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) {
+                target[key] = source[key];
+            }
+        }
+    }return target;
+};
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 var _events = require('events');
-
-var _events2 = _interopRequireDefault(_events);
-
-var _Object = require('react/lib/Object.assign');
-
-var _Object2 = _interopRequireDefault(_Object);
 
 var _Header = require('./Header.react');
 
@@ -19915,15 +19933,14 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-var EventEmitter = _events2.default.EventEmitter,
-    SHOW_EVENT = 'show',
-    CLOSE_EVENT = 'close',
-    _props = {},
-    _initialState = {},
-    Manager,
-    Component;
+var SHOW_EVENT = 'show';
+var CLOSE_EVENT = 'close';
+var REFRESH_EVENT = 'refresh_position';
 
-Manager = (0, _Object2.default)({}, EventEmitter.prototype, {
+var _props = {};
+var _initialState = {};
+
+var Manager = _extends({}, _events.EventEmitter.prototype, {
 
     id: 1,
 
@@ -19970,11 +19987,15 @@ Manager = (0, _Object2.default)({}, EventEmitter.prototype, {
         this.active = id;
 
         this.emit(SHOW_EVENT);
+    },
+
+    refreshPosition: function refreshPosition(position) {
+        this.emit(REFRESH_EVENT, position);
     }
 
 });
 
-Component = _react2.default.createClass({
+var Component = _react2.default.createClass({
 
     displayName: 'Popup',
 
@@ -20030,7 +20051,7 @@ Component = _react2.default.createClass({
         register: function register(data) {
             var id = Manager.getId();
 
-            data = (0, _Object2.default)({}, _initialState, data);
+            data = _extends({}, _initialState, data);
 
             Manager.popups[id] = data;
 
@@ -20088,17 +20109,17 @@ Component = _react2.default.createClass({
                 type: 'text'
             });
 
+            Manager.value = inputAttributes.value;
+
             function onChange(value) {
                 Manager.value = value;
             }
-
-            var content, data;
 
             if (text) {
                 text = _react2.default.createElement('p', null, text);
             }
 
-            content = _react2.default.createElement('div', null, text, _react2.default.createElement(_Input2.default, { value: inputAttributes.value, placeholder: inputAttributes.placeholder, type: inputAttributes.type, className: _props.inputClass, onChange: onChange }));
+            var content = _react2.default.createElement('div', null, text, _react2.default.createElement(_Input2.default, { value: inputAttributes.value, placeholder: inputAttributes.placeholder, type: inputAttributes.type, className: _props.inputClass, onChange: onChange }));
 
             var data = {
                 title: title,
@@ -20126,16 +20147,19 @@ Component = _react2.default.createClass({
 
         registerPlugin: function registerPlugin(name, callback) {
             this.plugins[name] = callback.bind(this);
+        },
+
+        refreshPosition: function refreshPosition(position) {
+            return Manager.refreshPosition(position);
         }
 
     },
 
     componentDidMount: function componentDidMount() {
-        var _this = this,
-            popup;
+        var _this = this;
 
         Manager.on(SHOW_EVENT, function () {
-            popup = Manager.activePopup();
+            var popup = Manager.activePopup();
 
             _this.setState({
                 title: popup.title,
@@ -20153,16 +20177,28 @@ Component = _react2.default.createClass({
         Manager.on(CLOSE_EVENT, function () {
             _this.setState(_this.getInitialState());
         });
+
+        Manager.on(REFRESH_EVENT, function (position) {
+            _this.setPosition(position);
+        });
     },
 
     componentDidUpdate: function componentDidUpdate() {
+        this.setPosition(this.state.position);
+    },
+
+    setPosition: function setPosition(position) {
         var box = this.refs.box;
 
         if (!box) {
             return;
         }
 
-        if (!this.state.position) {
+        if (!position) {
+            position = this.state.position;
+        }
+
+        if (!position) {
             box.style.opacity = 1;
             box.style.top = null;
             box.style.left = null;
@@ -20171,12 +20207,12 @@ Component = _react2.default.createClass({
             return false;
         }
 
-        if (typeof this.state.position === 'function') {
-            return this.state.position.call(null, box);
+        if (typeof position === 'function') {
+            return position.call(null, box);
         }
 
-        box.style.top = parseInt(this.state.position.y, 10) + 'px';
-        box.style.left = parseInt(this.state.position.x, 10) + 'px';
+        box.style.top = parseInt(position.y, 10) + 'px';
+        box.style.left = parseInt(position.x, 10) + 'px';
         box.style.margin = 0;
         box.style.opacity = 1;
     },
@@ -20202,8 +20238,8 @@ Component = _react2.default.createClass({
             return className;
         }
 
-        var finalClass = [],
-            classNames = className.split(' ');
+        var finalClass = [];
+        var classNames = className.split(' ');
 
         classNames.forEach(function (className) {
             finalClass.push(base + '--' + className);
@@ -20229,20 +20265,20 @@ Component = _react2.default.createClass({
     },
 
     render: function render() {
-        var className = this.props.className,
-            box,
-            closeBtn,
-            overlayStyle = {},
-            boxClass;
+        var className = this.props.className;
+        var box = null;
+        var overlayStyle = {};
 
         if (this.state.visible) {
+            var closeBtn = null;
+
             className += ' ' + this.props.className + '--visible';
 
             if (this.props.closeBtn) {
                 closeBtn = _react2.default.createElement('button', { onClick: this.onClose, className: this.props.className + '__close' }, this.props.closeHtml);
             }
 
-            boxClass = this.className('box');
+            var boxClass = this.className('box');
 
             if (this.state.className) {
                 boxClass += ' ' + this.wildClass(this.state.className, boxClass);
@@ -20271,7 +20307,7 @@ Component = _react2.default.createClass({
 
 exports.default = Component;
 
-},{"./Footer.react":163,"./Header.react":164,"./Input.react":165,"events":3,"react":161,"react/lib/Object.assign":27}]},{},[2])
+},{"./Footer.react":163,"./Header.react":164,"./Input.react":165,"events":3,"react":161}]},{},[2])
 
 
 //# sourceMappingURL=script.js.map
