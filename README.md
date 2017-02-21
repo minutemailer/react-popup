@@ -114,12 +114,10 @@ buttons: {
 The position property is useful to display a popup in another position, like next to the trigger. The easy use is to just set an object with x and y values: `{x: 100, y: 200}`. The more advanced option is to use a function. When using a function you will be given the DOM node of the popup box, what you do with it is up to you. One thing to have in mind is that, when rendered, the popup has the styling `opacity: 0`. This is to give you a chance to know the popup dimensions when you position the element. The popup box will automatically be visible if you do not use positioning or if you use an object, but when using a function you need to do it yourself. Here's a simple example to display the popup centered above a button:
 
 ```js
-var trigger = document.getElementById('trigger');
+const trigger = document.getElementById('trigger');
 
 trigger.addEventListener('click', function (e) {
     e.preventDefault();
-
-    var _this = this;
 
     Popup.create({
         content: 'This popup will be displayed right above this button.',
@@ -127,14 +125,15 @@ trigger.addEventListener('click', function (e) {
             right: ['ok']
         },
         noOverlay: true, // Make it look like a tooltip
-        position: function (box) {
-            var bodyRect      = document.body.getBoundingClientRect(),
-                btnRect       = _this.getBoundingClientRect(),
-                btnOffsetTop  = btnRect.top - bodyRect.top,
-                btnOffsetLeft = btnRect.left - bodyRect.left;
+        position: (box) => {
+            const bodyRect      = document.body.getBoundingClientRect();
+            const btnRect       = trigger.getBoundingClientRect();
+            const btnOffsetTop  = btnRect.top - bodyRect.top;
+            const btnOffsetLeft = btnRect.left - bodyRect.left;
+            const scroll        = document.documentElement.scrollTop || document.body.scrollTop;
 
-            box.style.top  = (btnOffsetTop - box.offsetHeight - 10) + 'px';
-            box.style.left = (btnOffsetLeft + (_this.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
+            box.style.top  = (btnOffsetTop - box.offsetHeight - 10) - scroll + 'px';
+            box.style.left = (btnOffsetLeft + (target.offsetWidth / 2) - (box.offsetWidth / 2)) + 'px';
             box.style.margin = 0;
             box.style.opacity = 1;
         }
