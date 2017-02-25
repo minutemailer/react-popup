@@ -2,6 +2,7 @@
 
 React popup component
 ===========
+
 Simple and powerful react popup component. Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
 
 [Demo](http://minutemailer.github.io/react-popup/)
@@ -140,3 +141,7 @@ trigger.addEventListener('click', function (e) {
     });
 });
 ```
+  
+---
+  
+<a style="display: block; text-align: center" href="https://minutemailer.com"><img src="https://minutemailer.com/assets/svg/minutemailer-logo.svg" width="400" alt="Minutemailer"></a>
