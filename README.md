@@ -141,6 +141,11 @@ trigger.addEventListener('click', function (e) {
     });
 });
 ```
+
+#### Clear queue
+
+Sometimes you might want to wipe the popup queue completely, making sure no more popups will be displayed after you close the current one.
+To do this, just call `Popup.clearQueue()`. Remember that this will only clear the queue, you have to close the currently visible popup yourself (`Popup.close()`).
   
 ---
   

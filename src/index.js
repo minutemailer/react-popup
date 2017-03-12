@@ -38,7 +38,7 @@ const Manager = Object.assign({}, EventEmitter.prototype, {
             return false;
         }
 
-        var id      = this.active;
+        let id      = this.active;
         this.active = null;
 
         this.emit(CLOSE_EVENT);
@@ -54,7 +54,7 @@ const Manager = Object.assign({}, EventEmitter.prototype, {
             return false;
         }
 
-        var id = this.queue.shift();
+        let id = this.queue.shift();
 
         /** Set active */
         this.active = id;
@@ -64,6 +64,10 @@ const Manager = Object.assign({}, EventEmitter.prototype, {
 
     refreshPosition: function (position) {
         this.emit(REFRESH_EVENT, position);
+    },
+
+    clearQueue: function () {
+        this.queue = [];
     }
 
 });
@@ -229,6 +233,10 @@ const Component = React.createClass({
 
         refreshPosition: function (position) {
             return Manager.refreshPosition(position);
+        },
+
+        clearQueue: function () {
+            return Manager.clearQueue();
         }
 
     },

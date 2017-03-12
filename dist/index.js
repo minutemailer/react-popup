@@ -84,6 +84,10 @@ var Manager = _extends({}, _events.EventEmitter.prototype, {
 
     refreshPosition: function refreshPosition(position) {
         this.emit(REFRESH_EVENT, position);
+    },
+
+    clearQueue: function clearQueue() {
+        this.queue = [];
     }
 
 });
@@ -253,6 +257,10 @@ var Component = _react2.default.createClass({
 
         refreshPosition: function refreshPosition(position) {
             return Manager.refreshPosition(position);
+        },
+
+        clearQueue: function clearQueue() {
+            return Manager.clearQueue();
         }
 
     },
