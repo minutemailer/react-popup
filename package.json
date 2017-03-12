@@ -4,7 +4,7 @@
   "description": "React popup component from Minutemailer",
   "main": "dist/index.js",
   "scripts": {
-    "lint": "eslint index.js",
+    "lint": "eslint src/index.js",
     "test": "jest"
   },
   "repository": {
