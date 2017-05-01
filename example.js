@@ -99,7 +99,6 @@ prompt.addEventListener('click', function () {
 let mySpecialPopup = Popup.register({
     title: 'I am special',
     content: 'Since I am special you might need me again later. Save me!',
-    closeOnOutsideClick: false,
     buttons: {
         left: ['cancel'],
         right: ['ok']

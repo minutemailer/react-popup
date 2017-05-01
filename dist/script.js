@@ -178,7 +178,6 @@ prompt.addEventListener('click', function () {
 var mySpecialPopup = _reactPopup2.default.register({
     title: 'I am special',
     content: 'Since I am special you might need me again later. Save me!',
-    closeOnOutsideClick: false,
     buttons: {
         left: ['cancel'],
         right: ['ok']
