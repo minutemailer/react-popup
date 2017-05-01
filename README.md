@@ -7,6 +7,9 @@ Simple and powerful react popup component. Part of [Minutemailer.com](https://mi
 
 [Demo](http://minutemailer.github.io/react-popup/)
 
+## Breaking changes in v0.7.0
+The helper method `Popup.prompt` has been removed. With the new plugin system, it made more sense to have the prompt as a plugin. Please refer to the demo page for an example of how you can implement it the recommended way.
+
 ## Install
 
 For now this component is only available as a CommonJS module. Install it with npm (`npm install react-popup --save`). The module exports a react component with static methods. Here's a simple example:
@@ -82,7 +85,8 @@ To create a popup, you have two methods you can use: `create` and `register`. Th
     },
     className: null, // or string
     noOverlay: true, // hide overlay layer (default is false, overlay visible)
-    position: {x: 0, y: 0} // or a function, more on this further down
+    position: {x: 0, y: 0}, // or a function, more on this further down
+    closeOnOutsideClick: true // Should a click outside the popup close it? (default is true)
 }
 ```
 
