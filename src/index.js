@@ -15,21 +15,23 @@ const propTypes = {
     'closeHtml'           : React.PropTypes.string,
     'defaultOk'           : React.PropTypes.string,
     'defaultCancel'       : React.PropTypes.string,
-    'wildClasses'         : React.PropTypes.bool
+    'wildClasses'         : React.PropTypes.bool,
+    'closeOnOutsideClick' : React.PropTypes.bool
 };
 
 const defaultProps = {
-    'className'     : 'mm-popup',
-    'btnClass'      : 'mm-popup__btn',
-    'inputClass'    : 'mm-popup__input',
-    'closeBtn'      : true,
-    'closeHtml'     : null,
-    'defaultOk'     : 'Ok',
-    'defaultCancel' : 'Cancel',
-    'wildClasses'   : false
+    'className'           : 'mm-popup',
+    'btnClass'            : 'mm-popup__btn',
+    'inputClass'          : 'mm-popup__input',
+    'closeBtn'            : true,
+    'closeHtml'           : null,
+    'defaultOk'           : 'Ok',
+    'defaultCancel'       : 'Cancel',
+    'wildClasses'         : false,
+    'closeOnOutsideClick' : true
 };
 
-const initialState = {
+let initialState = {
     'title'               : null,
     'buttons'             : false,
     'content'             : null,
@@ -46,6 +48,8 @@ class Component extends React.Component {
 
     constructor(props) {
         super(props);
+
+        initialState.closeOnOutsideClick = this.props.closeOnOutsideClick;
 
         this.state = initialState;
 

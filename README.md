@@ -37,7 +37,8 @@ You configure the popup by passing properties to the component. Available option
     closeHtml={null}
     defaultOk="Ok"
     defaultCancel="Cancel"
-    wildClasses={false} />
+    wildClasses={false}
+    closeOnOutsideClick={true} />
 ```
 
 Above are defaults and for the popup to work you don't have to change anything. If `wildClasses` is set to `false` all classes will be added as BEM style modifiers. If set to `true` you have complete freedom and the class will be displayed exactly as you defined it. Look at this example:
@@ -86,7 +87,7 @@ To create a popup, you have two methods you can use: `create` and `register`. Th
     className: null, // or string
     noOverlay: true, // hide overlay layer (default is false, overlay visible)
     position: {x: 0, y: 0}, // or a function, more on this further down
-    closeOnOutsideClick: true // Should a click outside the popup close it? (default is true)
+    closeOnOutsideClick: true // Should a click outside the popup close it? (default is closeOnOutsideClick property on the component)
 }
 ```
 

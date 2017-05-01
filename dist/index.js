@@ -45,7 +45,8 @@ var propTypes = {
     'closeHtml': _react2.default.PropTypes.string,
     'defaultOk': _react2.default.PropTypes.string,
     'defaultCancel': _react2.default.PropTypes.string,
-    'wildClasses': _react2.default.PropTypes.bool
+    'wildClasses': _react2.default.PropTypes.bool,
+    'closeOnOutsideClick': _react2.default.PropTypes.bool
 };
 
 var defaultProps = {
@@ -56,7 +57,8 @@ var defaultProps = {
     'closeHtml': null,
     'defaultOk': 'Ok',
     'defaultCancel': 'Cancel',
-    'wildClasses': false
+    'wildClasses': false,
+    'closeOnOutsideClick': true
 };
 
 var initialState = {
@@ -79,6 +81,8 @@ var Component = function (_React$Component) {
         _classCallCheck(this, Component);
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Component).call(this, props));
+
+        initialState.closeOnOutsideClick = _this.props.closeOnOutsideClick;
 
         _this.state = initialState;
 
