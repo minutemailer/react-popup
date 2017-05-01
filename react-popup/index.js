@@ -6,11 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _events = require('events');
+var _Store = require('./Store');
+
+var _Store2 = _interopRequireDefault(_Store);
 
 var _Header = require('./Header.react');
 
@@ -20,152 +24,359 @@ var _Footer = require('./Footer.react');
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _Input = require('./Input.react');
+var _Constants = require('./Constants');
 
-var _Input2 = _interopRequireDefault(_Input);
+var _Constants2 = _interopRequireDefault(_Constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SHOW_EVENT = 'show';
-var CLOSE_EVENT = 'close';
-var REFRESH_EVENT = 'refresh_position';
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _props = {};
-var _initialState = {};
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var Manager = _extends({}, _events.EventEmitter.prototype, {
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    id: 1,
+var displayName = 'Popup';
+var propTypes = {
+    'className': _react2.default.PropTypes.string.isRequired,
+    'btnClass': _react2.default.PropTypes.string.isRequired,
+    'inputClass': _react2.default.PropTypes.string.isRequired,
+    'closeBtn': _react2.default.PropTypes.bool,
+    'closeHtml': _react2.default.PropTypes.string,
+    'defaultOk': _react2.default.PropTypes.string,
+    'defaultCancel': _react2.default.PropTypes.string,
+    'wildClasses': _react2.default.PropTypes.bool
+};
 
-    popups: {},
+var defaultProps = {
+    'className': 'mm-popup',
+    'btnClass': 'mm-popup__btn',
+    'inputClass': 'mm-popup__input',
+    'closeBtn': true,
+    'closeHtml': null,
+    'defaultOk': 'Ok',
+    'defaultCancel': 'Cancel',
+    'wildClasses': false
+};
 
-    queue: [],
+var initialState = {
+    'title': null,
+    'buttons': false,
+    'content': null,
+    'visible': false,
+    'className': null,
+    'noOverlay': false,
+    'position': false,
+    'closeOnOutsideClick': true
+};
 
-    active: null,
+var Store = new _Store2.default();
 
-    value: null,
+var Component = function (_React$Component) {
+    _inherits(Component, _React$Component);
 
-    getId: function getId() {
-        return 'id_' + this.id++;
-    },
+    function Component(props) {
+        _classCallCheck(this, Component);
 
-    activePopup: function activePopup() {
-        return this.popups[this.active];
-    },
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Component).call(this, props));
 
-    close: function close() {
-        if (!this.active) {
-            return false;
-        }
+        _this.state = initialState;
 
-        var id = this.active;
-        this.active = null;
+        _this.onShow = function () {
+            return _this._onShow();
+        };
+        _this.onClose = function () {
+            return _this._onClose();
+        };
+        _this.onRefresh = function (position) {
+            return _this._onRefresh(position);
+        };
 
-        this.emit(CLOSE_EVENT);
-        this.dispatch();
-
-        this.value = null;
-
-        return id;
-    },
-
-    dispatch: function dispatch() {
-        if (this.active || this.queue.length < 1) {
-            return false;
-        }
-
-        var id = this.queue.shift();
-
-        /** Set active */
-        this.active = id;
-
-        this.emit(SHOW_EVENT);
-    },
-
-    refreshPosition: function refreshPosition(position) {
-        this.emit(REFRESH_EVENT, position);
+        _this.handleCloseEvent = function () {
+            return _this._handleCloseEvent();
+        };
+        _this.containerClick = function (e) {
+            return _this._containerClick(e);
+        };
+        _this.handleButtonClick = function (action) {
+            return _this._handleButtonClick(action);
+        };
+        return _this;
     }
 
-});
+    _createClass(Component, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            Store.on(_Constants2.default.SHOW, this.onShow);
+            Store.on(_Constants2.default.CLOSE, this.onClose);
+            Store.on(_Constants2.default.REFRESH, this.onRefresh);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            this.setPosition(this.state.position);
+        }
 
-var Component = _react2.default.createClass({
+        /**
+         * On popup show
+         * @private
+         */
 
-    displayName: 'Popup',
+    }, {
+        key: '_onShow',
+        value: function _onShow() {
+            var popup = Store.activePopup();
 
-    getInitialState: function getInitialState() {
-        var state = {
-            'title': null,
-            'buttons': false,
-            'content': null,
-            'visible': false,
-            'className': null,
-            'noOverlay': false,
-            'position': false,
-            'wildClasses': false
-        };
+            this.setState({
+                title: popup.title,
+                content: popup.content,
+                buttons: popup.buttons,
+                visible: true,
+                className: popup.className,
+                noOverlay: popup.noOverlay,
+                position: popup.position,
+                closeOnOutsideClick: popup.closeOnOutsideClick
+            });
+        }
 
-        _initialState = state;
+        /**
+         * On popup close
+         * @private
+         */
 
-        return state;
-    },
+    }, {
+        key: '_onClose',
+        value: function _onClose() {
+            this.setState(initialState);
+        }
 
-    getDefaultProps: function getDefaultProps() {
-        return {
-            'className': 'mm-popup',
-            'btnClass': 'mm-popup__btn',
-            'inputClass': 'mm-popup__input',
-            'closeBtn': true,
-            'closeHtml': null,
-            'defaultOk': 'Ok',
-            'defaultCancel': 'Cancel'
-        };
-    },
+        /**
+         * Handle close triggered inside component
+         * @private
+         */
 
-    statics: {
+    }, {
+        key: '_handleCloseEvent',
+        value: function _handleCloseEvent() {
+            Store.close();
+        }
 
-        plugins: {},
+        /**
+         * Handle button clicks
+         * @param action
+         * @returns {*}
+         * @private
+         */
 
-        addShowListener: function addShowListener(callback) {
-            Manager.on(SHOW_EVENT, callback);
-        },
+    }, {
+        key: '_handleButtonClick',
+        value: function _handleButtonClick(action) {
+            if (typeof action === 'function') {
+                return action.call(this, Store);
+            }
+        }
 
-        removeShowListener: function removeShowListener(callback) {
-            Manager.removeListener(SHOW_EVENT, callback);
-        },
+        /**
+         * Handle container click
+         * @param e
+         * @private
+         */
 
-        addCloseListener: function addCloseListener(callback) {
-            Manager.on(CLOSE_EVENT, callback);
-        },
+    }, {
+        key: '_containerClick',
+        value: function _containerClick(e) {
+            if (this.state.closeOnOutsideClick && this.hasClass(e.target, this.props.className)) {
+                this.handleCloseEvent();
+            }
+        }
 
-        removeCloseListener: function removeCloseListener(callback) {
-            Manager.removeListener(CLOSE_EVENT, callback);
-        },
+        /**
+         * Refresh popup position
+         * @param position
+         * @private
+         */
 
-        register: function register(data) {
-            var id = Manager.getId();
+    }, {
+        key: '_onRefresh',
+        value: function _onRefresh(position) {
+            this.setPosition(position);
+        }
+    }, {
+        key: 'setPosition',
+        value: function setPosition(position) {
+            var box = this.refs.box;
 
-            data = _extends({}, _initialState, data);
+            if (!box) {
+                return;
+            }
 
-            Manager.popups[id] = data;
+            if (!position) {
+                position = this.state.position;
+            }
+
+            if (!position) {
+                box.style.opacity = 1;
+                box.style.top = null;
+                box.style.left = null;
+                box.style.margin = null;
+
+                return false;
+            }
+
+            if (typeof position === 'function') {
+                return position.call(null, box);
+            }
+
+            box.style.top = parseInt(position.y, 10) + 'px';
+            box.style.left = parseInt(position.x, 10) + 'px';
+            box.style.margin = 0;
+            box.style.opacity = 1;
+        }
+    }, {
+        key: 'hasClass',
+        value: function hasClass(element, className) {
+            if (element.classList) {
+                return !!className && element.classList.contains(className);
+            }
+
+            return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
+        }
+    }, {
+        key: 'className',
+        value: function className(_className) {
+            return this.props.className + '__' + _className;
+        }
+    }, {
+        key: 'wildClass',
+        value: function wildClass(className, base) {
+            if (!className) {
+                return null;
+            }
+
+            if (this.props.wildClasses) {
+                return className;
+            }
+
+            var finalClass = [];
+            var classNames = className.split(' ');
+
+            classNames.forEach(function (className) {
+                finalClass.push(base + '--' + className);
+            });
+
+            return finalClass.join(' ');
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var className = this.props.className;
+            var box = null;
+            var overlayStyle = {};
+
+            if (this.state.visible) {
+                var closeBtn = null;
+
+                className += ' ' + this.props.className + '--visible';
+
+                if (this.props.closeBtn) {
+                    closeBtn = _react2.default.createElement(
+                        'button',
+                        { onClick: this.handleCloseEvent, className: this.props.className + '__close' },
+                        this.props.closeHtml
+                    );
+                }
+
+                var boxClass = this.className('box');
+
+                if (this.state.className) {
+                    boxClass += ' ' + this.wildClass(this.state.className, boxClass);
+                }
+
+                box = _react2.default.createElement(
+                    'article',
+                    { ref: 'box', style: { opacity: 0 }, className: boxClass },
+                    closeBtn,
+                    _react2.default.createElement(_Header2.default, { title: this.state.title, className: this.className('box__header') }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: this.className('box__body') },
+                        this.state.content
+                    ),
+                    _react2.default.createElement(_Footer2.default, {
+                        className: this.className('box__footer'),
+                        wildClasses: this.props.wildClasses,
+                        btnClass: this.props.btnClass,
+                        buttonClick: this.handleButtonClick,
+                        onClose: this.handleCloseEvent,
+                        onOk: this.handleCloseEvent,
+                        defaultOk: this.props.defaultOk,
+                        defaultCancel: this.props.defaultCancel,
+                        buttons: this.state.buttons })
+                );
+            }
+
+            if (this.state.noOverlay) {
+                overlayStyle.background = 'transparent';
+            }
+
+            return _react2.default.createElement(
+                'div',
+                { onClick: this.containerClick, className: className, style: overlayStyle },
+                box
+            );
+        }
+    }], [{
+        key: 'addShowListener',
+        value: function addShowListener(callback) {
+            Store.on(_Constants2.default.SHOW, callback);
+        }
+    }, {
+        key: 'removeShowListener',
+        value: function removeShowListener(callback) {
+            Store.removeListener(_Constants2.default.SHOW, callback);
+        }
+    }, {
+        key: 'addCloseListener',
+        value: function addCloseListener(callback) {
+            Store.on(_Constants2.default.CLOSE, callback);
+        }
+    }, {
+        key: 'removeCloseListener',
+        value: function removeCloseListener(callback) {
+            Store.removeListener(_Constants2.default.CLOSE, callback);
+        }
+    }, {
+        key: 'register',
+        value: function register(data) {
+            var id = Store.getId();
+
+            data = _extends({}, initialState, data);
+
+            Store.popups[id] = data;
 
             return id;
-        },
-
-        queue: function queue(id) {
-            if (!Manager.popups.hasOwnProperty(id)) {
+        }
+    }, {
+        key: 'queue',
+        value: function queue(id) {
+            if (!Store.popups.hasOwnProperty(id)) {
                 return false;
             }
 
             /** Add popup to queue */
-            Manager.queue.push(id);
+            Store.queue.push(id);
 
             /** Dispatch queue */
-            Manager.dispatch();
+            Store.dispatch();
 
             return id;
-        },
-
-        create: function create(data) {
+        }
+    }, {
+        key: 'create',
+        value: function create(data) {
             /** Register popup */
             var id = this.register(data);
 
@@ -173,9 +384,10 @@ var Component = _react2.default.createClass({
             this.queue(id);
 
             return id;
-        },
-
-        alert: function alert(text, title, noQueue) {
+        }
+    }, {
+        key: 'alert',
+        value: function alert(text, title, noQueue) {
             var data = {
                 title: title,
                 content: text,
@@ -189,241 +401,39 @@ var Component = _react2.default.createClass({
             }
 
             return this.create(data);
-        },
-
-        prompt: function prompt(title, text, inputAttributes, okBtn, noQueue) {
-            if (!okBtn) {
-                okBtn = 'ok';
-            }
-
-            inputAttributes || (inputAttributes = {
-                value: '',
-                placeholder: '',
-                type: 'text'
-            });
-
-            Manager.value = inputAttributes.value;
-
-            function onChange(value) {
-                Manager.value = value;
-            }
-
-            if (text) {
-                text = _react2.default.createElement(
-                    'p',
-                    null,
-                    text
-                );
-            }
-
-            var content = _react2.default.createElement(
-                'div',
-                null,
-                text,
-                _react2.default.createElement(_Input2.default, { value: inputAttributes.value, placeholder: inputAttributes.placeholder, type: inputAttributes.type, className: _props.inputClass, onChange: onChange })
-            );
-
-            var data = {
-                title: title,
-                content: content,
-                buttons: {
-                    left: ['cancel'],
-                    right: [okBtn]
-                }
-            };
-
-            if (noQueue) {
-                return this.register(data);
-            }
-
-            return this.create(data);
-        },
-
-        close: function close() {
-            Manager.close();
-        },
-
-        getValue: function getValue() {
-            return Manager.value;
-        },
-
-        registerPlugin: function registerPlugin(name, callback) {
-            this.plugins[name] = callback.bind(this);
-        },
-
-        refreshPosition: function refreshPosition(position) {
-            return Manager.refreshPosition(position);
         }
-
-    },
-
-    componentDidMount: function componentDidMount() {
-        var _this = this;
-
-        Manager.on(SHOW_EVENT, function () {
-            var popup = Manager.activePopup();
-
-            _this.setState({
-                title: popup.title,
-                content: popup.content,
-                buttons: popup.buttons,
-                visible: true,
-                className: popup.className,
-                noOverlay: popup.noOverlay,
-                position: popup.position
-            });
-        });
-
-        _props = this.props;
-
-        Manager.on(CLOSE_EVENT, function () {
-            _this.setState(_this.getInitialState());
-        });
-
-        Manager.on(REFRESH_EVENT, function (position) {
-            _this.setPosition(position);
-        });
-    },
-
-    componentDidUpdate: function componentDidUpdate() {
-        this.setPosition(this.state.position);
-    },
-
-    setPosition: function setPosition(position) {
-        var box = this.refs.box;
-
-        if (!box) {
-            return;
+    }, {
+        key: 'close',
+        value: function close() {
+            Store.close();
         }
-
-        if (!position) {
-            position = this.state.position;
+    }, {
+        key: 'registerPlugin',
+        value: function registerPlugin(name, callback) {
+            Store.plugins[name] = callback.bind(this);
         }
-
-        if (!position) {
-            box.style.opacity = 1;
-            box.style.top = null;
-            box.style.left = null;
-            box.style.margin = null;
-
-            return false;
+    }, {
+        key: 'plugins',
+        value: function plugins() {
+            return Store.plugins;
         }
-
-        if (typeof position === 'function') {
-            return position.call(null, box);
+    }, {
+        key: 'refreshPosition',
+        value: function refreshPosition(position) {
+            return Store.refreshPosition(position);
         }
-
-        box.style.top = parseInt(position.y, 10) + 'px';
-        box.style.left = parseInt(position.x, 10) + 'px';
-        box.style.margin = 0;
-        box.style.opacity = 1;
-    },
-
-    hasClass: function hasClass(element, className) {
-        if (element.classList) {
-            return !!className && element.classList.contains(className);
+    }, {
+        key: 'clearQueue',
+        value: function clearQueue() {
+            return Store.clearQueue();
         }
+    }]);
 
-        return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
-    },
+    return Component;
+}(_react2.default.Component);
 
-    className: function className(_className) {
-        return this.props.className + '__' + _className;
-    },
-
-    wildClass: function wildClass(className, base) {
-        if (!className) {
-            return null;
-        }
-
-        if (this.props.wildClasses) {
-            return className;
-        }
-
-        var finalClass = [];
-        var classNames = className.split(' ');
-
-        classNames.forEach(function (className) {
-            finalClass.push(base + '--' + className);
-        });
-
-        return finalClass.join(' ');
-    },
-
-    onClose: function onClose() {
-        Manager.close();
-    },
-
-    handleButtonClick: function handleButtonClick(action) {
-        if (typeof action === 'function') {
-            return action.call(this, Manager);
-        }
-    },
-
-    containerClick: function containerClick(e) {
-        if (this.hasClass(e.target, this.props.className)) {
-            this.onClose();
-        }
-    },
-
-    render: function render() {
-        var className = this.props.className;
-        var box = null;
-        var overlayStyle = {};
-
-        if (this.state.visible) {
-            var closeBtn = null;
-
-            className += ' ' + this.props.className + '--visible';
-
-            if (this.props.closeBtn) {
-                closeBtn = _react2.default.createElement(
-                    'button',
-                    { onClick: this.onClose, className: this.props.className + '__close' },
-                    this.props.closeHtml
-                );
-            }
-
-            var boxClass = this.className('box');
-
-            if (this.state.className) {
-                boxClass += ' ' + this.wildClass(this.state.className, boxClass);
-            }
-
-            box = _react2.default.createElement(
-                'article',
-                { ref: 'box', style: { opacity: 0 }, className: boxClass },
-                closeBtn,
-                _react2.default.createElement(_Header2.default, { title: this.state.title, className: this.className('box__header') }),
-                _react2.default.createElement(
-                    'div',
-                    { className: this.className('box__body') },
-                    this.state.content
-                ),
-                _react2.default.createElement(_Footer2.default, {
-                    className: this.className('box__footer'),
-                    wildClasses: this.props.wildClasses,
-                    btnClass: this.props.btnClass,
-                    buttonClick: this.handleButtonClick,
-                    onClose: this.onClose,
-                    onOk: this.onClose,
-                    defaultOk: this.props.defaultOk,
-                    defaultCancel: this.props.defaultCancel,
-                    buttons: this.state.buttons })
-            );
-        }
-
-        if (this.state.noOverlay) {
-            overlayStyle.background = 'transparent';
-        }
-
-        return _react2.default.createElement(
-            'div',
-            { onClick: this.containerClick, className: className, style: overlayStyle },
-            box
-        );
-    }
-
-});
+Component.displayName = displayName;
+Component.propTypes = propTypes;
+Component.defaultProps = defaultProps;
 
 exports.default = Component;

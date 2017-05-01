@@ -214,18 +214,64 @@ ReactDom.render(
             <div class="section">
                 <h2>What's your name?</h2>
 
-                <p>For your convinience, React Popup ships with a built-in prompt. Displaying one is as easy as asking someone their name.</p>
+                <p><strong>The prompt helper has been removed in v0.7.0</strong>. To help you out a bit, here's an example of how you can do it yourself, the recommended way. More about plugins further down.</p>
 
-                <pre><code class="language-js">Popup.prompt('Type your name below', 'What\'s your name?', {
-    placeholder: 'Placeholder yo',
-    type: 'text'
-}, {
-    text: 'Save',
-    className: 'success',
-    action: function (Box) {
-        Popup.alert('Your name is: ' + Box.value);
-        Box.close();
+                <pre><code class="language-js">/** The prompt content component */
+class Prompt extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: this.props.defaultValue
+        };
+
+        this.onChange = (e) => this._onChange(e);
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.value !== this.state.value) {
+            this.props.onChange(this.state.value);
+        }
+    }
+
+    _onChange(e) {
+        let value = e.target.value;
+
+        this.setState({value: value});
+    }
+
+    render() {
+        return <input type="text" placeholder={this.props.placeholder} className="mm-popup__input" value={this.state.value} onChange={this.onChange} />;
+    }
+}
+
+/** Prompt plugin */
+Popup.registerPlugin('prompt', function (defaultValue, placeholder, callback) {
+    let promptValue = null;
+    let promptChange = function (value) {
+        promptValue = value;
+    };
+
+    this.create({
+        title: 'What\'s your name?',
+        content: <Prompt onChange={promptChange} placeholder={placeholder} value={defaultValue} />,
+        buttons: {
+            left: ['cancel'],
+            right: [{
+                text: 'Save',
+                className: 'success',
+                action: function () {
+                    callback(promptValue);
+                    Popup.close();
+                }
+            }]
+        }
+    });
+});
+
+/** Call the plugin */
+Popup.plugins().prompt('', 'Type your name', function (value) {
+    Popup.alert('You typed: ' + value);
 });</code></pre>
                 <p><button class="btn btn--big" type="button" id="prompt">Try me</button></p>
             </div>
@@ -315,7 +361,7 @@ Popup.queue(mySpecialPopup);</code></pre>
     });
 });
 
-Popup.plugins.popover('This popup will be displayed right above this button.', element);</code></pre>
+Popup.plugins().popover('This popup will be displayed right above this button.', element);</code></pre>
                 
                 <p>Note that in this example I'm using custom positioning. All popups can have a position property. It can be an object with x and y or a function. If you use a function you get complete control over the box. The box is invisible (opacity=0) by default so you need to make it visible in your function as in the example above.</p> 
                 <p><button class="btn btn--big" type="button" id="position">Try me</button></p>

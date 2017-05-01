@@ -38,17 +38,60 @@ alertWithTitle.addEventListener('click', function () {
 });
 
 /** Prompt */
-prompt.addEventListener('click', function () {
-    Popup.prompt('Type your name below', 'What\'s your name?', {
-        placeholder: 'Placeholder yo',
-        type: 'text'
-    }, {
-        text: 'Save',
-        className: 'success',
-        action: function (Box) {
-            Popup.alert('You typed: ' + Box.value);
-            Box.close();
+class Prompt extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: this.props.defaultValue
+        };
+
+        this.onChange = (e) => this._onChange(e);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.value !== this.state.value) {
+            this.props.onChange(this.state.value);
         }
+    }
+
+    _onChange(e) {
+        let value = e.target.value;
+
+        this.setState({value: value});
+    }
+
+    render() {
+        return <input type="text" placeholder={this.props.placeholder} className="mm-popup__input" value={this.state.value} onChange={this.onChange} />;
+    }
+}
+
+Popup.registerPlugin('prompt', function (defaultValue, placeholder, callback) {
+    let promptValue = null;
+    let promptChange = function (value) {
+        promptValue = value;
+    };
+
+    this.create({
+        title: 'What\'s your name?',
+        content: <Prompt onChange={promptChange} placeholder={placeholder} value={defaultValue} />,
+        buttons: {
+            left: ['cancel'],
+            right: [{
+                text: 'Save',
+                className: 'success',
+                action: function () {
+                    callback(promptValue);
+                    Popup.close();
+                }
+            }]
+        }
+    });
+});
+
+prompt.addEventListener('click', function () {
+    Popup.plugins().prompt('', 'Type your name', function (value) {
+        Popup.alert('You typed: ' + value);
     });
 });
 
@@ -56,6 +99,7 @@ prompt.addEventListener('click', function () {
 let mySpecialPopup = Popup.register({
     title: 'I am special',
     content: 'Since I am special you might need me again later. Save me!',
+    closeOnOutsideClick: false,
     buttons: {
         left: ['cancel'],
         right: ['ok']
@@ -89,7 +133,7 @@ Popup.registerPlugin('popover', function (content, target) {
 /** Positioning */
 position.addEventListener('click', function () {
     window.addEventListener('scroll', refreshPosition);
-    Popup.plugins.popover('This popup will be displayed right above this button.', this);
+    Popup.plugins().popover('This popup will be displayed right above this button.', this);
 });
 
 /** Custom buttons */
