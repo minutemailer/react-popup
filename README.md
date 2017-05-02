@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/react-popup.svg?maxAge=2592000)](https://www.npmjs.com/package/react-popup) [![npm](https://img.shields.io/npm/dt/react-popup.svg?maxAge=2592000)](https://www.npmjs.com/package/react-popup)  [![npm](https://img.shields.io/npm/l/react-popup.svg?maxAge=2592000)](https://www.npmjs.com/package/react-popup)
+[![npm](https://img.shields.io/npm/v/react-popup.svg?maxAge=86400)](https://www.npmjs.com/package/react-popup) [![npm](https://img.shields.io/npm/dt/react-popup.svg?maxAge=86400)](https://www.npmjs.com/package/react-popup)  [![npm](https://img.shields.io/npm/l/react-popup.svg?maxAge=86400)](https://www.npmjs.com/package/react-popup)
 
 React popup component
 ===========
