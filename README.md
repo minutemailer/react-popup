@@ -91,6 +91,21 @@ To create a popup, you have two methods you can use: `create` and `register`. Th
 }
 ```
 
+### Jump the queue
+
+If you want to display the popup immediately, and go back to the previous one after the new one is closed, pass `true` as the second argument to the `create` method:
+
+```js
+Popup.create({
+    title: 'Immediate popup',
+    content: 'This popup will be displayed straight away',
+    className: 'alert',
+    buttons: {
+        right: ['ok']
+    }
+}, true);
+```
+
 #### Buttons
 
 The popup supports two arrays of buttons, left and right. These just renders two divs with corresponding classes, how you style it is up to you. A button requires the following properties:
