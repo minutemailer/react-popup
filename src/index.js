@@ -243,12 +243,20 @@ class Component extends React.Component {
         return id;
     }
 
-    static create(data) {
+    static create(data, bringToFront) {
         /** Register popup */
         const id = this.register(data);
 
         /** Queue popup */
-        this.queue(id);
+        if (bringToFront === true) {
+            let currentlyActive = Store.active
+            Store.active = null
+            this.queue(id);
+            this.queue(currentlyActive)
+            Store.dispatch()
+        } else {
+            this.queue(id);
+        }
 
         return id;
     }
