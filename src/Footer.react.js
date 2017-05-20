@@ -1,146 +1,153 @@
 'use strict';
 
 import React from 'react';
-import ActionButton from './ActionButton.react';
+import ActionButton from './ActionButton';
 
-let ButtonsSpace,
-    Component;
+const buttonSpaceDefaultProps = {
+	buttons: null,
+	className: null,
+	onOk: null,
+	onClose: null,
+	buttonClick: null,
+	btnClass: null,
+	href: null
+};
 
-ButtonsSpace = React.createClass({
+class ButtonsSpace extends React.Component {
 
-	displayName: 'PopupFooterButtons',
+	constructor(props) {
+		super(props);
+	}
 
-	getInitialProps: function () {
-		return {
-			buttons     : null,
-			className   : null,
-			onOk        : null,
-			onClose     : null,
-			buttonClick : null,
-			btnClass    : null,
-			href        : null
-		};
-	},
+    onOk() {
+        if (this.props.onOk) {
+            return this.props.onOk();
+        }
+    }
 
-	onOk: function () {
-		if (this.props.onOk) {
-			return this.props.onOk();
-		}
-	},
+    onClose() {
+        if (this.props.onClose) {
+            return this.props.onClose();
+        }
+    }
 
-	onClose: function () {
-		if (this.props.onClose) {
-			return this.props.onClose();
-		}
-	},
-
-	buttonClick: function (action) {
+    buttonClick(action) {
 		if (this.props.buttonClick) {
-			return this.props.buttonClick(action);
-		}
-	},
+            return this.props.buttonClick(action);
+        }
+    }
 
-	wildClass: function (className, base) {
-		if (!className) {
-			return null;
-		}
+    wildClass(className, base) {
+        if (!className) {
+            return null;
+        }
 
-		if (this.props.wildClasses) {
-			return className;
-		}
+        if (this.props.wildClasses) {
+            return className;
+        }
 
-		var finalClass = [],
-		    classNames = className.split(' ');
+        var finalClass = [],
+            classNames = className.split(' ');
 
-		classNames.forEach(function (className) {
-			finalClass.push(base + '--' + className);
-		});
+        classNames.forEach(function (className) {
+            finalClass.push(base + '--' + className);
+        });
 
-		return finalClass.join(' ');
-	},
+        return finalClass.join(' ');
+    }
 
-	render: function () {
-		if (!this.props.buttons) {
-			return null;
-		}
+    render() {
+        if (!this.props.buttons) {
+            return null;
+        }
 
-		var i, btns = [], btn, className, url;
+        let btns = [];
 
-		for (i = 0; i < this.props.buttons.length; i++) {
-			btn = this.props.buttons[i];
-			url = (btn.url) ? btn.url : null;
+        for (let i in this.props.buttons) {
+            if (this.props.buttons.hasOwnProperty(i)) {
+                let btn = this.props.buttons[i];
+                let url = (btn.url) ? btn.url : null;
 
-			if (typeof btn === 'string') {
-				if (btn === 'ok') {
-					btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--ok'} key={i} onClick={this.onOk}>{this.props.defaultOk}</ActionButton>);
-				} else if (btn === 'cancel') {
-					btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={this.onClose}>{this.props.defaultCancel}</ActionButton>);
-				}
-			} else {
-				className = this.props.btnClass + ' ' + this.wildClass(btn.className, this.props.btnClass);
-				btns.push(<ActionButton className={className} key={i} url={url} onClick={this.buttonClick.bind(this, btn.action)}>{btn.text}</ActionButton>);
-			}
-		}
+                if (typeof btn === 'string') {
+                    if (btn === 'ok') {
+                        btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--ok'} key={i} onClick={() => this.onOk()}>{this.props.defaultOk}</ActionButton>);
+                    } else if (btn === 'cancel') {
+                        btns.push(<ActionButton className={this.props.btnClass + ' ' + this.props.btnClass + '--cancel'} key={i} onClick={() => this.onClose()}>{this.props.defaultCancel}</ActionButton>);
+                    }
+                } else {
+                    let className = this.props.btnClass + ' ' + this.wildClass(btn.className, this.props.btnClass);
+                    btns.push(<ActionButton className={className} key={i} url={url} onClick={() => this.buttonClick(btn.action)}>{btn.text}</ActionButton>);
+                }
+            }
+        }
 
-		return (
-			<div className={this.props.className}>
-				{btns}
-			</div>
-		);
+        return (
+            <div className={this.props.className}>
+                {btns}
+            </div>
+        );
+    }
+
+}
+
+ButtonsSpace.displayName = 'PopupFooterButtons';
+ButtonsSpace.defaultProps = buttonSpaceDefaultProps;
+
+const defaultProps = {
+	buttons: null,
+	className: null,
+	wildClasses: false,
+	btnClass: null,
+	defaultOk: null,
+	defaultCancel: null,
+	buttonClick: null,
+	onOk: null,
+	onClose: null
+};
+
+class Component extends React.Component {
+
+	constructor(props) {
+		super(props);
 	}
 
-});
+    render() {
+        if (this.props.buttons) {
+            return (
+                <footer className={this.props.className}>
+                    <ButtonsSpace
+                        buttonClick={this.props.buttonClick}
+                        onOk={this.props.onOk}
+                        onClose={this.props.onClose}
+                        className={this.props.className + '__left-space'}
+                        wildClasses={this.props.wildClasses}
+                        btnClass={this.props.btnClass}
+                        defaultOk={this.props.defaultOk}
+                        defaultCancel={this.props.defaultCancel}
+                        buttons={this.props.buttons.left}
+					/>
 
-Component = React.createClass({
+                    <ButtonsSpace
+                        buttonClick={this.props.buttonClick}
+                        onOk={this.props.onOk}
+                        onClose={this.props.onClose}
+                        className={this.props.className + '__right-space'}
+                        wildClasses={this.props.wildClasses}
+                        btnClass={this.props.btnClass}
+                        defaultOk={this.props.defaultOk}
+                        defaultCancel={this.props.defaultCancel}
+                        buttons={this.props.buttons.right}
+					/>
+                </footer>
+            );
+        }
 
-	displayName: 'PopupFooter',
+        return null;
+    }
 
-	getInitialProps: function () {
-		return {
-			buttons: null,
-			className: null,
-			wildClasses: false,
-			btnClass: null,
-			defaultOk: null,
-			defaultCancel: null,
-			buttonClick: null,
-			onOk: null,
-			onClose: null
-		};
-	},
+}
 
-	render: function () {
-		if (this.props.buttons) {
-			return (
-				<footer className={this.props.className}>
-					<ButtonsSpace
-						buttonClick={this.props.buttonClick}
-						onOk={this.props.onOk}
-						onClose={this.props.onClose}
-						className={this.props.className + '__left-space'}
-						wildClasses={this.props.wildClasses}
-						btnClass={this.props.btnClass}
-						defaultOk={this.props.defaultOk}
-						defaultCancel={this.props.defaultCancel}
-						buttons={this.props.buttons.left} />
-
-					<ButtonsSpace
-						buttonClick={this.props.buttonClick}
-						onOk={this.props.onOk}
-						onClose={this.props.onClose}
-						className={this.props.className + '__right-space'}
-						wildClasses={this.props.wildClasses}
-						btnClass={this.props.btnClass}
-						defaultOk={this.props.defaultOk}
-						defaultCancel={this.props.defaultCancel}
-						buttons={this.props.buttons.right} />
-				</footer>
-			);
-		}
-
-		return null;
-	}
-
-});
+Component.displayName = 'PopupFooter';
+Component.defaultProps = defaultProps;
 
 export default Component;

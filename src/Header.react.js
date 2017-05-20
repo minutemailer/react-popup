@@ -1,30 +1,31 @@
-'use strict';
-
 import React from 'react';
 
-let Component = React.createClass({
+const defaultProps = {
+    title: null,
+    className: null,
+};
 
-	displayName: 'PopupHeader',
+class Component extends React.Component {
 
-	getInitialProps: function () {
-		return {
-			title:     null,
-			className: null
-		};
-	},
+    constructor(props) {
+        super(props);
+    }
 
-	render: function () {
-		if (this.props.title) {
-			return (
-				<header className={this.props.className}>
-					<h1 className={this.props.className + '__title'}>{this.props.title}</h1>
-				</header>
-			);
-		}
+    render() {
+        if (this.props.title) {
+            return (
+                <header className={this.props.className}>
+                    <h1 className={this.props.className + '__title'}>{this.props.title}</h1>
+                </header>
+            );
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-});
+}
+
+Component.displayName = 'PopupHeader';
+Component.defaultProps = defaultProps;
 
 export default Component;
