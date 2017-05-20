@@ -154,10 +154,14 @@ customButtons.addEventListener('click', function () {
             right: [{
                 text: 'Alt',
                 action: function () {
-                    Popup.alert('You pressed the Alt btn');
-
-                    /** Close this popup. Close will always close the current visible one, if one is visible */
-                    Popup.close();
+                    Popup.create({
+                        title: null,
+                        content: 'I was configured to display right away, without affecting the queue. Closing this will display the previously visible popup.',
+                        buttons: {
+                            left: ['cancel'],
+                            right: []
+                        }
+                    }, true);
                 }
             }, {
                 text: 'Save',

@@ -26,7 +26,7 @@ var PopupStore = function (_EventEmitter) {
     function PopupStore(props) {
         _classCallCheck(this, PopupStore);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PopupStore).call(this, props));
+        var _this = _possibleConstructorReturn(this, (PopupStore.__proto__ || Object.getPrototypeOf(PopupStore)).call(this, props));
 
         _this.id = 1;
         _this.popups = {};

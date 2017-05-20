@@ -13,17 +13,17 @@
                 margin: 0;
                 padding: 0;
             }
-            
+
             html {
                 background: #fff;
                 font: normal 16px/1.2 "Open Sans", sans-serif;
                 color: #646666;
             }
-            
+
             html, button, input {
                 -webkit-font-smoothing: antialiased;
             }
-            
+
             body {
                 text-rendering: optimizeLegibility;
             }
@@ -96,7 +96,7 @@
                     color: #00b4e5;
                     font-weight: bold;
                 }
-            
+
             p {
                 line-height: 1.5;
                 margin: 30px 0 0;
@@ -105,7 +105,7 @@
             .section {
                 margin-top: 80px;
             }
-            
+
             section {
                 margin-top: 30px;
                 padding-top: 30px;
@@ -176,7 +176,7 @@
         <div class="container">
             <div class="minutemailer"><a href="https://minutemailer.com">Minutemailer</a></div>
             <a href="https://github.com/minutemailer/react-popup" class="btn fork">Fork this on GitHub</a>
-        
+
             <h1>React Popup</h1>
             <p class="description">Simple and powerful react popup component.</p>
 
@@ -204,7 +204,7 @@ ReactDom.render(
                 <h2>Display a simple alert</h2>
 
                 <p>Displaying an alert box couldn't be easier. Just call the <code>alert</code> method on the popup with the text as the first argument and an optional title as the second one.</p>
-            
+
                 <pre><code class="language-js">Popup.alert('I am alert, nice to meet you');</code></pre>
                 <p><button class="btn btn--big" type="button" id="alert">Try me</button> <button class="btn btn--big" type="button" id="alertWithTitle">I have a title!</button></p>
 
@@ -216,7 +216,7 @@ ReactDom.render(
 
                 <p><strong>The prompt helper has been removed in v0.7.0</strong>. To help you out a bit, here's an example of how you can do it yourself, the recommended way. More about plugins further down.</p>
 
-                <pre><code class="language-js">/** The prompt content component */
+                <pre><code class="language-jsx">/** The prompt content component */
 class Prompt extends React.Component {
     constructor(props) {
         super(props);
@@ -241,7 +241,7 @@ class Prompt extends React.Component {
     }
 
     render() {
-        return <input type="text" placeholder={this.props.placeholder} className="mm-popup__input" value={this.state.value} onChange={this.onChange} />;
+        return &lt;input type="text" placeholder={this.props.placeholder} className="mm-popup__input" value={this.state.value} onChange={this.onChange} /&gt;;
     }
 }
 
@@ -254,7 +254,7 @@ Popup.registerPlugin('prompt', function (defaultValue, placeholder, callback) {
 
     this.create({
         title: 'What\'s your name?',
-        content: <Prompt onChange={promptChange} placeholder={placeholder} value={defaultValue} />,
+        content: &lt;Prompt onChange={promptChange} placeholder={placeholder} value={defaultValue} /&gt;,
         buttons: {
             left: ['cancel'],
             right: [{
@@ -298,10 +298,16 @@ Popup.plugins().prompt('', 'Type your name', function (value) {
         right: [{
             text: 'Alt',
             action: function () {
-                Popup.alert('You pressed the Alt btn');
-
-                /** Close this popup. Close will always close the current visible one, if one is visible */
-                Popup.close();
+                // Passing true as the second argument to the create method
+                // displays it directly, without interupting the queue.
+                Popup.create({
+                    title: null,
+                    content: 'I was configured to display right away, without affecting the queue. Closing this will display the previously visible popup.',
+                    buttons: {
+                        left: ['cancel'],
+                        right: []
+                    }
+                }, true);
             }
         }, {
             text: 'Save',
@@ -322,7 +328,7 @@ Popup.plugins().prompt('', 'Type your name', function (value) {
                 <h2>Reuse popups</h2>
 
                 <p>It is possible to store popups in variables and reuse them. Instead of using one of the helper methods (alert and prompt) you use the <code>register</code> method. You can also set a third parameter on <code>alert</code> and <code>prompt</code> to <code>true</code>.</p>
-            
+
                 <pre><code class="language-js">let mySpecialPopup = Popup.register({
     title: 'I am special',
     content: 'Since I am special you might need me again later. Save me!',
@@ -362,8 +368,8 @@ Popup.queue(mySpecialPopup);</code></pre>
 });
 
 Popup.plugins().popover('This popup will be displayed right above this button.', element);</code></pre>
-                
-                <p>Note that in this example I'm using custom positioning. All popups can have a position property. It can be an object with x and y or a function. If you use a function you get complete control over the box. The box is invisible (opacity=0) by default so you need to make it visible in your function as in the example above.</p> 
+
+                <p>Note that in this example I'm using custom positioning. All popups can have a position property. It can be an object with x and y or a function. If you use a function you get complete control over the box. The box is invisible (opacity=0) by default so you need to make it visible in your function as in the example above.</p>
                 <p><button class="btn btn--big" type="button" id="position">Try me</button></p>
             </div>
 
