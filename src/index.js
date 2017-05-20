@@ -107,7 +107,7 @@ class Component extends React.Component {
         return id;
     }
 
-    static alert(text, title, noQueue) {
+    static alert(text, title, bringToFront) {
         const data = {
             title,
             content: text,
@@ -116,11 +116,7 @@ class Component extends React.Component {
             },
         };
 
-        if (noQueue) {
-            return this.register(data);
-        }
-
-        return this.create(data);
+        return this.create(data, bringToFront);
     }
 
     static close() {

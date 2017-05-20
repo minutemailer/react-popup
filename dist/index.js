@@ -152,7 +152,7 @@ var Component = function (_React$Component) {
         }
     }, {
         key: 'alert',
-        value: function alert(text, title, noQueue) {
+        value: function alert(text, title, bringToFront) {
             var data = {
                 title: title,
                 content: text,
@@ -161,11 +161,7 @@ var Component = function (_React$Component) {
                 }
             };
 
-            if (noQueue) {
-                return this.register(data);
-            }
-
-            return this.create(data);
+            return this.create(data, bringToFront);
         }
     }, {
         key: 'close',
