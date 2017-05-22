@@ -14,7 +14,7 @@ The helper method `Popup.prompt` has been removed. With the new plugin system, i
 
 For now this component is only available as a CommonJS module. Install it with npm (`npm install react-popup --save`). The module exports a react component with static methods. Here's a simple example:
 
-```js
+```jsx
 import React from 'react';
 import ReactDom from 'react-dom';
 import Popup from 'react-popup';
@@ -24,6 +24,8 @@ ReactDom.render(
     document.getElementById('popupContainer')
 );
 ```
+
+_Important_: The component is meant to work as a global component. You should only mount it once, not everytime you want to use it, in other components. Preferably mount it as far up the DOM tree as possible to avoid positioning problems.
 
 ## Configuration
 
