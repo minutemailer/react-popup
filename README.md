@@ -27,6 +27,10 @@ ReactDom.render(
 
 _Important_: The component is meant to work as a global component. You should only mount it once, not everytime you want to use it, in other components. Preferably mount it as far up the DOM tree as possible to avoid positioning problems.
 
+## Basic styling
+
+Basic CSS is needed to handle the visibility and positioning of the popup. Se [demo CSS](https://github.com/minutemailer/react-popup/blob/gh-pages/popup.example.css) for an example.
+
 ## Configuration
 
 You configure the popup by passing properties to the component. Available options are:
