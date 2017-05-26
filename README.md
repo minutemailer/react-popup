@@ -1,7 +1,18 @@
-[![npm](https://img.shields.io/npm/v/react-popup.svg?maxAge=86400)](https://www.npmjs.com/package/react-popup) [![npm](https://img.shields.io/npm/dt/react-popup.svg?maxAge=86400)](https://www.npmjs.com/package/react-popup)  [![npm](https://img.shields.io/npm/l/react-popup.svg?maxAge=86400)](https://www.npmjs.com/package/react-popup)
+<h1 align="center">React popup component</h1>
 
-React popup component
-===========
+    
+<p align="center">
+    <a href="https://www.npmjs.com/package/react-popup">
+        <img src="https://camo.githubusercontent.com/5e686c4eb8e3c65a53788a9de5d9f100cb803238/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f72656163742d706f7075702e7376673f6d61784167653d3836343030" alt="npm" data-canonical-src="https://img.shields.io/npm/v/react-popup.svg?maxAge=86400" style="max-width:100%;" />
+    </a>
+    <a href="https://www.npmjs.com/package/react-popup">
+        <img src="https://camo.githubusercontent.com/d42279f9d6289757de1cab9125ff955fcd77a331/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f64742f72656163742d706f7075702e7376673f6d61784167653d3836343030" alt="npm" data-canonical-src="https://img.shields.io/npm/dt/react-popup.svg?maxAge=86400" style="max-width:100%;" />
+    </a>
+    <a href="https://www.npmjs.com/package/react-popup">
+        <img src="https://camo.githubusercontent.com/99c9f0ca43fd6c2dd1c956ffc1cb48c74aa2e88d/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f72656163742d706f7075702e7376673f6d61784167653d3836343030" alt="npm" data-canonical-src="https://img.shields.io/npm/l/react-popup.svg?maxAge=86400" style="max-width:100%;" />
+    </a>
+</p>
+
 
 Simple and powerful react popup component. Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
 
