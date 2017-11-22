@@ -1,4 +1,6 @@
-<h1 align="center">React popup component</h1>
+<p align="center">
+  <img src="http://minutemailer.github.io/react-popup/logo.png" alt="React Popup" />
+</p>
 
     
 <p align="center">
@@ -13,8 +15,10 @@
     </a>
 </p>
 
-
-Simple and powerful react popup component. Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
+<p align="center">
+    Simple and powerful react popup component. <br>Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
+</p>
+<p>&nbsp;</p>
 
 ## Breaking changes in master
 
@@ -41,6 +45,7 @@ Popup.alert('Hello');
 
 Documentation and demo can be found here: http://minutemailer.github.io/react-popup/
 
----
-
-<a style="display: block; text-align: center" href="https://minutemailer.com"><img src="https://minutemailer.com/assets/svg/minutemailer-logo.svg" width="400" alt="Minutemailer"></a>
+<p>&nbsp;</p>
+<p align="center">
+<a href="https://minutemailer.com"><img src="https://minutemailer.com/assets/svg/minutemailer-logo.svg" width="400" alt="Minutemailer"></a>
+</p>
