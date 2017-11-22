@@ -79,6 +79,7 @@ Popup.registerPlugin('prompt', function (defaultValue, placeholder, callback) {
             left: ['cancel'],
             right: [{
                 text: 'Save',
+                key: '⌘+s',
                 className: 'success',
                 action: function () {
                     callback(promptValue);

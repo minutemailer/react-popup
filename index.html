@@ -190,6 +190,7 @@
                 <h2>Setup</h2>
 
                 <p>Start by rendering the react component into an element on the page. You will need the <code>react</code> and <code>react-dom</code> packages. See configuration options at the end of this page.</p>
+                <p><em>Important: The component is meant to work as a global component. You should only mount it once, not everytime you want to use it, in other components. Preferably mount it as far up the DOM tree as possible to avoid positioning problems.</em></p>
                 <pre><code class="language-jsx">import React from 'react';
 import ReactDom from 'react-dom';
 import Popup from 'react-popup';
@@ -198,6 +199,12 @@ ReactDom.render(
     &lt;Popup /&gt;,
     document.getElementById('popupContainer')
 );</code></pre>
+            </div>
+
+            <div class="section">
+                <h2>Styling</h2>
+
+                <p>Right now we do not support css in js. We use simple classes that you need to use in order for the popup to display correctly. See <a href="https://github.com/minutemailer/react-popup/blob/gh-pages/popup.example.css">demo CSS</a> for an example.</p>
             </div>
 
             <div class="section">
@@ -279,7 +286,7 @@ Popup.plugins().prompt('', 'Type your name', function (value) {
             <div class="section">
                 <h2>Custom buttons</h2>
 
-                <p>You can customize the buttons with classes, text and on click actions.</p>
+                <p>You can customize the buttons with classes, text and on click actions. The value for "key" is sent directly to <a href="https://github.com/madrobby/keymaster" target="_blank">keymaster</a>, check their documentation to see what you can use.</p>
 
                 <pre><code class="language-js">Popup.create({
     title: null,
@@ -288,6 +295,7 @@ Popup.plugins().prompt('', 'Type your name', function (value) {
         left: [{
             text: 'Cancel',
             className: 'danger',
+            key: 'esc',
             action: function () {
                 Popup.alert('You pressed the Cancel btn');
 
@@ -297,6 +305,7 @@ Popup.plugins().prompt('', 'Type your name', function (value) {
         }],
         right: [{
             text: 'Alt',
+            key: '⌘+enter',
             action: function () {
                 // Passing true as the second argument to the create method
                 // displays it directly, without interupting the queue.
@@ -374,6 +383,20 @@ Popup.plugins().popover('This popup will be displayed right above this button.',
             </div>
 
             <div class="section">
+                <h2>Jump the queue</h2>
+                <p>If you want to display the popup immediately, and go back to the previous one after the new one is closed, pass `true` as the second argument to the `create` method:</p>
+
+                <pre><code class="language-jsx">Popup.create({
+    title: 'Immediate popup',
+    content: 'This popup will be displayed straight away',
+    className: 'alert',
+    buttons: {
+        right: ['ok']
+    }
+}, true);</code></pre>
+            </div>
+
+            <div class="section">
                 <h2>Configuration</h2>
 
                 <p>There are multiple options you can set when you attach the popup component to the DOM. See below for a complete list.</p>
@@ -384,7 +407,14 @@ Popup.plugins().popover('This popup will be displayed right above this button.',
     closeHtml={null}
     defaultOk="Ok"
     defaultCancel="Cancel"
-    wildClasses={false} /&gt;</code></pre>
+    wildClasses={false}
+    escToClose={true} /&gt;</code></pre>
+            </div>
+
+            <div class="section">
+                <h2>Clear queue</h2>
+                <p>Sometimes you might want to wipe the popup queue completely, making sure no more popups will be displayed after you close the current one.
+                To do this, just call <strong>Popup.clearQueue()</strong>. Remember that this will only clear the queue, you have to close the currently visible popup yourself (<strong>Popup.close()</strong>).</p>
             </div>
         </div>
 
