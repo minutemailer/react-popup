@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -23,68 +23,59 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var defaultProps = {
-	onClick: function onClick() {},
-	className: 'btn',
-	url: null
+    onClick: function onClick() {},
+    className: 'btn',
+    url: null
 };
 
 var propTypes = {
-	children: _propTypes2.default.node.isRequired
+    onClick: _propTypes2.default.func,
+    className: _propTypes2.default.string,
+    children: _propTypes2.default.node.isRequired,
+    url: _propTypes2.default.string
 };
 
 var Component = function (_React$Component) {
-	_inherits(Component, _React$Component);
+    _inherits(Component, _React$Component);
 
-	function Component(props) {
-		_classCallCheck(this, Component);
+    function Component() {
+        _classCallCheck(this, Component);
 
-		return _possibleConstructorReturn(this, (Component.__proto__ || Object.getPrototypeOf(Component)).call(this, props));
-	}
+        return _possibleConstructorReturn(this, (Component.__proto__ || Object.getPrototypeOf(Component)).apply(this, arguments));
+    }
 
-	_createClass(Component, [{
-		key: 'handleClick',
-		value: function handleClick() {
-			return this.props.onClick();
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			var _this2 = this;
+    _createClass(Component, [{
+        key: 'handleClick',
+        value: function handleClick() {
+            return this.props.onClick();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
 
-			var className = this.props.className;
-			var url = false;
+            var className = this.props.className;
 
-			if (this.props.url) {
-				if (this.props.url !== '#') {
-					url = true;
-				}
 
-				if (!url) {
-					return _react2.default.createElement(
-						'a',
-						{ target: '_blank', className: className },
-						this.props.children
-					);
-				}
+            if (this.props.url && this.props.url !== '#') {
+                return _react2.default.createElement(
+                    'a',
+                    { href: this.props.url, target: '_blank', className: className },
+                    this.props.children
+                );
+            }
 
-				return _react2.default.createElement(
-					'a',
-					{ href: this.props.url, target: '_blank', className: className },
-					this.props.children
-				);
-			}
+            return _react2.default.createElement(
+                'button',
+                { onClick: function onClick() {
+                        return _this2.handleClick();
+                    }, className: className },
+                this.props.children
+            );
+        }
+    }]);
 
-			return _react2.default.createElement(
-				'button',
-				{ onClick: function onClick() {
-						return _this2.handleClick();
-					}, className: className },
-				this.props.children
-			);
-		}
-	}]);
-
-	return Component;
+    return Component;
 }(_react2.default.Component);
 
 Component.displayName = 'PopupAction';

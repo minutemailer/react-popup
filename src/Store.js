@@ -5,10 +5,10 @@ export default class PopupStore extends EventEmitter {
     constructor(props) {
         super(props);
 
-        this.id      = 1;
-        this.popups  = {};
-        this.queue   = [];
-        this.active  = null;
+        this.id = 1;
+        this.popups = {};
+        this.queue = [];
+        this.active = null;
         this.plugins = {};
     }
 
@@ -16,7 +16,8 @@ export default class PopupStore extends EventEmitter {
      * Get popup ID
      */
     getId() {
-        return 'id_' + (this.id++);
+        const nextId = this.id + 1;
+        return `id_${(nextId)}`;
     }
 
     /**
@@ -35,7 +36,7 @@ export default class PopupStore extends EventEmitter {
             return false;
         }
 
-        let id      = this.active;
+        const id = this.active;
         this.active = null;
 
         this.emit(Constants.CLOSE);
@@ -54,12 +55,14 @@ export default class PopupStore extends EventEmitter {
             return false;
         }
 
-        let id = this.queue.shift();
+        const id = this.queue.shift();
 
         /** Set active */
         this.active = id;
 
-        this.emit(Constants.SHOW);
+        this.emit(Constants.SHOW, id);
+
+        return true;
     }
 
     /**

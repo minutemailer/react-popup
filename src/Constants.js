@@ -1,5 +1,5 @@
 export default {
-    SHOW    : 'SHOW',
-    CLOSE   : 'CLOSE',
-    REFRESH : 'REFRESH'
+    SHOW: 'SHOW',
+    CLOSE: 'CLOSE',
+    REFRESH: 'REFRESH',
 };
