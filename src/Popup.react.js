@@ -40,7 +40,7 @@ class Component extends React.Component {
         className: PropTypes.string,
         btnClass: PropTypes.string,
         closeBtn: PropTypes.bool,
-        closeHtml: PropTypes.string,
+        closeHtml: PropTypes.node,
         defaultOk: PropTypes.string,
         defaultOkKey: PropTypes.string,
         defaultCancel: PropTypes.string,
