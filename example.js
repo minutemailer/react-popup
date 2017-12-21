@@ -158,6 +158,7 @@ customButtons.addEventListener('click', function () {
             }],
             right: [{
                 text: 'Alt',
+                key: 'ctrl+enter',
                 action: function () {
                     Popup.create({
                         title: null,
