@@ -112,7 +112,7 @@ var Prompt = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Prompt.__proto__ || Object.getPrototypeOf(Prompt)).call(this, props));
 
         _this.state = {
-            value: _this.props.defaultValue
+            value: _this.props.defaultValue || ''
         };
 
         _this.onChange = function (e) {
@@ -151,9 +151,13 @@ _reactPopup2.default.registerPlugin('prompt', function (defaultValue, placeholde
         promptValue = value;
     };
 
+    if (typeof defaultValue !== 'string') {
+        defaultValue = '';
+    }
+
     this.create({
         title: 'What\'s your name?',
-        content: _react2.default.createElement(Prompt, { onChange: promptChange, placeholder: placeholder, value: defaultValue }),
+        content: _react2.default.createElement(Prompt, { onChange: promptChange, placeholder: placeholder, defaultValue: defaultValue }),
         buttons: {
             left: ['cancel'],
             right: [{
@@ -20028,6 +20032,8 @@ function _inherits(subClass, superClass) {
     }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
+var defaultKeyFilter = _keymaster2.default.filter;
+
 var Store = new _Store2.default();
 var hasClass = function hasClass(element, className) {
     if (element.classList) {
@@ -20039,6 +20045,7 @@ var hasClass = function hasClass(element, className) {
 
 var handleClose = function handleClose() {
     _keymaster2.default.deleteScope('react-popup');
+    _keymaster2.default.filter = defaultKeyFilter;
 
     Store.close();
 };
@@ -20208,6 +20215,7 @@ var Component = function (_React$Component) {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             _keymaster2.default.deleteScope('react-popup');
+            _keymaster2.default.filter = defaultKeyFilter;
         }
 
         /**
@@ -20231,6 +20239,8 @@ var Component = function (_React$Component) {
         key: 'onClose',
         value: function onClose() {
             _keymaster2.default.deleteScope('react-popup');
+            _keymaster2.default.filter = defaultKeyFilter;
+
             this.setState(initialState);
         }
 
@@ -20245,6 +20255,10 @@ var Component = function (_React$Component) {
             var _this2 = this;
 
             _keymaster2.default.deleteScope('react-popup');
+
+            _keymaster2.default.filter = function () {
+                return true;
+            };
 
             var popup = Store.activePopup();
 
@@ -20332,7 +20346,7 @@ var Component = function (_React$Component) {
     }, {
         key: 'containerClick',
         value: function containerClick(e) {
-            if (this.state.closeOnOutsideClick && hasClass(e.target, this.props.className)) {
+            if (this.state.closeOnOutsideClick) {
                 handleClose();
             }
         }
@@ -20360,7 +20374,7 @@ var Component = function (_React$Component) {
         value: function handleKeyEvent(button, id, e) {
             var excludeTags = ['INPUT', 'TEXTAREA', 'BUTTON'];
 
-            if (this.state.id !== id || excludeTags.indexOf(e.target.tagName) >= 0) {
+            if (this.state.id !== id || button.key === 'enter' && excludeTags.indexOf(e.target.tagName) >= 0) {
                 return true;
             }
 
@@ -20470,7 +20484,7 @@ Component.propTypes = {
     className: _propTypes2.default.string,
     btnClass: _propTypes2.default.string,
     closeBtn: _propTypes2.default.bool,
-    closeHtml: _propTypes2.default.string,
+    closeHtml: _propTypes2.default.node,
     defaultOk: _propTypes2.default.string,
     defaultOkKey: _propTypes2.default.string,
     defaultCancel: _propTypes2.default.string,
@@ -20564,8 +20578,7 @@ var PopupStore = function (_EventEmitter) {
     _createClass(PopupStore, [{
         key: 'getId',
         value: function getId() {
-            var nextId = this.id + 1;
-            return 'id_' + nextId;
+            return 'id_' + this.id++;
         }
 
         /**

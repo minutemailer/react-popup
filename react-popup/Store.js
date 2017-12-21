@@ -44,8 +44,7 @@ var PopupStore = function (_EventEmitter) {
     _createClass(PopupStore, [{
         key: 'getId',
         value: function getId() {
-            var nextId = this.id + 1;
-            return 'id_' + nextId;
+            return 'id_' + this.id++;
         }
 
         /**

@@ -43,7 +43,7 @@ class Prompt extends React.Component {
         super(props);
 
         this.state = {
-            value: this.props.defaultValue
+            value: this.props.defaultValue || ''
         };
 
         this.onChange = (e) => this._onChange(e);
@@ -72,9 +72,13 @@ Popup.registerPlugin('prompt', function (defaultValue, placeholder, callback) {
         promptValue = value;
     };
 
+    if (typeof defaultValue !== 'string') {
+        defaultValue = '';
+    }
+
     this.create({
         title: 'What\'s your name?',
-        content: <Prompt onChange={promptChange} placeholder={placeholder} value={defaultValue} />,
+        content: <Prompt onChange={promptChange} placeholder={placeholder} defaultValue={defaultValue} />,
         buttons: {
             left: ['cancel'],
             right: [{

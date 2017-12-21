@@ -266,6 +266,7 @@ Popup.registerPlugin('prompt', function (defaultValue, placeholder, callback) {
             left: ['cancel'],
             right: [{
                 text: 'Save',
+                key: '⌘+s',
                 className: 'success',
                 action: function () {
                     callback(promptValue);
@@ -295,7 +296,6 @@ Popup.plugins().prompt('', 'Type your name', function (value) {
         left: [{
             text: 'Cancel',
             className: 'danger',
-            key: 'esc',
             action: function () {
                 Popup.alert('You pressed the Cancel btn');
 
