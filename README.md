@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-    Simple and powerful react popup component. <br>Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
+    Simple and powerful react popup component. <br>Part of <a href="https://minutemailer.com">Minutemailer.com</a> - Marketing Simplified
 </p>
 <p>&nbsp;</p>
 
