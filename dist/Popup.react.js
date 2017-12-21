@@ -63,7 +63,7 @@ var handleClose = function handleClose() {
 var initialState = {
     id: null,
     title: null,
-    buttons: false,
+    buttons: null,
     content: null,
     visible: false,
     className: null,
@@ -272,11 +272,11 @@ var Component = function (_React$Component) {
 
             var popup = Store.activePopup();
 
-            if (!Object.prototype.hasOwnProperty.call(popup.buttons, 'left')) {
+            if (popup.buttons && !Object.prototype.hasOwnProperty.call(popup.buttons, 'left')) {
                 popup.buttons.left = [];
             }
 
-            if (!Object.prototype.hasOwnProperty.call(popup.buttons, 'right')) {
+            if (popup.buttons && !Object.prototype.hasOwnProperty.call(popup.buttons, 'right')) {
                 popup.buttons.right = [];
             }
 
@@ -341,8 +341,10 @@ var Component = function (_React$Component) {
                 return;
             }
 
-            box.style.top = parseInt(boxPosition.y, 10) + ' px';
-            box.style.left = parseInt(boxPosition.x, 10) + ' \'px';
+            console.log(boxPosition);
+
+            box.style.top = parseInt(boxPosition.y, 10) + 'px';
+            box.style.left = parseInt(boxPosition.x, 10) + 'px';
             box.style.margin = 0;
             box.style.opacity = 1;
         }
