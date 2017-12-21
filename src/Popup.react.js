@@ -6,6 +6,8 @@ import Header from './Header.react';
 import Footer from './Footer.react';
 import Constants from './Constants';
 
+const defaultKeyFilter = key.filter;
+
 const Store = new PopupStore();
 const hasClass = (element, className) => {
     if (element.classList) {
@@ -17,6 +19,7 @@ const hasClass = (element, className) => {
 
 const handleClose = () => {
     key.deleteScope('react-popup');
+    key.filter = defaultKeyFilter;
 
     Store.close();
 };
@@ -192,6 +195,7 @@ class Component extends React.Component {
 
     componentWillUnmount() {
         key.deleteScope('react-popup');
+        key.filter = defaultKeyFilter;
     }
 
     /**
@@ -209,6 +213,8 @@ class Component extends React.Component {
      */
     onClose() {
         key.deleteScope('react-popup');
+        key.filter = defaultKeyFilter;
+
         this.setState(initialState);
     }
 
@@ -218,6 +224,8 @@ class Component extends React.Component {
      */
     onShow(id) {
         key.deleteScope('react-popup');
+
+        key.filter = () => { return true };
 
         const popup = Store.activePopup();
 
@@ -297,7 +305,7 @@ class Component extends React.Component {
      * @private
      */
     containerClick(e) {
-        if (this.state.closeOnOutsideClick && hasClass(e.target, this.props.className)) {
+        if (this.state.closeOnOutsideClick) {
             handleClose();
         }
     }
@@ -323,7 +331,7 @@ class Component extends React.Component {
     handleKeyEvent(button, id, e) {
         const excludeTags = ['INPUT', 'TEXTAREA', 'BUTTON'];
 
-        if (this.state.id !== id || excludeTags.indexOf(e.target.tagName) >= 0) {
+        if (this.state.id !== id || (button.key === 'enter' && excludeTags.indexOf(e.target.tagName) >= 0)) {
             return true;
         }
 

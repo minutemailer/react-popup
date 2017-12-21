@@ -42,6 +42,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var defaultKeyFilter = _keymaster2.default.filter;
+
 var Store = new _Store2.default();
 var hasClass = function hasClass(element, className) {
     if (element.classList) {
@@ -53,6 +55,7 @@ var hasClass = function hasClass(element, className) {
 
 var handleClose = function handleClose() {
     _keymaster2.default.deleteScope('react-popup');
+    _keymaster2.default.filter = defaultKeyFilter;
 
     Store.close();
 };
@@ -222,6 +225,7 @@ var Component = function (_React$Component) {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             _keymaster2.default.deleteScope('react-popup');
+            _keymaster2.default.filter = defaultKeyFilter;
         }
 
         /**
@@ -245,6 +249,8 @@ var Component = function (_React$Component) {
         key: 'onClose',
         value: function onClose() {
             _keymaster2.default.deleteScope('react-popup');
+            _keymaster2.default.filter = defaultKeyFilter;
+
             this.setState(initialState);
         }
 
@@ -259,6 +265,10 @@ var Component = function (_React$Component) {
             var _this2 = this;
 
             _keymaster2.default.deleteScope('react-popup');
+
+            _keymaster2.default.filter = function () {
+                return true;
+            };
 
             var popup = Store.activePopup();
 
@@ -346,7 +356,7 @@ var Component = function (_React$Component) {
     }, {
         key: 'containerClick',
         value: function containerClick(e) {
-            if (this.state.closeOnOutsideClick && hasClass(e.target, this.props.className)) {
+            if (this.state.closeOnOutsideClick) {
                 handleClose();
             }
         }
@@ -374,7 +384,7 @@ var Component = function (_React$Component) {
         value: function handleKeyEvent(button, id, e) {
             var excludeTags = ['INPUT', 'TEXTAREA', 'BUTTON'];
 
-            if (this.state.id !== id || excludeTags.indexOf(e.target.tagName) >= 0) {
+            if (this.state.id !== id || button.key === 'enter' && excludeTags.indexOf(e.target.tagName) >= 0) {
                 return true;
             }
 
@@ -504,7 +514,7 @@ Component.propTypes = {
     className: _propTypes2.default.string,
     btnClass: _propTypes2.default.string,
     closeBtn: _propTypes2.default.bool,
-    closeHtml: _propTypes2.default.string,
+    closeHtml: _propTypes2.default.node,
     defaultOk: _propTypes2.default.string,
     defaultOkKey: _propTypes2.default.string,
     defaultCancel: _propTypes2.default.string,

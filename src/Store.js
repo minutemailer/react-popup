@@ -16,8 +16,7 @@ export default class PopupStore extends EventEmitter {
      * Get popup ID
      */
     getId() {
-        const nextId = this.id + 1;
-        return `id_${(nextId)}`;
+        return `id_${this.id++}`;
     }
 
     /**
