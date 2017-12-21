@@ -47,5 +47,5 @@ Documentation and demo can be found here: http://minutemailer.github.io/react-po
 
 <p>&nbsp;</p>
 <p align="center">
-<a href="https://minutemailer.com"><img src="https://minutemailer.com/assets/svg/minutemailer-logo.svg" width="400" alt="Minutemailer"></a>
+<a href="https://minutemailer.com"><img src="https://app.minutemailer.com/assets/svg/minutemailer-logo.svg" width="400" alt="Minutemailer"></a>
 </p>
