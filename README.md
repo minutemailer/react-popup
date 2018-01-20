@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-    Simple and powerful react popup component. <br>Part of [Minutemailer.com](https://minutemailer.com) - Marketing Simplified
+    Simple and powerful react popup component. <br>Part of <a href="https://minutemailer.com">Minutemailer.com</a> - Marketing Simplified
 </p>
 <p>&nbsp;</p>
 
@@ -47,5 +47,5 @@ Documentation and demo can be found here: http://minutemailer.github.io/react-po
 
 <p>&nbsp;</p>
 <p align="center">
-<a href="https://minutemailer.com"><img src="https://minutemailer.com/assets/svg/minutemailer-logo.svg" width="400" alt="Minutemailer"></a>
+<a href="https://minutemailer.com"><img src="http://minutemailerlive.s3.amazonaws.com/Minutemailer-blue-RGB.svg" width="400" alt="Minutemailer"></a>
 </p>
