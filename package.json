@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/minutemailer/react-popup",
   "peerDependencies": {
-    "keymaster": "^1.6.2",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
@@ -59,5 +58,8 @@
     "gulp-babel": "^7.0.0",
     "gulp-rename": "^1.2.2",
     "jest-cli": "^11.0.0"
+  },
+  "dependencies": {
+    "keymaster": "^1.6.2"
   }
 }
