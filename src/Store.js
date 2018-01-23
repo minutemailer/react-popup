@@ -38,7 +38,7 @@ export default class PopupStore extends EventEmitter {
         const id = this.active;
         this.active = null;
 
-        this.emit(Constants.CLOSE);
+        this.emit(Constants.CLOSE, id);
         this.dispatch();
 
         this.value = null;
