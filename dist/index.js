@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
-var _Popup = require('./Popup.react');
-
-var _Popup2 = _interopRequireDefault(_Popup);
+var _Popup = _interopRequireDefault(require("./Popup.react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _Popup2.default;
+var _default = _Popup.default;
+exports.default = _default;

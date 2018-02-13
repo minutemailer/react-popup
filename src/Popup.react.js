@@ -39,34 +39,6 @@ const initialState = {
 class Component extends React.Component {
     static displayName = 'Popup';
 
-    static propTypes = {
-        className: PropTypes.string,
-        btnClass: PropTypes.string,
-        closeBtn: PropTypes.bool,
-        closeHtml: PropTypes.node,
-        defaultOk: PropTypes.string,
-        defaultOkKey: PropTypes.string,
-        defaultCancel: PropTypes.string,
-        defaultCancelKey: PropTypes.string,
-        wildClasses: PropTypes.bool,
-        closeOnOutsideClick: PropTypes.bool,
-        escToClose: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        className: 'mm-popup',
-        btnClass: 'mm-popup__btn',
-        closeBtn: true,
-        closeHtml: null,
-        defaultOk: 'Ok',
-        defaultOkKey: 'enter',
-        defaultCancel: 'Cancel',
-        defaultCancelKey: 'esc',
-        wildClasses: false,
-        closeOnOutsideClick: true,
-        escToClose: true,
-    };
-
     static addShowListener(callback) {
         Store.on(Constants.SHOW, callback);
     }
@@ -439,5 +411,33 @@ class Component extends React.Component {
         );
     }
 }
+
+Component.propTypes = {
+    className: PropTypes.string,
+    btnClass: PropTypes.string,
+    closeBtn: PropTypes.bool,
+    closeHtml: PropTypes.node,
+    defaultOk: PropTypes.string,
+    defaultOkKey: PropTypes.string,
+    defaultCancel: PropTypes.string,
+    defaultCancelKey: PropTypes.string,
+    wildClasses: PropTypes.bool,
+    closeOnOutsideClick: PropTypes.bool,
+    escToClose: PropTypes.bool,
+};
+
+Component.defaultProps = {
+    className: 'mm-popup',
+    btnClass: 'mm-popup__btn',
+    closeBtn: true,
+    closeHtml: null,
+    defaultOk: 'Ok',
+    defaultOkKey: 'enter',
+    defaultCancel: 'Cancel',
+    defaultCancelKey: 'esc',
+    wildClasses: false,
+    closeOnOutsideClick: true,
+    escToClose: true,
+};
 
 export default Component;

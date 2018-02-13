@@ -5,33 +5,6 @@ import ActionButton from './ActionButton.react';
 export default class ButtonsSpace extends React.Component {
     static displayName = 'PopupFooterButtons';
 
-    static propTypes = {
-        buttons: PropTypes.arrayOf(PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.object,
-        ])),
-        className: PropTypes.string,
-        onOk: PropTypes.func,
-        onClose: PropTypes.func,
-        buttonClick: PropTypes.func,
-        btnClass: PropTypes.string,
-        wildClasses: PropTypes.bool,
-        defaultOk: PropTypes.string,
-        defaultCancel: PropTypes.string,
-    };
-
-    static defaultProps = {
-        buttons: null,
-        className: null,
-        onOk: () => {},
-        onClose: () => {},
-        buttonClick: () => {},
-        btnClass: null,
-        wildClasses: false,
-        defaultOk: null,
-        defaultCancel: null,
-    };
-
     onOk() {
         return this.props.onOk();
     }
@@ -104,3 +77,30 @@ export default class ButtonsSpace extends React.Component {
         );
     }
 }
+
+ButtonsSpace.propTypes = {
+    buttons: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+    ])),
+    className: PropTypes.string,
+    onOk: PropTypes.func,
+    onClose: PropTypes.func,
+    buttonClick: PropTypes.func,
+    btnClass: PropTypes.string,
+    wildClasses: PropTypes.bool,
+    defaultOk: PropTypes.string,
+    defaultCancel: PropTypes.string,
+};
+
+ButtonsSpace.defaultProps = {
+    buttons: null,
+    className: null,
+    onOk: () => {},
+    onClose: () => {},
+    buttonClick: () => {},
+    btnClass: null,
+    wildClasses: false,
+    defaultOk: null,
+    defaultCancel: null,
+};
