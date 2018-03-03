@@ -3,13 +3,19 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = undefined;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = require("react");
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _react2 = _interopRequireDefault(_react);
 
-var _ActionButton = _interopRequireDefault(require("./ActionButton.react"));
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ActionButton = require("./ActionButton.react");
+
+var _ActionButton2 = _interopRequireDefault(_ActionButton);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -85,7 +91,7 @@ function (_React$Component) {
 
         if (typeof btn === 'string') {
           if (btn === 'ok') {
-            btns.push(_react.default.createElement(_ActionButton.default, {
+            btns.push(_react2.default.createElement(_ActionButton2.default, {
               className: "".concat(_this.props.btnClass, " ").concat(_this.props.btnClass, "--ok"),
               key: key,
               onClick: function onClick() {
@@ -93,7 +99,7 @@ function (_React$Component) {
               }
             }, _this.props.defaultOk));
           } else if (btn === 'cancel') {
-            btns.push(_react.default.createElement(_ActionButton.default, {
+            btns.push(_react2.default.createElement(_ActionButton2.default, {
               className: "".concat(_this.props.btnClass, " ").concat(_this.props.btnClass, "--cancel"),
               key: key,
               onClick: function onClick() {
@@ -104,7 +110,7 @@ function (_React$Component) {
         } else {
           var className = "".concat(_this.props.btnClass, " ").concat(_this.wildClass(btn.className, _this.props.btnClass));
 
-          var btnComponent = _react.default.createElement(_ActionButton.default, {
+          var btnComponent = _react2.default.createElement(_ActionButton2.default, {
             className: className,
             key: key,
             url: url,
@@ -116,32 +122,32 @@ function (_React$Component) {
           btns.push(btnComponent);
         }
       });
-      return _react.default.createElement("div", {
+      return _react2.default.createElement("div", {
         className: this.props.className
       }, btns);
     }
   }]);
 
   return ButtonsSpace;
-}(_react.default.Component);
+}(_react2.default.Component);
 
-exports.default = ButtonsSpace;
 Object.defineProperty(ButtonsSpace, "displayName", {
   configurable: true,
   enumerable: true,
   writable: true,
   value: 'PopupFooterButtons'
 });
+exports.default = ButtonsSpace;
 ButtonsSpace.propTypes = {
-  buttons: _propTypes.default.arrayOf(_propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.object])),
-  className: _propTypes.default.string,
-  onOk: _propTypes.default.func,
-  onClose: _propTypes.default.func,
-  buttonClick: _propTypes.default.func,
-  btnClass: _propTypes.default.string,
-  wildClasses: _propTypes.default.bool,
-  defaultOk: _propTypes.default.string,
-  defaultCancel: _propTypes.default.string
+  buttons: _propTypes2.default.arrayOf(_propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object])),
+  className: _propTypes2.default.string,
+  onOk: _propTypes2.default.func,
+  onClose: _propTypes2.default.func,
+  buttonClick: _propTypes2.default.func,
+  btnClass: _propTypes2.default.string,
+  wildClasses: _propTypes2.default.bool,
+  defaultOk: _propTypes2.default.string,
+  defaultCancel: _propTypes2.default.string
 };
 ButtonsSpace.defaultProps = {
   buttons: null,

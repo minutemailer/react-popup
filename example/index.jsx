@@ -9,20 +9,19 @@ render(
 );
 
 Popup.create({
-    title: 'test',
+    title: 'Hello World!',
     content: (
         <div>
-            Hello world!
+            It takes more than just a good looking body. You've got to have the heart and soul to go with it.
         </div>
     ),
     className: 'alert',
     buttons: {
-        right: [
-            {
-                text: 'Cancel',
-                className: 'danger',
-                action: Popup.close,
-            },
-        ],
+        left: ['cancel'],
+        right: [{
+            text: 'Ok!',
+            className: 'success',
+            action: Popup.close
+        }]
     },
 });

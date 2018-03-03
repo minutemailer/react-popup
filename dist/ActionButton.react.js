@@ -3,11 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = require("react");
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,14 +50,14 @@ function (_React$Component) {
       var className = this.props.className;
 
       if (this.props.url && this.props.url !== '#') {
-        return _react.default.createElement("a", {
+        return _react2.default.createElement("a", {
           href: this.props.url,
           target: "_blank",
           className: className
         }, this.props.children);
       }
 
-      return _react.default.createElement("button", {
+      return _react2.default.createElement("button", {
         onClick: function onClick() {
           return _this.handleClick();
         },
@@ -64,19 +67,18 @@ function (_React$Component) {
   }]);
 
   return Component;
-}(_react.default.Component);
+}(_react2.default.Component);
 
 Component.displayName = 'PopupAction';
 Component.propTypes = {
-  onClick: _propTypes.default.func,
-  className: _propTypes.default.string,
-  children: _propTypes.default.node.isRequired,
-  url: _propTypes.default.string
+  onClick: _propTypes2.default.func,
+  className: _propTypes2.default.string,
+  children: _propTypes2.default.node.isRequired,
+  url: _propTypes2.default.string
 };
 Component.defaultProps = {
   onClick: function onClick() {},
   className: 'btn',
   url: null
 };
-var _default = Component;
-exports.default = _default;
+exports.default = Component;

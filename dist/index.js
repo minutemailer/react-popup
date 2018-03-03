@@ -3,11 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
 
-var _Popup = _interopRequireDefault(require("./Popup.react"));
+var _Popup = require("./Popup.react");
+
+var _Popup2 = _interopRequireDefault(_Popup);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _default = _Popup.default;
-exports.default = _default;
+exports.default = _Popup2.default;
