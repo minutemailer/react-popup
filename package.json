@@ -5,7 +5,7 @@
   "main": "dist",
   "scripts": {
     "lint": "eslint src/*.js",
-    "test": "jest",
+    "test": "ava",
     "start": "webpack-dev-server --config example/webpack.config.js",
     "build": "babel src --out-dir dist"
   },
@@ -36,35 +36,29 @@
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
   },
-  "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react",
-      "<rootDir>/node_modules/react-dom",
-      "<rootDir>/node_modules/react-addons-test-utils"
-    ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/node_modules/"
-    ]
-  },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.39",
-    "@babel/core": "^7.0.0-beta.39",
+    "@babel/core": "^7.0.0-beta.40",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.39",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.40",
     "@babel/preset-env": "^7.0.0-beta.39",
     "@babel/preset-react": "^7.0.0-beta.39",
+    "@babel/register": "^7.0.0-beta.40",
+    "ava": "next",
+    "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.1",
-    "babel-jest": "^11.0.0",
     "babel-loader": "^8.0.0-beta.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.13",
+    "browser-env": "^3.2.5",
     "css-loader": "^0.28.9",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.11.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.1",
     "html-webpack-plugin": "^2.30.1",
-    "jest-cli": "^11.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "style-loader": "^0.20.1",
@@ -73,5 +67,12 @@
   },
   "dependencies": {
     "keymaster": "^1.6.2"
+  },
+  "ava": {
+    "require": [
+      "@babel/register",
+      "./__tests__/helpers/setup-browser-env.js",
+      "./__tests__/helpers/setup-enzyme.js"
+    ]
   }
 }
