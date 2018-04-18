@@ -166,6 +166,9 @@ class Component extends React.Component {
     }
 
     componentWillUnmount() {
+        Store.removeListener(Constants.SHOW, this.bound.onShow);
+        Store.removeListener(Constants.CLOSE, this.bound.onClose);
+        Store.removeListener(Constants.REFRESH, this.bound.onRefresh);
         key.deleteScope('react-popup');
         key.filter = defaultKeyFilter;
     }
