@@ -34,6 +34,7 @@ const initialState = {
     noOverlay: false,
     position: false,
     closeOnOutsideClick: true,
+    footer: null,
 };
 
 class Component extends React.Component {
@@ -222,6 +223,7 @@ class Component extends React.Component {
             noOverlay: popup.noOverlay,
             position: popup.position,
             closeOnOutsideClick: popup.closeOnOutsideClick,
+            footer: popup.footer,
         }, () => {
             key.setScope('react-popup');
 
@@ -397,6 +399,7 @@ class Component extends React.Component {
                         defaultOk={this.props.defaultOk}
                         defaultCancel={this.props.defaultCancel}
                         buttons={this.state.buttons}
+                        footer={this.state.footer}
                     />
                 </article>
             );

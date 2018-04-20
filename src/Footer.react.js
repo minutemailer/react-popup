@@ -3,37 +3,44 @@ import PropTypes from 'prop-types';
 import ButtonsSpace from './ButtonsSpace.react';
 
 const Component = (props) => {
-    if (!props.buttons) {
-        return null;
+    if (props.buttons) {
+        return (
+            <footer className={props.className}>
+                <ButtonsSpace
+                    buttonClick={props.buttonClick}
+                    onOk={props.onOk}
+                    onClose={props.onClose}
+                    className={`${props.className}__left-space`}
+                    wildClasses={props.wildClasses}
+                    btnClass={props.btnClass}
+                    defaultOk={props.defaultOk}
+                    defaultCancel={props.defaultCancel}
+                    buttons={props.buttons.left}
+                />
+
+                {props.footer}
+
+                <ButtonsSpace
+                    buttonClick={props.buttonClick}
+                    onOk={props.onOk}
+                    onClose={props.onClose}
+                    className={`${props.className}__right-space`}
+                    wildClasses={props.wildClasses}
+                    btnClass={props.btnClass}
+                    defaultOk={props.defaultOk}
+                    defaultCancel={props.defaultCancel}
+                    buttons={props.buttons.right}
+                />
+            </footer>
+        );
+    } else if (props.footer) {
+        return (
+            <footer className={props.className}>
+                {props.footer}
+            </footer>
+        );
     }
-
-    return (
-        <footer className={props.className}>
-            <ButtonsSpace
-                buttonClick={props.buttonClick}
-                onOk={props.onOk}
-                onClose={props.onClose}
-                className={`${props.className}__left-space`}
-                wildClasses={props.wildClasses}
-                btnClass={props.btnClass}
-                defaultOk={props.defaultOk}
-                defaultCancel={props.defaultCancel}
-                buttons={props.buttons.left}
-            />
-
-            <ButtonsSpace
-                buttonClick={props.buttonClick}
-                onOk={props.onOk}
-                onClose={props.onClose}
-                className={`${props.className}__right-space`}
-                wildClasses={props.wildClasses}
-                btnClass={props.btnClass}
-                defaultOk={props.defaultOk}
-                defaultCancel={props.defaultCancel}
-                buttons={props.buttons.right}
-            />
-        </footer>
-    );
+    return null;
 };
 
 Component.displayName = 'PopupFooter';
@@ -56,6 +63,7 @@ Component.propTypes = {
     buttonClick: PropTypes.func,
     defaultOk: PropTypes.string,
     defaultCancel: PropTypes.string,
+    footer: PropTypes.any,
 };
 Component.defaultProps = {
     buttons: null,
@@ -64,6 +72,7 @@ Component.defaultProps = {
     btnClass: null,
     defaultOk: null,
     defaultCancel: null,
+    footer: null,
     buttonClick: () => {},
     onOk: () => {},
     onClose: () => {},
