@@ -3,19 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
+exports.default = void 0;
 
-var _react = require("react");
+var _react = _interopRequireDefault(require("react"));
 
-var _react2 = _interopRequireDefault(_react);
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _propTypes = require("prop-types");
+var _ActionButton = _interopRequireDefault(require("./ActionButton.react"));
 
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _ActionButton = require("./ActionButton.react");
-
-var _ActionButton2 = _interopRequireDefault(_ActionButton);
+var _Bem = require("./Bem");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,18 +27,18 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ButtonsSpace =
+var PopupFooterButtons =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(ButtonsSpace, _React$Component);
+  _inherits(PopupFooterButtons, _React$Component);
 
-  function ButtonsSpace() {
-    _classCallCheck(this, ButtonsSpace);
+  function PopupFooterButtons() {
+    _classCallCheck(this, PopupFooterButtons);
 
-    return _possibleConstructorReturn(this, (ButtonsSpace.__proto__ || Object.getPrototypeOf(ButtonsSpace)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (PopupFooterButtons.__proto__ || Object.getPrototypeOf(PopupFooterButtons)).apply(this, arguments));
   }
 
-  _createClass(ButtonsSpace, [{
+  _createClass(PopupFooterButtons, [{
     key: "onOk",
     value: function onOk() {
       return this.props.onOk();
@@ -56,24 +52,6 @@ function (_React$Component) {
     key: "buttonClick",
     value: function buttonClick(action) {
       return this.props.buttonClick(action);
-    }
-  }, {
-    key: "wildClass",
-    value: function wildClass(className, base) {
-      if (!className) {
-        return null;
-      }
-
-      if (this.props.wildClasses) {
-        return className;
-      }
-
-      var finalClass = [];
-      var classNames = className.split(' ');
-      classNames.forEach(function (singleClass) {
-        finalClass.push("".concat(base, "--").concat(singleClass));
-      });
-      return finalClass.join(' ');
     }
   }, {
     key: "render",
@@ -91,7 +69,7 @@ function (_React$Component) {
 
         if (typeof btn === 'string') {
           if (btn === 'ok') {
-            btns.push(_react2.default.createElement(_ActionButton2.default, {
+            btns.push(_react.default.createElement(_ActionButton.default, {
               className: "".concat(_this.props.btnClass, " ").concat(_this.props.btnClass, "--ok"),
               key: key,
               onClick: function onClick() {
@@ -99,7 +77,7 @@ function (_React$Component) {
               }
             }, _this.props.defaultOk));
           } else if (btn === 'cancel') {
-            btns.push(_react2.default.createElement(_ActionButton2.default, {
+            btns.push(_react.default.createElement(_ActionButton.default, {
               className: "".concat(_this.props.btnClass, " ").concat(_this.props.btnClass, "--cancel"),
               key: key,
               onClick: function onClick() {
@@ -108,9 +86,9 @@ function (_React$Component) {
             }, _this.props.defaultCancel));
           }
         } else {
-          var className = "".concat(_this.props.btnClass, " ").concat(_this.wildClass(btn.className, _this.props.btnClass));
+          var className = "".concat(_this.props.btnClass, " ").concat((0, _Bem.modifier)(btn.className, _this.props.btnClass));
 
-          var btnComponent = _react2.default.createElement(_ActionButton2.default, {
+          var btnComponent = _react.default.createElement(_ActionButton.default, {
             className: className,
             key: key,
             url: url,
@@ -122,41 +100,38 @@ function (_React$Component) {
           btns.push(btnComponent);
         }
       });
-      return _react2.default.createElement("div", {
+      return _react.default.createElement("div", {
         className: this.props.className
       }, btns);
     }
   }]);
 
-  return ButtonsSpace;
-}(_react2.default.Component);
+  return PopupFooterButtons;
+}(_react.default.Component);
 
-Object.defineProperty(ButtonsSpace, "displayName", {
+exports.default = PopupFooterButtons;
+Object.defineProperty(PopupFooterButtons, "defaultProps", {
   configurable: true,
   enumerable: true,
   writable: true,
-  value: 'PopupFooterButtons'
+  value: {
+    buttons: null,
+    className: null,
+    onOk: function onOk() {},
+    onClose: function onClose() {},
+    buttonClick: function buttonClick() {},
+    btnClass: null,
+    defaultOk: null,
+    defaultCancel: null
+  }
 });
-exports.default = ButtonsSpace;
-ButtonsSpace.propTypes = {
-  buttons: _propTypes2.default.arrayOf(_propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object])),
-  className: _propTypes2.default.string,
-  onOk: _propTypes2.default.func,
-  onClose: _propTypes2.default.func,
-  buttonClick: _propTypes2.default.func,
-  btnClass: _propTypes2.default.string,
-  wildClasses: _propTypes2.default.bool,
-  defaultOk: _propTypes2.default.string,
-  defaultCancel: _propTypes2.default.string
-};
-ButtonsSpace.defaultProps = {
-  buttons: null,
-  className: null,
-  onOk: function onOk() {},
-  onClose: function onClose() {},
-  buttonClick: function buttonClick() {},
-  btnClass: null,
-  wildClasses: false,
-  defaultOk: null,
-  defaultCancel: null
+PopupFooterButtons.propTypes = {
+  buttons: _propTypes.default.arrayOf(_propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.object])),
+  className: _propTypes.default.string,
+  onOk: _propTypes.default.func,
+  onClose: _propTypes.default.func,
+  buttonClick: _propTypes.default.func,
+  btnClass: _propTypes.default.string,
+  defaultOk: _propTypes.default.string,
+  defaultCancel: _propTypes.default.string
 };

@@ -3,13 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
+exports.default = void 0;
 
 var _events = require("events");
 
-var _Constants = require("./Constants");
-
-var _Constants2 = _interopRequireDefault(_Constants);
+var _Constants = _interopRequireDefault(require("./Constants"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -76,7 +74,7 @@ function (_EventEmitter) {
 
       var id = this.active;
       this.active = null;
-      this.emit(_Constants2.default.CLOSE, id);
+      this.emit(_Constants.default.CLOSE, id);
       this.dispatch();
       this.value = null;
       return id;
@@ -96,7 +94,7 @@ function (_EventEmitter) {
       /** Set active */
 
       this.active = id;
-      this.emit(_Constants2.default.SHOW, id);
+      this.emit(_Constants.default.SHOW, id);
       return true;
     }
     /**
@@ -107,7 +105,7 @@ function (_EventEmitter) {
   }, {
     key: "refreshPosition",
     value: function refreshPosition(position) {
-      this.emit(_Constants2.default.REFRESH, position);
+      this.emit(_Constants.default.REFRESH, position);
     }
     /**
      * Clear queue

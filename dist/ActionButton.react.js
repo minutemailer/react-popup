@@ -3,14 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
-var _react = require("react");
+var _react = _interopRequireDefault(require("react"));
 
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = require("prop-types");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,18 +23,18 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Component =
+var PopupAction =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(Component, _React$Component);
+  _inherits(PopupAction, _React$Component);
 
-  function Component() {
-    _classCallCheck(this, Component);
+  function PopupAction() {
+    _classCallCheck(this, PopupAction);
 
-    return _possibleConstructorReturn(this, (Component.__proto__ || Object.getPrototypeOf(Component)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (PopupAction.__proto__ || Object.getPrototypeOf(PopupAction)).apply(this, arguments));
   }
 
-  _createClass(Component, [{
+  _createClass(PopupAction, [{
     key: "handleClick",
     value: function handleClick() {
       return this.props.onClick();
@@ -50,14 +47,14 @@ function (_React$Component) {
       var className = this.props.className;
 
       if (this.props.url && this.props.url !== '#') {
-        return _react2.default.createElement("a", {
+        return _react.default.createElement("a", {
           href: this.props.url,
           target: "_blank",
           className: className
         }, this.props.children);
       }
 
-      return _react2.default.createElement("button", {
+      return _react.default.createElement("button", {
         onClick: function onClick() {
           return _this.handleClick();
         },
@@ -66,19 +63,24 @@ function (_React$Component) {
     }
   }]);
 
-  return Component;
-}(_react2.default.Component);
+  return PopupAction;
+}(_react.default.Component);
 
-Component.displayName = 'PopupAction';
-Component.propTypes = {
-  onClick: _propTypes2.default.func,
-  className: _propTypes2.default.string,
-  children: _propTypes2.default.node.isRequired,
-  url: _propTypes2.default.string
+Object.defineProperty(PopupAction, "defaultProps", {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  value: {
+    onClick: function onClick() {},
+    className: 'btn',
+    url: null
+  }
+});
+PopupAction.propTypes = {
+  onClick: _propTypes.default.func,
+  className: _propTypes.default.string,
+  children: _propTypes.default.node.isRequired,
+  url: _propTypes.default.string
 };
-Component.defaultProps = {
-  onClick: function onClick() {},
-  className: 'btn',
-  url: null
-};
-exports.default = Component;
+var _default = PopupAction;
+exports.default = _default;
