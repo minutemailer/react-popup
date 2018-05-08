@@ -24,6 +24,10 @@
 
 The popup and overlay is now two separate layers to allow more customization. See [demo css](https://github.com/minutemailer/react-popup/blob/gh-pages/popup.example.css) for styling example.
 
+## Global API approach
+
+The idea behind `react-popup` is to use it as a drop-in replacement for the native `window.alert`. With the similarity of only displaying one popup at a time. This is why we use a global API to control the component instead of rendering it inside components. Maybe this is an anti-pattern, maybe it's not. Feel free to discuss it by opening an issue if one doesn't already exist.
+
 ## Install
 
 Install it with npm (or yarn) (`npm install react-popup --save`). The component is API driven and means that you only render it once, on a global level. Here's a simple example:
