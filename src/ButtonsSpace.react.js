@@ -44,6 +44,8 @@ export default class PopupFooterButtons extends React.Component {
                 } else if (btn === 'cancel') {
                     btns.push(<ActionButton className={`${this.props.btnClass} ${this.props.btnClass}--cancel`} key={key} onClick={() => this.onClose()}>{this.props.defaultCancel}</ActionButton>);
                 }
+            } else if (React.isValidElement(btn)) {
+                btns.push(btn);
             } else {
                 const className = `${this.props.btnClass} ${modifier(btn.className, this.props.btnClass)}`;
                 const btnComponent = (

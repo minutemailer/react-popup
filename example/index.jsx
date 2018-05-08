@@ -18,10 +18,13 @@ Popup.create({
     className: 'alert',
     buttons: {
         left: ['cancel'],
-        right: [{
-            text: 'Ok!',
-            className: 'success',
-            action: Popup.close
-        }]
+        right: [
+            <span style={{padding: '0 15px'}}>🦄</span>,
+            {
+                text: 'Ok!',
+                className: 'success',
+                action: Popup.close
+            }
+        ]
     },
 });
