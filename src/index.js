@@ -1,3 +1,1 @@
-import Popup from './Popup.react';
-
-export default Popup;
+export { default } from './Popup.react';
