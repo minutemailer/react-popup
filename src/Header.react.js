@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Component = (props) => {
+const PopupHeader = (props) => {
     if (!props.title) {
         return null;
     }
@@ -13,14 +13,14 @@ const Component = (props) => {
     );
 };
 
-Component.displayName = 'PopupHeader';
-Component.defaultProps = {
+PopupHeader.defaultProps = {
     title: null,
     className: null,
 };
-Component.propTypes = {
+
+PopupHeader.propTypes = {
     title: PropTypes.string,
     className: PropTypes.string,
 };
 
-export default Component;
+export default PopupHeader;

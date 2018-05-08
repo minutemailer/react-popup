@@ -5,17 +5,10 @@ import PopupStore from './Store';
 import Header from './Header.react';
 import Footer from './Footer.react';
 import Constants from './Constants';
+import { element, modifier } from './Bem';
 
 const defaultKeyFilter = key.filter;
-
 const Store = new PopupStore();
-const hasClass = (element, className) => {
-    if (element.classList) {
-        return !!className && element.classList.contains(className);
-    }
-
-    return (` ${element.className} `).indexOf(` ${className} `) > -1;
-};
 
 const handleClose = () => {
     key.deleteScope('react-popup');
@@ -36,8 +29,19 @@ const initialState = {
     closeOnOutsideClick: true,
 };
 
-class Component extends React.Component {
-    static displayName = 'Popup';
+class Popup extends React.Component {
+    static defaultProps = {
+        className: 'mm-popup',
+        btnClass: 'mm-popup__btn',
+        closeBtn: true,
+        closeHtml: null,
+        defaultOk: 'Ok',
+        defaultOkKey: 'enter',
+        defaultCancel: 'Cancel',
+        defaultCancelKey: 'esc',
+        closeOnOutsideClick: true,
+        escToClose: true,
+    };
 
     static addShowListener(callback) {
         Store.on(Constants.SHOW, callback);
@@ -200,7 +204,7 @@ class Component extends React.Component {
     onShow(id) {
         key.deleteScope('react-popup');
 
-        key.filter = () => { return true };
+        key.filter = () => true;
 
         const popup = Store.activePopup();
 
@@ -268,8 +272,6 @@ class Component extends React.Component {
             return;
         }
 
-        console.log(boxPosition);
-
         box.style.top = `${parseInt(boxPosition.y, 10)}px`;
         box.style.left = `${parseInt(boxPosition.x, 10)}px`;
         box.style.margin = 0;
@@ -281,7 +283,7 @@ class Component extends React.Component {
      * @param e
      * @private
      */
-    containerClick(e) {
+    containerClick() {
         if (this.state.closeOnOutsideClick) {
             handleClose();
         }
@@ -336,26 +338,7 @@ class Component extends React.Component {
     }
 
     className(className) {
-        return `${this.props.className}__${className}`;
-    }
-
-    wildClass(className, base) {
-        if (!className) {
-            return null;
-        }
-
-        if (this.props.wildClasses) {
-            return className;
-        }
-
-        const finalClass = [];
-        const classNames = className.split(' ');
-
-        classNames.forEach((singleClass) => {
-            finalClass.push(`${base}--${singleClass}`);
-        });
-
-        return finalClass.join(' ');
+        return element(className, this.props.className);
     }
 
     render() {
@@ -375,7 +358,7 @@ class Component extends React.Component {
             let boxClass = this.className('box');
 
             if (this.state.className) {
-                boxClass += ` ${this.wildClass(this.state.className, boxClass)}`;
+                boxClass += ` ${modifier(this.state.className, boxClass)}`;
             }
 
             box = (
@@ -389,7 +372,6 @@ class Component extends React.Component {
 
                     <Footer
                         className={this.className('box__footer')}
-                        wildClasses={this.props.wildClasses}
                         btnClass={this.props.btnClass}
                         buttonClick={this.bound.handleButtonClick}
                         onClose={handleClose}
@@ -415,7 +397,7 @@ class Component extends React.Component {
     }
 }
 
-Component.propTypes = {
+Popup.propTypes = {
     className: PropTypes.string,
     btnClass: PropTypes.string,
     closeBtn: PropTypes.bool,
@@ -424,23 +406,8 @@ Component.propTypes = {
     defaultOkKey: PropTypes.string,
     defaultCancel: PropTypes.string,
     defaultCancelKey: PropTypes.string,
-    wildClasses: PropTypes.bool,
     closeOnOutsideClick: PropTypes.bool,
     escToClose: PropTypes.bool,
 };
 
-Component.defaultProps = {
-    className: 'mm-popup',
-    btnClass: 'mm-popup__btn',
-    closeBtn: true,
-    closeHtml: null,
-    defaultOk: 'Ok',
-    defaultOkKey: 'enter',
-    defaultCancel: 'Cancel',
-    defaultCancelKey: 'esc',
-    wildClasses: false,
-    closeOnOutsideClick: true,
-    escToClose: true,
-};
-
-export default Component;
+export default Popup;

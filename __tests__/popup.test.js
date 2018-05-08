@@ -1,16 +1,16 @@
 import test from 'ava';
 import React from 'react';
+import { shallow } from 'enzyme';
 import Popup from '../src/Popup.react';
-import {shallow} from 'enzyme';
 
-test('Initialization works', t => {
+test('Initialization works', (t) => {
     const component = shallow(<Popup className="popup" />);
 
     t.true(component.hasClass('popup'));
     t.is(component.find('.popup__overlay').length, 1);
 });
 
-test('Display and hide popup', t => {
+test('Display and hide popup', (t) => {
     const component = shallow(<Popup className="popup" />);
 
     Popup.create({});

@@ -26,7 +26,7 @@ The popup and overlay is now two separate layers to allow more customization. Se
 
 ## Install
 
-For now this component is only available as a CommonJS module. Install it with npm (`npm install react-popup --save`). The module exports a react component with static methods. Here's a simple example:
+Install it with npm (or yarn) (`npm install react-popup --save`). The component is API driven and means that you only render it once, on a global level. Here's a simple example:
 
 ```jsx
 import React from 'react';

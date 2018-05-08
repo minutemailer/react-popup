@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Component extends React.Component {
+class PopupAction extends React.Component {
+    static defaultProps = {
+        onClick: () => {},
+        className: 'btn',
+        url: null,
+    };
+
     handleClick() {
         return this.props.onClick();
     }
@@ -21,17 +27,11 @@ class Component extends React.Component {
     }
 }
 
-Component.displayName = 'PopupAction';
-Component.propTypes = {
+PopupAction.propTypes = {
     onClick: PropTypes.func,
     className: PropTypes.string,
     children: PropTypes.node.isRequired,
     url: PropTypes.string,
 };
-Component.defaultProps = {
-    onClick: () => {},
-    className: 'btn',
-    url: null,
-};
 
-export default Component;
+export default PopupAction;

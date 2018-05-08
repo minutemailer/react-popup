@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ButtonsSpace from './ButtonsSpace.react';
 
-const Component = (props) => {
+const PopupFooter = (props) => {
     if (!props.buttons) {
         return null;
     }
@@ -14,7 +14,6 @@ const Component = (props) => {
                 onOk={props.onOk}
                 onClose={props.onClose}
                 className={`${props.className}__left-space`}
-                wildClasses={props.wildClasses}
                 btnClass={props.btnClass}
                 defaultOk={props.defaultOk}
                 defaultCancel={props.defaultCancel}
@@ -26,7 +25,6 @@ const Component = (props) => {
                 onOk={props.onOk}
                 onClose={props.onClose}
                 className={`${props.className}__right-space`}
-                wildClasses={props.wildClasses}
                 btnClass={props.btnClass}
                 defaultOk={props.defaultOk}
                 defaultCancel={props.defaultCancel}
@@ -36,8 +34,7 @@ const Component = (props) => {
     );
 };
 
-Component.displayName = 'PopupFooter';
-Component.propTypes = {
+PopupFooter.propTypes = {
     buttons: PropTypes.shape({
         left: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
@@ -49,7 +46,6 @@ Component.propTypes = {
         ])),
     }),
     className: PropTypes.string,
-    wildClasses: PropTypes.bool,
     btnClass: PropTypes.string,
     onOk: PropTypes.func,
     onClose: PropTypes.func,
@@ -57,10 +53,10 @@ Component.propTypes = {
     defaultOk: PropTypes.string,
     defaultCancel: PropTypes.string,
 };
-Component.defaultProps = {
+
+PopupFooter.defaultProps = {
     buttons: null,
     className: null,
-    wildClasses: false,
     btnClass: null,
     defaultOk: null,
     defaultCancel: null,
@@ -69,4 +65,4 @@ Component.defaultProps = {
     onClose: () => {},
 };
 
-export default Component;
+export default PopupFooter;

@@ -1,9 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ActionButton from './ActionButton.react';
+import { modifier } from './Bem';
 
-export default class ButtonsSpace extends React.Component {
-    static displayName = 'PopupFooterButtons';
+export default class PopupFooterButtons extends React.Component {
+    static defaultProps = {
+        buttons: null,
+        className: null,
+        onOk: () => {},
+        onClose: () => {},
+        buttonClick: () => {},
+        btnClass: null,
+        defaultOk: null,
+        defaultCancel: null,
+    };
 
     onOk() {
         return this.props.onOk();
@@ -15,25 +25,6 @@ export default class ButtonsSpace extends React.Component {
 
     buttonClick(action) {
         return this.props.buttonClick(action);
-    }
-
-    wildClass(className, base) {
-        if (!className) {
-            return null;
-        }
-
-        if (this.props.wildClasses) {
-            return className;
-        }
-
-        const finalClass = [];
-        const classNames = className.split(' ');
-
-        classNames.forEach((singleClass) => {
-            finalClass.push(`${base}--${singleClass}`);
-        });
-
-        return finalClass.join(' ');
     }
 
     render() {
@@ -54,7 +45,7 @@ export default class ButtonsSpace extends React.Component {
                     btns.push(<ActionButton className={`${this.props.btnClass} ${this.props.btnClass}--cancel`} key={key} onClick={() => this.onClose()}>{this.props.defaultCancel}</ActionButton>);
                 }
             } else {
-                const className = `${this.props.btnClass} ${this.wildClass(btn.className, this.props.btnClass)}`;
+                const className = `${this.props.btnClass} ${modifier(btn.className, this.props.btnClass)}`;
                 const btnComponent = (
                     <ActionButton
                         className={className}
@@ -78,7 +69,7 @@ export default class ButtonsSpace extends React.Component {
     }
 }
 
-ButtonsSpace.propTypes = {
+PopupFooterButtons.propTypes = {
     buttons: PropTypes.arrayOf(PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.object,
@@ -88,19 +79,6 @@ ButtonsSpace.propTypes = {
     onClose: PropTypes.func,
     buttonClick: PropTypes.func,
     btnClass: PropTypes.string,
-    wildClasses: PropTypes.bool,
     defaultOk: PropTypes.string,
     defaultCancel: PropTypes.string,
-};
-
-ButtonsSpace.defaultProps = {
-    buttons: null,
-    className: null,
-    onOk: () => {},
-    onClose: () => {},
-    buttonClick: () => {},
-    btnClass: null,
-    wildClasses: false,
-    defaultOk: null,
-    defaultCancel: null,
 };
