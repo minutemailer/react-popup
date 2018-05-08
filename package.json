@@ -44,7 +44,7 @@
     "@babel/preset-env": "^7.0.0-beta.39",
     "@babel/preset-react": "^7.0.0-beta.39",
     "@babel/register": "^7.0.0-beta.40",
-    "ava": "next",
+    "ava": "^1.0.0-beta.4",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^8.0.0-beta.0",
