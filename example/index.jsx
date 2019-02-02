@@ -10,6 +10,12 @@ render(
 
 Popup.create({
     title: 'Hello World!',
+    onShow: (id, title) => {
+        console.log('Callback: onShow', id, title);
+    },
+    onClose: (id, title) => {
+        console.log('Callback: onClose', id, title);
+    },
     content: (
         <div>
             It takes more than just a good looking body. You've got to have the heart and soul to go with it.

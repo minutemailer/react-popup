@@ -27,15 +27,21 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } _setPrototypeOf(subClass.prototype, superClass && superClass.prototype); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var defaultKeyFilter = _keymaster.default.filter;
 var Store = new _Store.default();
@@ -56,14 +62,14 @@ var initialState = {
   className: null,
   noOverlay: false,
   position: false,
-  closeOnOutsideClick: true
+  closeOnOutsideClick: true,
+  onClose: function onClose() {},
+  onOpen: function onOpen() {}
 };
 
 var Popup =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(Popup, _React$Component);
-
   _createClass(Popup, null, [{
     key: "addShowListener",
     value: function addShowListener(callback) {
@@ -169,15 +175,15 @@ function (_React$Component) {
 
     _classCallCheck(this, Popup);
 
-    _this = _possibleConstructorReturn(this, (Popup.__proto__ || Object.getPrototypeOf(Popup)).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Popup).call(this, props));
     initialState.closeOnOutsideClick = _this.props.closeOnOutsideClick;
     _this.state = initialState;
     _this.bound = {
-      onShow: _this.onShow.bind(_assertThisInitialized(_this)),
-      onClose: _this.onClose.bind(_assertThisInitialized(_this)),
-      onRefresh: _this.onRefresh.bind(_assertThisInitialized(_this)),
-      containerClick: _this.containerClick.bind(_assertThisInitialized(_this)),
-      handleButtonClick: _this.handleButtonClick.bind(_assertThisInitialized(_this))
+      onShow: _this.onShow.bind(_assertThisInitialized(_assertThisInitialized(_this))),
+      onClose: _this.onClose.bind(_assertThisInitialized(_assertThisInitialized(_this))),
+      onRefresh: _this.onRefresh.bind(_assertThisInitialized(_assertThisInitialized(_this))),
+      containerClick: _this.containerClick.bind(_assertThisInitialized(_assertThisInitialized(_this))),
+      handleButtonClick: _this.handleButtonClick.bind(_assertThisInitialized(_assertThisInitialized(_this)))
     };
     _this.boxRef = null;
     _this.defaultKeyBindings = {
@@ -236,6 +242,7 @@ function (_React$Component) {
       _keymaster.default.deleteScope('react-popup');
 
       _keymaster.default.filter = defaultKeyFilter;
+      this.state.onClose(this.state.id, this.state.title);
       this.setState(initialState);
     }
     /**
@@ -273,9 +280,13 @@ function (_React$Component) {
         className: popup.className,
         noOverlay: popup.noOverlay,
         position: popup.position,
-        closeOnOutsideClick: popup.closeOnOutsideClick
+        closeOnOutsideClick: popup.closeOnOutsideClick,
+        onClose: popup.onClose,
+        onOpen: popup.onOpen
       }, function () {
         _keymaster.default.setScope('react-popup');
+
+        _this2.state.onOpen(_this2.state.id, _this2.state.title);
 
         if (_this2.props.escToClose) {
           (0, _keymaster.default)('esc', 'react-popup', _this2.handleKeyEvent.bind(_this2, 'cancel', _this2.state.id));
@@ -467,26 +478,26 @@ function (_React$Component) {
     }
   }]);
 
+  _inherits(Popup, _React$Component);
+
   return Popup;
 }(_react.default.Component);
 
-Object.defineProperty(Popup, "defaultProps", {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  value: {
-    className: 'mm-popup',
-    btnClass: 'mm-popup__btn',
-    closeBtn: true,
-    closeHtml: null,
-    defaultOk: 'Ok',
-    defaultOkKey: 'enter',
-    defaultCancel: 'Cancel',
-    defaultCancelKey: 'esc',
-    closeOnOutsideClick: true,
-    escToClose: true
-  }
+_defineProperty(Popup, "defaultProps", {
+  className: 'mm-popup',
+  btnClass: 'mm-popup__btn',
+  closeBtn: true,
+  closeHtml: null,
+  defaultOk: 'Ok',
+  defaultOkKey: 'enter',
+  defaultCancel: 'Cancel',
+  defaultCancelKey: 'esc',
+  closeOnOutsideClick: true,
+  escToClose: true,
+  onClose: function onClose() {},
+  onOpen: function onOpen() {}
 });
+
 Popup.propTypes = {
   className: _propTypes.default.string,
   btnClass: _propTypes.default.string,
@@ -497,7 +508,9 @@ Popup.propTypes = {
   defaultCancel: _propTypes.default.string,
   defaultCancelKey: _propTypes.default.string,
   closeOnOutsideClick: _propTypes.default.bool,
-  escToClose: _propTypes.default.bool
+  escToClose: _propTypes.default.bool,
+  onClose: _propTypes.default.func,
+  onOpen: _propTypes.default.func
 };
 var _default = Popup;
 exports.default = _default;
