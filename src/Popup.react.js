@@ -27,6 +27,8 @@ const initialState = {
     noOverlay: false,
     position: false,
     closeOnOutsideClick: true,
+    onClose: () => {},
+    onShow: () => {},
 };
 
 class Popup extends React.Component {
@@ -41,6 +43,8 @@ class Popup extends React.Component {
         defaultCancelKey: 'esc',
         closeOnOutsideClick: true,
         escToClose: true,
+        onClose: () => {},
+        onShow: () => {},
     };
 
     static addShowListener(callback) {
@@ -193,7 +197,7 @@ class Popup extends React.Component {
     onClose() {
         key.deleteScope('react-popup');
         key.filter = defaultKeyFilter;
-
+        this.state.onClose(this.state.id, this.state.title);
         this.setState(initialState);
     }
 
@@ -226,8 +230,11 @@ class Popup extends React.Component {
             noOverlay: popup.noOverlay,
             position: popup.position,
             closeOnOutsideClick: popup.closeOnOutsideClick,
+            onClose: popup.onClose,
+            onShow: popup.onShow,
         }, () => {
             key.setScope('react-popup');
+            this.state.onShow(this.state.id, this.state.title);
 
             if (this.props.escToClose) {
                 key('esc', 'react-popup', this.handleKeyEvent.bind(this, 'cancel', this.state.id));
@@ -408,6 +415,8 @@ Popup.propTypes = {
     defaultCancelKey: PropTypes.string,
     closeOnOutsideClick: PropTypes.bool,
     escToClose: PropTypes.bool,
+    onClose: PropTypes.func,
+    onShow: PropTypes.func,
 };
 
 export default Popup;
