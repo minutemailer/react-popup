@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.element = exports.modifier = void 0;
+exports.modifier = exports.element = void 0;
 
 var element = function element(el, base) {
   return "".concat(base, "__").concat(el);
